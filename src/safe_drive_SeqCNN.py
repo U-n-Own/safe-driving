@@ -5,7 +5,7 @@ import os
 import PIL
 import PIL.Image
 import tensorflow as tf
-i#mport tensorflow_datasets as tfds
+#import tensorflow_datasets as tfds
 import pathlib
 import matplotlib.pyplot as plt
 
