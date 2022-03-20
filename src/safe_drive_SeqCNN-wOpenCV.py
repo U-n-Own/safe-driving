@@ -1,3 +1,4 @@
+from importlib.resources import path
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
 import cv2
@@ -23,9 +24,24 @@ model = keras.Sequential([
 
 #Path to folders is ./dataset/dataWithoutMasks/c00..c14
 
-#Import dataset using OpenCV 
-image = cv2.imread("/home/gargano/dataset/dataWithoutMasks/c00/*.png", 0) 
-#(h, w, c) = image.shape[:3]
+#Import dataset using OpenCV
+DATADIR = "/home/gargano/dataset/dataWithoutMasks"
+CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
+
+for category in CATEGORIES:
+    path = os.path.join(DATADIR,category) #Path to the folder divided in 15 classes
+    for img in os.listdir(path)
+    img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
+    
+#Original is 640x480
+IMAGE_SIZE = 256
+#IMAGE_SIZE = 512
+new_array = cv2.resize(img_to_array, (IMAGE_SIZE, IMAGE_SIZE))
+
+plt.imshow(new_array)
+plt.show()
+
+#image = cv2.imread("/home/gargano/dataset/dataWithoutMasks/c00/IMAGE_NAME_HERE.png", 0) 
 #cv2.imshow("image", image) #Can't show image in ssh session
 
 ''' 
