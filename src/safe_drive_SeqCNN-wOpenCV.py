@@ -24,10 +24,9 @@ model = keras.Sequential([
 #Path to folders is ./dataset/dataWithoutMasks/c00..c14
 
 #Import dataset using OpenCV 
-image = cv2.imread("/home/gargano/dataset/dataWithoutMasks/c00/Botta-1310.png", 0) 
+image = cv2.imread("/home/gargano/dataset/dataWithoutMasks/c00/*.png", 0) 
 #(h, w, c) = image.shape[:3]
-cv2.imshow("image", image)
-cv2.waitKey(0)
+#cv2.imshow("image", image) #Can't show image in ssh session
 
 ''' 
 daset_test = tf.keras.preprocessing.image_dataset_from_directory(
