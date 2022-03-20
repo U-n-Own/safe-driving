@@ -26,7 +26,7 @@ model = keras.Sequential([
 #Import dataset using OpenCV 
 image = cv2.imread("/home/gargano/dataset/dataWithoutMasks/c00/Botta-1310.png", 0) 
 #(h, w, c) = image.shape[:3]
-cv2.imgshow("image", image)
+cv2.imshow("image", image)
 cv2.waitKey(0)
 
 ''' 
