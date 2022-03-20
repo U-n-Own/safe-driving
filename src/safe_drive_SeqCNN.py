@@ -24,7 +24,8 @@ model = keras.Sequential([
 #Path to folders is ./dataset/dataWithoutMasks/c00..c14
 
 dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
-    '/home/gargano/safe-driving/datasets/dataWithoutMasks/', 
+   # '../dataset/dataWithoutMasks',  
+    '/home/gargano/dataset/dataWithoutMasks',
     labels = 'inferred',
     label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
     image_size=(256, 256), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
@@ -38,7 +39,8 @@ dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
 )
 
 dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
-    '/home/gargano/safe-driving/datasets/dataWithoutMasks/',
+    #'/home/gargano/safe-driving/datasets/dataWithoutMasks/',
+    '/home/gargano/dataset/dataWithoutMasks',
     labels = 'inferred',
     label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
     image_size=(256, 256), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
