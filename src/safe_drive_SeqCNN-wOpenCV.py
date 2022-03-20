@@ -30,8 +30,8 @@ CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10",
 
 for category in CATEGORIES:
     path = os.path.join(DATADIR,category) #Path to the folder divided in 15 classes
-    for img in os.listdir(path)
-    img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
+    for img in os.listdir(path):
+        img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
     
 #Original is 640x480
 IMAGE_SIZE = 256
