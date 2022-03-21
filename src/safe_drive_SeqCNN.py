@@ -8,7 +8,8 @@ import tensorflow as tf
 import pathlib
 import matplotlib.pyplot as plt
 
-
+print(tf.version.VERSION)
+quit()
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
