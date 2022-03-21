@@ -8,6 +8,9 @@ import tensorflow as tf #Ver. 2.7.0
 import pathlib
 import matplotlib.pyplot as plt
 
+batch_size = 32
+img_height = 180
+img_width = 180
 
 
 # Model for image classification on 15 classes, 
@@ -58,29 +61,6 @@ def model_compile(model):
 def fit_model(model):
     model.fit(dataset_to_train, class_names, epochs=10)
 
-def results():
-    acc = history.history['accuracy']
-    val_acc = history.history['val_accuracy']
-
-    loss = history.history['loss']
-    val_loss = history.history['val_loss']
-
-    epochs_range = range(epochs)
-
-    plt.figure(figsize=(8, 8))
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs_range, acc, label='Training Accuracy')
-    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-    plt.legend(loc='lower right')
-    plt.title('Training and Validation Accuracy')
-
-    plt.subplot(1, 2, 2)
-    plt.plot(epochs_range, loss, label='Training Loss')
-    plt.plot(epochs_range, val_loss, label='Validation Loss')
-    plt.legend(loc='upper right')
-    plt.title('Training and Validation Loss')
-    plt.show()
-
 def trained_model_evaluation(model):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
     print('\nTest accuracy:', test_acc)
@@ -88,14 +68,13 @@ def trained_model_evaluation(model):
 #Main function
 def main():
     model = generate_model_safe_drive()
+    print("\n\n\nModel generated with success!\n\n\n")
     model = model_compile(model)
+    print("\n\n\nModel compiled with success!\n\n\n")
     fit_model(model)
+    print("\n\n\nModel trained with success!\n\n\n")
     #history.results()
     trained_model_evaluation(model)
-
-batch_size = 32
-img_height = 180
-img_width = 180
 
 
 #This preprocessing does reshaping and splitting of the dataset
@@ -190,3 +169,26 @@ for image_batch, labels_batch in dataset_to_train:
     print(image_batch.shape)
     print(labels_batch.shape)
     break '''
+
+def results():
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
+
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    epochs_range = range(epochs)
+
+    plt.figure(figsize=(8, 8))
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs_range, acc, label='Training Accuracy')
+    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+    plt.legend(loc='lower right')
+    plt.title('Training and Validation Accuracy')
+
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs_range, loss, label='Training Loss')
+    plt.plot(epochs_range, val_loss, label='Validation Loss')
+    plt.legend(loc='upper right')
+    plt.title('Training and Validation Loss')
+    plt.show()
