@@ -1,40 +1,27 @@
 from cProfile import label
 from tensorflow.keras.preprocessing import image_dataset_from_directory
-#from tkinter import Y
 import numpy as np
 import os
 import PIL
 import PIL.Image
 import tensorflow as tf
-#import tensorflow_datasets as tfds
 import pathlib
 import matplotlib.pyplot as plt
-
-''' #Model for CNN image classification on 15 classes
-model = keras.Sequential([
-    keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),
- '''
 
 batch_size = 32
 img_height = 180
 img_width = 180
 
-#Import dataset for training the dataset is divided in dataset/dataWithoutMasks/c00.. until c14
-#There are 15 classes one for each label of action per users
-#There are 30 users in the dataset with 200 image per user and each user can have 15 actions
-#This function will import the dataset and divide it in train and test set
 
-#Path to folders is ./dataset/dataWithoutMasks/c00..c14
+#This preprocessing does reshaping and splitting of the dataset
 
 dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
-   # '../dataset/dataWithoutMasks',  
     '/home/gargano/dataset/dataWithoutMasks',
     labels = 'inferred',
-    label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
+    label_mode = "categorical", #Maybe int? user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
     image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-    #class_names=[c00,c01,c02,c03,c04,c05,c06,c07,c08,c09,c10,c11,c12,c13,c14],
     batch_size=batch_size,
-    #color_mode="rgb", #Don't know what format images are can try both?
+    color_mode="rgb", #Don't know what format images are can try both?
     shuffle = True,
     seed = 123,
     validation_split = 0.2,
@@ -42,50 +29,114 @@ dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
 )
 
 dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
-    #'/home/gargano/safe-driving/datasets/dataWithoutMasks/',
     '/home/gargano/dataset/dataWithoutMasks',
     labels = 'inferred',
     label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
     image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-    #class_names=[c00,c01,c02,c03,c04,c05,c06,c07,c08,c09,c10,c11,c12,c13,c14],
     batch_size=batch_size,
-    #color_mode="rgb", #Don't know what format images are can try both?
+    color_mode="rgb", #Don't know what format images are can try both?
     shuffle = True,
     seed = 123,
     validation_split = 0.2,
     subset = 'validation'
 )
 
-''' 
-daset_test = tf.keras.preprocessing.image_dataset_from_directory(
-    'datasets/dataWithoutMasks/',
+
+dataset_test = tf.keras.preprocessing.image_dataset_from_directory(
+    '/home/gargano/dataset/dataWithoutMasks',
     labels = 'inferred',
     label_mode = "categorical", 
     image_size=(256, 256), 
-    class_names=[c00all],
     batch_size=batch_size,
-    #color_mode="rgb", #Don't know what format images are can try both?
+    color_mode="rgb", #Don't know what format images are can try both?
     shuffle = True,
-    seed = 42,
+    seed = 123,
     validation_split = 0.2,
     subset = 'test' 
-) '''
-print("End of import dataset")
-print("#############################")
-print("Visualize dataset tensor")
-#Trying to visualize the dataset
+) 
+
+
+#Visualizing class names
 class_names = dataset_to_train.class_names
 print(class_names)
-#image_batch è un tensore della forma (32, 256, 256, 3) .
-#Si tratta di un batch di 32 immagini di forma 256x256x3 (l'ultima dimensione si riferisce ai canali colore RGB).
+
+
+
+#@Info: image_batch è un tensore della forma (32, 256, 256, 3) .
+#@Info: Si tratta di un batch di 32 immagini di forma 256x256x3 (l'ultima dimensione si riferisce ai canali colore RGB).
+print("\nEnd of import dataset\n")
+print("\n#############################\n")
+print("Visualize dataset tensor")
 for image_batch, labels_batch in dataset_to_train:
     print(image_batch.shape)
     print(labels_batch.shape)
     break
-#Chiamare .numpy() sui tensori image_batch ed labels_batch per convertirli in un numpy.ndarray .
 
 
-#Data augmentations maybe
+# Model for image classification on 15 classes, 
+# classes consists in actions one of them is safe driving the other are action that distract the user
+# We use a CNN with 3 convolutional layers and a fully connected layer, and we use a softmax activation function for the last layer.
+def generate_model_safe_drive():
+    model = tf.keras.models.Sequential([
+
+        #Flatten the input to a 1-D vector
+        tf.keras.layer.Flatten(),
+
+        #First convolutional layer with 32 filters and a kernel size of 3x3
+        tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(img_height, img_width, 3)),
+        tf.keras.layers.MaxPooling2D(2, 2),
+
+        #Second convolutional layer with 64 filters and a kernel size of 3x3
+        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+        tf.keras.layers.MaxPooling2D(2, 2),
+
+        #Third convolutional layer with 128 filters and a kernel size of 3x3
+        tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
+        tf.keras.layers.MaxPooling2D(2, 2),
+
+        #Flatten the output of the previous layer
+        tf.keras.layers.Flatten(),
+
+        #Anothet fully connected layer with 512 units
+        tf.keras.layers.Dense(512, activation='relu'),
+
+        #Final layer with 15 classes
+        tf.keras.layers.Dense(15, activation='softmax')
+    ])
+
+    model.summary()
+
+    return model
+
+#Try experimenting with different optimizers and different optimizer configs
+def model_compile(model):
+
+    model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=1e-1), 
+                loss='sparse_categorical_crossentropy',
+                metrics=['accuracy'])
+
+    return model
+
+
+def fit_model(model):
+    model.fit(dataset_to_train, class_names, epochs=10)
+
+def trained_model_evaluation(model):
+    test_loss, test_acc = model.evaluate(dataset_test)
+    print('\nTest accuracy:', test_acc)
+
+#Main function
+def main():
+    model = generate_model_safe_drive()
+    model = model_compile(model)
+    fit_model(model)
+    trained_model_evaluation(model)
+
+#---------------------------------------------------------------------------------------
+
+#Todo later: 
+
+#Data augmentations
 ''' 
 def augumentation_imgs 
     image = tf.image.random_brightness(image, max_delta=0.07)
@@ -94,7 +145,20 @@ def augumentation_imgs
  '''
 
 
+''' def generate_model():
 
+    num_classes = len(class_names)
 
-
-
+    model = Sequential([
+    layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
+    layers.Conv2D(16, 3, padding='same', activation='relu'),
+    layers.MaxPooling2D(),
+    layers.Conv2D(32, 3, padding='same', activation='relu'),
+    layers.MaxPooling2D(),
+    layers.Conv2D(64, 3, padding='same', activation='relu'),
+    layers.MaxPooling2D(),
+    layers.Flatten(),
+    layers.Dense(128, activation='relu'),
+    layers.Dense(num_classes)
+    ])
+ '''
