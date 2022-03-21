@@ -59,7 +59,9 @@ src = root_dir + category
 
 all_files_names = os.listdir(src)
 np.random.shuffle(all_files_names)
-train_file_names, test_file_names = np.split(np.array(all_file_names), [int(len(all_file_names) * (1 - test_set_ratio))]
+
+train_file_names, test_file_names = np.split(np.array(all_file_names),
+                                                          [int(len(all_file_names) * (1 - test_set_ratio))])
 
 train_file_names = [src+'/'+ name for name in train_file_names.tolist()]
         
