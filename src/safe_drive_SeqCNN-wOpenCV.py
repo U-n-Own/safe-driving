@@ -25,7 +25,7 @@ model = keras.Sequential([
 #Path to folders is ./dataset/dataWithoutMasks/c00..c14
 
 #Import dataset using OpenCV
-root_dir = '/home/gargano'
+root_dir = '/home/gargano/'
 DATADIR = "/home/gargano/dataset/dataWithoutMasks"
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 i = 0
@@ -52,8 +52,8 @@ print("end of loading")
 
 test_set_ratio = 0.2
 for category in CATEGORIES:
-    os.makedirs(root_dir + '/train/' + category)
-    os.makedirs(root_dir + '/test/' + category)
+    os.makedirs(root_dir + '/train' +  category)
+    os.makedirs(root_dir + '/test' + category)
 
 src = root_dir + category
 
