@@ -29,10 +29,10 @@ img_width = 180
 dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
    # '../dataset/dataWithoutMasks',  
     '/home/gargano/dataset/dataWithoutMasks',
-    labels = 'inferred',
+#    labels = 'inferred',
     label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
     image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-    #class_names=[c00,c01,c02,c03,c04,c05,c06,c07,c08,c09,c10,c11,c12,c13,c14],
+    class_names=[c00,c01,c02,c03,c04,c05,c06,c07,c08,c09,c10,c11,c12,c13,c14],
     batch_size=batch_size,
     #color_mode="rgb", #Don't know what format images are can try both?
     shuffle = True,
@@ -44,10 +44,10 @@ dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
 dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
     #'/home/gargano/safe-driving/datasets/dataWithoutMasks/',
     '/home/gargano/dataset/dataWithoutMasks',
-    labels = 'inferred',
+    #labels = 'inferred',
     label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
     image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-    #class_names=[c00,c01,c02,c03,c04,c05,c06,c07,c08,c09,c10,c11,c12,c13,c14],
+    class_names=[c00,c01,c02,c03,c04,c05,c06,c07,c08,c09,c10,c11,c12,c13,c14],
     batch_size=batch_size,
     #color_mode="rgb", #Don't know what format images are can try both?
     shuffle = True,
