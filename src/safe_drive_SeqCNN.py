@@ -8,57 +8,6 @@ import tensorflow as tf
 import pathlib
 import matplotlib.pyplot as plt
 
-batch_size = 32
-img_height = 180
-img_width = 180
-
-
-#This preprocessing does reshaping and splitting of the dataset
-
-dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
-    '/home/gargano/dataset/dataWithoutMasks',
-    labels = 'inferred',
-    label_mode = "categorical", #Maybe int? user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
-    image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-    batch_size=batch_size,
-    color_mode="rgb", #Don't know what format images are can try both?
-    shuffle = True,
-    seed = 123,
-    validation_split = 0.2,
-    subset = 'training'
-)
-
-dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
-    '/home/gargano/dataset/dataWithoutMasks',
-    labels = 'inferred',
-    label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
-    image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-    batch_size=batch_size,
-    color_mode="rgb", #Don't know what format images are can try both?
-    shuffle = True,
-    seed = 123,
-    validation_split = 0.2,
-    subset = 'validation'
-)
-
-
-
-
-#Visualizing class names
-class_names = dataset_to_train.class_names
-print(class_names)
-
-
-
-#@Info: image_batch è un tensore della forma (32, 256, 256, 3) .
-#@Info: Si tratta di un batch di 32 immagini di forma 256x256x3 (l'ultima dimensione si riferisce ai canali colore RGB).
-''' print("\nEnd of import dataset\n")
-print("\n#############################\n")
-print("Visualize dataset tensor")
-for image_batch, labels_batch in dataset_to_train:
-    print(image_batch.shape)
-    print(labels_batch.shape)
-    break '''
 
 
 # Model for image classification on 15 classes, 
@@ -144,7 +93,50 @@ def main():
     #history.results()
     trained_model_evaluation(model)
 
-#---------------------------------------------------------------------------------------
+batch_size = 32
+img_height = 180
+img_width = 180
+
+
+#This preprocessing does reshaping and splitting of the dataset
+
+dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
+    '/home/gargano/dataset/dataWithoutMasks',
+    labels = 'inferred',
+    label_mode = "categorical", #Maybe int? user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
+    image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
+    batch_size=batch_size,
+    color_mode="rgb", #Don't know what format images are can try both?
+    shuffle = True,
+    seed = 123,
+    validation_split = 0.2,
+    subset = 'training'
+)
+
+dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
+    '/home/gargano/dataset/dataWithoutMasks',
+    labels = 'inferred',
+    label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
+    image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
+    batch_size=batch_size,
+    color_mode="rgb", #Don't know what format images are can try both?
+    shuffle = True,
+    seed = 123,
+    validation_split = 0.2,
+    subset = 'validation'
+)
+
+
+#Visualizing class names
+class_names = dataset_to_train.class_names
+print("Visualizing class names")
+print(class_names)
+print("\n###################################################\n")
+
+#Now we run the main function
+main()
+
+#--------------------------------------End-------------------------------------------------
 
 #Todo later: 
 
@@ -188,3 +180,13 @@ def augumentation_imgs
     validation_split = -1.2,
     subset = 'test' 
 )  '''
+
+#@Info: image_batch è un tensore della forma (32, 256, 256, 3) .
+#@Info: Si tratta di un batch di 32 immagini di forma 256x256x3 (l'ultima dimensione si riferisce ai canali colore RGB).
+''' print("\nEnd of import dataset\n")
+print("\n#############################\n")
+print("Visualize dataset tensor")
+for image_batch, labels_batch in dataset_to_train:
+    print(image_batch.shape)
+    print(labels_batch.shape)
+    break '''
