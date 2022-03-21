@@ -14,7 +14,7 @@ import matplotlib.pyplot as plt
 # classes consists in actions one of them is safe driving the other are action that distract the user
 # We use a CNN with 3 convolutional layers and a fully connected layer, and we use a softmax activation function for the last layer.
 def generate_model_safe_drive():
-    model = tf.keras.models.Sequential([
+    model = tf.keras.Sequential([
 
         #Flatten the input to a 1-D vector
         tf.keras.layer.Flatten(input_shape=(256, 256, 3)),
