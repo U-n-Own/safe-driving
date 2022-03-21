@@ -52,8 +52,8 @@ print("end of loading")
 
 test_set_ratio = 0.2
 for category in CATEGORIES:
-    os.makedirs(root_dir + 'train/' + category)
-    os.makedirs(root_dir + 'test/' + category)
+    os.makedirs(root_dir + '/train/' + category)
+    os.makedirs(root_dir + '/test/' + category)
 
 src = root_dir + category
 
