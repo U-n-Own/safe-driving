@@ -15,6 +15,9 @@ model = keras.Sequential([
     keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),
  '''
 
+batch_size = 32
+img_height = 180
+img_width = 180
 
 #Import dataset for training the dataset is divided in dataset/dataWithoutMasks/c00.. until c14
 #There are 15 classes one for each label of action per users
@@ -28,9 +31,9 @@ dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
     '/home/gargano/dataset/dataWithoutMasks',
     labels = 'inferred',
     label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
-    image_size=(256, 256), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
+    image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
     #class_names=[c00,c01,c02,c03,c04,c05,c06,c07,c08,c09,c10,c11,c12,c13,c14],
-    batch_size=32,
+    batch_size=batch_size,
     #color_mode="rgb", #Don't know what format images are can try both?
     shuffle = True,
     seed = 123,
@@ -43,9 +46,9 @@ dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
     '/home/gargano/dataset/dataWithoutMasks',
     labels = 'inferred',
     label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
-    image_size=(256, 256), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
+    image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
     #class_names=[c00,c01,c02,c03,c04,c05,c06,c07,c08,c09,c10,c11,c12,c13,c14],
-    batch_size=32,
+    batch_size=batch_size,
     #color_mode="rgb", #Don't know what format images are can try both?
     shuffle = True,
     seed = 123,
@@ -60,7 +63,7 @@ daset_test = tf.keras.preprocessing.image_dataset_from_directory(
     label_mode = "categorical", 
     image_size=(256, 256), 
     class_names=[c00all],
-    batch_size=32,
+    batch_size=batch_size,
     #color_mode="rgb", #Don't know what format images are can try both?
     shuffle = True,
     seed = 42,
@@ -71,16 +74,13 @@ daset_test = tf.keras.preprocessing.image_dataset_from_directory(
 #Trying to visualize the dataset
 class_names = dataset_to_train.class_names
 print(class_names)
-
-#Show first 15 image of training set
-plt.figure(figsize=(10, 10))
-for images, labels in  dataset_to_train.take(1):
-  for i in range(9):
-    ax = plt.subplot(3, 3, i + 1)
-    plt.imshow(images[i].numpy().astype("uint8"))
-    plt.title(class_names[labels[i]])
-    plt.axis("off")
-
+#image_batch è un tensore della forma (32, 256, 256, 3) .
+#Si tratta di un batch di 32 immagini di forma 256x256x3 (l'ultima dimensione si riferisce ai canali colore RGB).
+for image_batch, labels_batch in dataset_to_train:
+    print(image_batch.shape)
+    print(labels_batch.shape)
+    break
+#Chiamare .numpy() sui tensori image_batch ed labels_batch per convertirli in un numpy.ndarray .
 
 
 #Data augmentations maybe
