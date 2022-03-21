@@ -4,12 +4,11 @@ import numpy as np
 import os
 import PIL
 import PIL.Image
-import tensorflow as tf
+import tensorflow as tf #Ver. 2.7.0
 import pathlib
 import matplotlib.pyplot as plt
 
-print(tf.version.VERSION)
-quit()
+
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
@@ -18,7 +17,7 @@ def generate_model_safe_drive():
     model = tf.keras.models.Sequential([
 
         #Flatten the input to a 1-D vector
-        tf.keras.layer.Flatten(),
+        tf.keras.layer.Flatten(input_shape=(256, 256, 3)),
 
         #First convolutional layer with 32 filters and a kernel size of 3x3
         tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(img_height, img_width, 3)),
