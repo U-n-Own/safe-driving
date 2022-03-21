@@ -42,18 +42,6 @@ dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
 )
 
 
-dataset_test = tf.keras.preprocessing.image_dataset_from_directory(
-    '/home/gargano/dataset/dataWithoutMasks',
-    labels = 'inferred',
-    label_mode = "categorical", 
-    image_size=(256, 256), 
-    batch_size=batch_size,
-    color_mode="rgb", #Don't know what format images are can try both?
-    shuffle = True,
-    seed = 123,
-    validation_split = 0.2,
-    subset = 'test' 
-) 
 
 
 #Visualizing class names
@@ -64,13 +52,13 @@ print(class_names)
 
 #@Info: image_batch è un tensore della forma (32, 256, 256, 3) .
 #@Info: Si tratta di un batch di 32 immagini di forma 256x256x3 (l'ultima dimensione si riferisce ai canali colore RGB).
-print("\nEnd of import dataset\n")
+''' print("\nEnd of import dataset\n")
 print("\n#############################\n")
 print("Visualize dataset tensor")
 for image_batch, labels_batch in dataset_to_train:
     print(image_batch.shape)
     print(labels_batch.shape)
-    break
+    break '''
 
 
 # Model for image classification on 15 classes, 
@@ -121,8 +109,31 @@ def model_compile(model):
 def fit_model(model):
     model.fit(dataset_to_train, class_names, epochs=10)
 
+def results():
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
+
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    epochs_range = range(epochs)
+
+    plt.figure(figsize=(8, 8))
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs_range, acc, label='Training Accuracy')
+    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+    plt.legend(loc='lower right')
+    plt.title('Training and Validation Accuracy')
+
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs_range, loss, label='Training Loss')
+    plt.plot(epochs_range, val_loss, label='Validation Loss')
+    plt.legend(loc='upper right')
+    plt.title('Training and Validation Loss')
+    plt.show()
+
 def trained_model_evaluation(model):
-    test_loss, test_acc = model.evaluate(dataset_test)
+    test_loss, test_acc = model.evaluate(dataset_to_validate)
     print('\nTest accuracy:', test_acc)
 
 #Main function
@@ -130,6 +141,7 @@ def main():
     model = generate_model_safe_drive()
     model = model_compile(model)
     fit_model(model)
+    #history.results()
     trained_model_evaluation(model)
 
 #---------------------------------------------------------------------------------------
@@ -162,3 +174,17 @@ def augumentation_imgs
     layers.Dense(num_classes)
     ])
  '''
+
+ #Test set not working
+''' dataset_test = tf.keras.preprocessing.image_dataset_from_directory(
+    '/home/gargano/dataset/dataWithoutMasks',
+    labels = 'inferred',
+    label_mode = "categorical", 
+    image_size=(255, 256), 
+    batch_size=batch_size,
+    color_mode="rgb", #Don't know what format images are can try both?
+    shuffle = True,
+    seed = 122,
+    validation_split = -1.2,
+    subset = 'test' 
+)  '''
