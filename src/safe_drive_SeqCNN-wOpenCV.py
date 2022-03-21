@@ -30,11 +30,11 @@ DATADIR = "/home/gargano/dataset/dataWithoutMasks"
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 i = 0
 
-#for category in CATEGORIES:
-#    print(category + "is now being processed")
-#    path = os.path.join(DATADIR,category) #Path to the folder divided in 15 classes
-#    for img in os.listdir(path):   
-#        img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
+for category in CATEGORIES:
+    print(category + "is now being processed")
+    path = os.path.join(DATADIR,category) #Path to the folder divided in 15 classes
+    for img in os.listdir(path):   
+        img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
     
 #Original is 640x480
 IMAGE_SIZE = 256
@@ -50,29 +50,7 @@ print("end of loading")
 #image = cv2.imread("/home/gargano/dataset/dataWithoutMasks/c00/IMAGE_NAME_HERE.png", 0) 
 #cv2.imshow("image", image) #Can't show image in ssh session
 
-test_set_ratio = 0.2
-for category in CATEGORIES:
-    os.makedirs(root_dir + '/train' +  category)
-    os.makedirs(root_dir + '/test' + category)
 
-src = root_dir + category
-
-all_files_names = os.listdir(src)
-np.random.shuffle(all_files_names)
-
-train_file_names, test_file_names = np.split(np.array(all_file_names),
-                                                          [int(len(all_file_names) * (1 - test_set_ratio))])
-
-train_file_names = [src+'/'+ name for name in train_file_names.tolist()]
-        
-test_file_names = [src+'/'+ name for name in test_file_names.tolist()]
-
-
-print("***************************************")
-print('Total images: ', len(all_file_names))
-print('Training: ', len(training_file_names))
-print('Testing: ', len(test_file_names))
-print("***************************************")
 
 #Todo: Copy the train and test set in new directory
 #Data augmentations maybe
