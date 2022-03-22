@@ -62,7 +62,7 @@ def model_compile(model):
 
 
 def fit_model(model):
-    model.fit(dataset_to_train, class_names, epochs=10)
+    model.fit(dataset_to_train, validation_data = dataset_to_validate, batch_size = batch_size, epochs=10)
 
 def trained_model_evaluation(model):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
