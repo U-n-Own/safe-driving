@@ -8,13 +8,20 @@ import tensorflow as tf #Ver. 2.7.0
 import pathlib
 import matplotlib.pyplot as plt
 
-
+batch_size = 32
+img_height = 180
+img_width = 180
+num_classes = 15
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
 # We use a CNN with 3 convolutional layers and a fully connected layer, and we use a softmax activation function for the last layer.
 def generate_model_safe_drive():
     model = tf.keras.Sequential([
+
+
+        #Rescaling the input image to a fixed size
+        tf.keras.layers.Rescaling(1./255, input_shape=(256, 256, 3)),
 
         #Flatten the input to a 1-D vector
         tf.keras.layers.Flatten(input_shape=(256, 256, 3)),
@@ -38,7 +45,7 @@ def generate_model_safe_drive():
         tf.keras.layers.Dense(512, activation='relu'),
 
         #Final layer with 15 classes
-        tf.keras.layers.Dense(15, activation='softmax')
+        tf.keras.layers.Dense(num_classes, activation='softmax')
     ])
 
     model.summary()
@@ -48,7 +55,7 @@ def generate_model_safe_drive():
 #Try experimenting with different optimizers and different optimizer configs
 def model_compile(model):
 
-    model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=1e-1), 
+    model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.1), 
                 loss='sparse_categorical_crossentropy',
                 metrics=['accuracy'])
 
@@ -56,30 +63,7 @@ def model_compile(model):
 
 
 def fit_model(model):
-    model.fit(dataset_to_train, class_names, epochs=10)
-
-def results():
-    acc = history.history['accuracy']
-    val_acc = history.history['val_accuracy']
-
-    loss = history.history['loss']
-    val_loss = history.history['val_loss']
-
-    epochs_range = range(epochs)
-
-    plt.figure(figsize=(8, 8))
-    plt.subplot(1, 2, 1)
-    plt.plot(epochs_range, acc, label='Training Accuracy')
-    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
-    plt.legend(loc='lower right')
-    plt.title('Training and Validation Accuracy')
-
-    plt.subplot(1, 2, 2)
-    plt.plot(epochs_range, loss, label='Training Loss')
-    plt.plot(epochs_range, val_loss, label='Validation Loss')
-    plt.legend(loc='upper right')
-    plt.title('Training and Validation Loss')
-    plt.show()
+    model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
 
 def trained_model_evaluation(model):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
@@ -88,14 +72,13 @@ def trained_model_evaluation(model):
 #Main function
 def main():
     model = generate_model_safe_drive()
+    print("\n\n\nModel generated with success!\n\n\n")
     model = model_compile(model)
+    print("\n\n\nModel compiled with success!\n\n\n")
     fit_model(model)
+    print("\n\n\nModel trained with success!\n\n\n")
     #history.results()
-    trained_model_evaluation(model)
-
-batch_size = 32
-img_height = 180
-img_width = 180
+#    trained_model_evaluation(model)
 
 
 #This preprocessing does reshaping and splitting of the dataset
@@ -127,13 +110,13 @@ dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
 )
 
 
-#Visualizing class names
+#Saving class names
 class_names = dataset_to_train.class_names
 print("Visualizing class names")
 print(class_names)
 print("\n###################################################\n")
 
-#Now we run the main function
+#Generate model, compile it and fit it
 main()
 
 #--------------------------------------End-------------------------------------------------
@@ -190,3 +173,26 @@ for image_batch, labels_batch in dataset_to_train:
     print(image_batch.shape)
     print(labels_batch.shape)
     break '''
+
+def results():
+    acc = history.history['accuracy']
+    val_acc = history.history['val_accuracy']
+
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
+
+    epochs_range = range(epochs)
+
+    plt.figure(figsize=(8, 8))
+    plt.subplot(1, 2, 1)
+    plt.plot(epochs_range, acc, label='Training Accuracy')
+    plt.plot(epochs_range, val_acc, label='Validation Accuracy')
+    plt.legend(loc='lower right')
+    plt.title('Training and Validation Accuracy')
+
+    plt.subplot(1, 2, 2)
+    plt.plot(epochs_range, loss, label='Training Loss')
+    plt.plot(epochs_range, val_loss, label='Validation Loss')
+    plt.legend(loc='upper right')
+    plt.title('Training and Validation Loss')
+    plt.show()
