@@ -20,7 +20,7 @@ def generate_model_safe_drive():
     model = tf.keras.Sequential([
 
         #Rescaling the input image to a fixed size
-        tf.keras.layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
+        #tf.keras.layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
 
         #Flatten the input to a 1-D vector
         #tf.keras.layers.Flatten(input_shape=(256, 256, 3)),
@@ -34,11 +34,11 @@ def generate_model_safe_drive():
         tf.keras.layers.MaxPooling2D(2, 2),
 
         #Third convolutional layer with 128 filters and a kernel size of 3x3
-        tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
-        tf.keras.layers.MaxPooling2D(2, 2),
+        #tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
+        #tf.keras.layers.MaxPooling2D(2, 2),
 
         #Flatten the output of the previous layer
-        tf.keras.layers.Flatten(),
+        #tf.keras.layers.Flatten(),
 
         #Anothet fully connected layer with 512 units
         tf.keras.layers.Dense(512, activation='relu'),
