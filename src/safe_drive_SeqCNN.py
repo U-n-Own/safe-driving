@@ -11,13 +11,16 @@ import matplotlib.pyplot as plt
 batch_size = 32
 img_height = 180
 img_width = 180
-
+num_classes = 15
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
 # We use a CNN with 3 convolutional layers and a fully connected layer, and we use a softmax activation function for the last layer.
 def generate_model_safe_drive():
     model = tf.keras.Sequential([
+
+        #Rescaling the input image to a fixed size
+        tf.keras.layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
 
         #Flatten the input to a 1-D vector
         #tf.keras.layers.Flatten(input_shape=(256, 256, 3)),
@@ -41,7 +44,7 @@ def generate_model_safe_drive():
         tf.keras.layers.Dense(512, activation='relu'),
 
         #Final layer with 15 classes
-        tf.keras.layers.Dense(15, activation='softmax')
+        tf.keras.layers.Dense(num_classes, activation='softmax')
     ])
 
     model.summary()
@@ -106,7 +109,7 @@ dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
 )
 
 
-#Visualizing class names
+#Saving class names
 class_names = dataset_to_train.class_names
 print("Visualizing class names")
 print(class_names)
