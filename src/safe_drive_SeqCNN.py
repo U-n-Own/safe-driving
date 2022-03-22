@@ -116,6 +116,13 @@ print("Visualizing class names")
 print(class_names)
 print("\n###################################################\n")
 
+print("Printing image_batch.shape and label_batch.shape")
+print("\n=====================================================\n")
+for image_batch, labels_batch in dataset_to_train:
+  print(image_batch.shape)
+  print(labels_batch.shape)
+  break
+
 #Generate model, compile it and fit it
 main()
 
