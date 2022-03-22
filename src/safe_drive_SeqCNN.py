@@ -9,8 +9,8 @@ import pathlib
 import matplotlib.pyplot as plt
 
 batch_size = 32
-img_height = 180
-img_width = 180
+img_height = 256 
+img_width = 256
 num_classes = 15
 
 # Model for image classification on 15 classes, 
