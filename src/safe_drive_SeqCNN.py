@@ -19,11 +19,12 @@ num_classes = 15
 def generate_model_safe_drive():
     model = tf.keras.Sequential([
 
-        #Rescaling the input image to a fixed size
-        tf.keras.layers.Rescaling(1./255),
 
         #Flatten the input to a 1-D vector
         tf.keras.layers.Flatten(input_shape=(256, 256, 3)),
+
+        #Rescaling the input image to a fixed size
+        tf.keras.layers.Rescaling(1./255),
 
         #First convolutional layer with 32 filters and a kernel size of 3x3
         tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(img_height, img_width, 3)),
