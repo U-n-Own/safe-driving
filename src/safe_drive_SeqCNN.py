@@ -77,7 +77,7 @@ def main():
     fit_model(model)
     print("\n\n\nModel trained with success!\n\n\n")
     #history.results()
-    trained_model_evaluation(model)
+#    trained_model_evaluation(model)
 
 
 #This preprocessing does reshaping and splitting of the dataset
@@ -115,7 +115,7 @@ print("Visualizing class names")
 print(class_names)
 print("\n###################################################\n")
 
-#Now we run the main function
+#Generate model, compile it and fit it
 main()
 
 #--------------------------------------End-------------------------------------------------
