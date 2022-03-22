@@ -54,7 +54,7 @@ def generate_model_safe_drive():
 #Try experimenting with different optimizers and different optimizer configs
 def model_compile(model):
 
-    model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=1e-1), 
+    model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.1), 
                 loss='sparse_categorical_crossentropy',
                 metrics=['accuracy'])
 
@@ -62,7 +62,7 @@ def model_compile(model):
 
 
 def fit_model(model):
-    model.fit(dataset_to_train, validation_data = dataset_to_validate, batch_size = batch_size, epochs=10)
+    model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
 
 def trained_model_evaluation(model):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
