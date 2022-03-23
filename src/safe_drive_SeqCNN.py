@@ -21,7 +21,7 @@ def generate_model_safe_drive():
 
 
         #Rescaling the input image to a fixed size
-        tf.keras.layers.Rescaling(1./255, input_shape=(256, 256, 3)),
+        #tf.keras.layers.Rescaling(1./255, input_shape=(256, 256, 3)),
 
         #Flatten the input to a 1-D vector
         tf.keras.layers.Flatten(input_shape=(256, 256, 3)),
