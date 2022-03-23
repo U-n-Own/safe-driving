@@ -13,6 +13,10 @@ img_height = 256
 img_width = 256
 num_classes = 15
 
+#Solve this error
+#I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
+
+
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
 # We use a CNN with 3 convolutional layers and a fully connected layer, and we use a softmax activation function for the last layer.
@@ -42,7 +46,7 @@ def generate_model_safe_drive():
         tf.keras.layers.Flatten(),
 
         #Anothet fully connected layer with 512 units
-        tf.keras.layers.Dense(512, activation='relu'),
+        tf.keras.layers.Dense(256, activation='relu'),
 
         #Final layer with 15 classes
         tf.keras.layers.Dense(num_classes, activation='softmax')

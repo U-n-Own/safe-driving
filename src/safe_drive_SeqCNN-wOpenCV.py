@@ -20,7 +20,6 @@ model = keras.Sequential([
 #Import dataset for training the dataset is divided in dataset/dataWithoutMasks/c00.. until c14
 #There are 15 classes one for each label of action per users
 #There are 30 users in the dataset with 200 image per user and each user can have 15 actions
-#This function will import the dataset and divide it in train and test set
 
 #Path to folders is ./dataset/dataWithoutMasks/c00..c14
 
@@ -44,11 +43,7 @@ IMAGE_SIZE = 256
 
 
 print("end of loading")
-#plt.imshow(new_array)
-#plt.show()
-
 #image = cv2.imread("/home/gargano/dataset/dataWithoutMasks/c00/IMAGE_NAME_HERE.png", 0) 
-#cv2.imshow("image", image) #Can't show image in ssh session
 
 
 
