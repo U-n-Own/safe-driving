@@ -115,8 +115,6 @@ dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
 class_names = dataset_to_train.class_names
 print("Visualizing class names")
 print(class_names)
-labels = dataset_to_train.labels 
-print(labels.shape)
 print("\n###################################################\n")
 
 
