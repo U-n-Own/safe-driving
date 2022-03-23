@@ -13,13 +13,6 @@ img_height = 256
 img_width = 256
 num_classes = 15
 
-#Solve this error
-#I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
-def fix_cuda_error():    
-    gpus = tf.config.experimental.list_physical_devices('GPU')
-    
-    for gpu in gpus:
-        tf.config.experimental.set_memory_growth(gpu, True)
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
@@ -77,8 +70,8 @@ def trained_model_evaluation(model):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
     print('\nTest accuracy:', test_acc)
 
-#Main function
-def main():
+
+def start_training():
     model = generate_model_safe_drive()
     print("\n\n\nModel generated with success!\n\n\n")
     model = model_compile(model)
@@ -89,9 +82,7 @@ def main():
 #    trained_model_evaluation(model)
 
 
-print("\n\n ------- Cuda error fixed ------- \n\n")
-fix_cuda_error()
-
+#Image importing + preprocessing
 #This preprocessing does reshaping and splitting of the dataset
 
 dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
@@ -135,60 +126,4 @@ for image_batch, labels_batch in dataset_to_train:
   break
 
 #Generate model, compile it and fit it
-main()
-
-#--------------------------------------End-------------------------------------------------
-
-#Todo later: 
-
-#Data augmentations
-''' 
-def augumentation_imgs 
-    image = tf.image.random_brightness(image, max_delta=0.07)
-    return image, y
-
- '''
-
-
-''' def generate_model():
-
-    num_classes = len(class_names)
-
-    model = Sequential([
-    layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
-    layers.Conv2D(16, 3, padding='same', activation='relu'),
-    layers.MaxPooling2D(),
-    layers.Conv2D(32, 3, padding='same', activation='relu'),
-    layers.MaxPooling2D(),
-    layers.Conv2D(64, 3, padding='same', activation='relu'),
-    layers.MaxPooling2D(),
-    layers.Flatten(),
-    layers.Dense(128, activation='relu'),
-    layers.Dense(num_classes)
-    ])
- '''
-
- #Test set not working
-''' dataset_test = tf.keras.preprocessing.image_dataset_from_directory(
-    '/home/gargano/dataset/dataWithoutMasks',
-    labels = 'inferred',
-    label_mode = "categorical", 
-    image_size=(255, 256), 
-    batch_size=batch_size,
-    color_mode="rgb", #Don't know what format images are can try both?
-    shuffle = True,
-    seed = 122,
-    validation_split = -1.2,
-    subset = 'test' 
-)  '''
-
-#@Info: image_batch è un tensore della forma (32, 256, 256, 3) .
-#@Info: Si tratta di un batch di 32 immagini di forma 256x256x3 (l'ultima dimensione si riferisce ai canali colore RGB).
-''' print("\nEnd of import dataset\n")
-print("\n#############################\n")
-print("Visualize dataset tensor")
-for image_batch, labels_batch in dataset_to_train:
-    print(image_batch.shape)
-    print(labels_batch.shape)
-    break '''
-
+start_training()
