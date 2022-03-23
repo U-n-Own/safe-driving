@@ -117,6 +117,8 @@ dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
     subset = 'validation'
 )
 
+fix_cuda_error()
+print("\n\n\n -------------- Cuda error fixed! ------------\n\n\n")
 
 #Saving class names
 class_names = dataset_to_train.class_names
@@ -124,8 +126,6 @@ print("Visualizing class names")
 print(class_names)
 print("\n###################################################\n")
 
-fix_cuda_error()
-print("\n\n\n -------------- Cuda error fixed! ------------\n\n\n")
 
 print("Printing image_batch.shape and label_batch.shape")
 print("\n=====================================================\n")
