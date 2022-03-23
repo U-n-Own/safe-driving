@@ -27,7 +27,7 @@ def generate_model_safe_drive():
         tf.keras.layers.Flatten(input_shape=(batch_size, 256, 256, 3)),
 
         #First convolutional layer with 32 filters and a kernel size of 3x3
-        tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(img_height, img_width, 3)),
+        tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(batch_size ,img_height, img_width, 3)),
         tf.keras.layers.MaxPooling2D(2, 2),
 
         #Second convolutional layer with 64 filters and a kernel size of 3x3
