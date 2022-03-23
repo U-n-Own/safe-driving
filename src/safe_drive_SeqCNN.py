@@ -15,7 +15,11 @@ num_classes = 15
 
 #Solve this error
 #I tensorflow/core/platform/default/subprocess.cc:304] Start cannot spawn child process: No such file or directory
-
+def fix_cuda_error():    
+    gpus = tf.config.experimental.list_physical_devices('GPU')
+    
+    for gpu in gpus:
+        tf.config.experimental.set_memory_growth(gpu, True)
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
@@ -119,6 +123,9 @@ class_names = dataset_to_train.class_names
 print("Visualizing class names")
 print(class_names)
 print("\n###################################################\n")
+
+fix_cuda_error()
+print("\n\n\n -------------- Cuda error fixed! ------------\n\n\n")
 
 print("Printing image_batch.shape and label_batch.shape")
 print("\n=====================================================\n")
