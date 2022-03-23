@@ -56,8 +56,8 @@ def generate_model_safe_drive():
 #Try experimenting with different optimizers and different optimizer configs
 def model_compile(model):
 
-    model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=0.1), 
-                loss='sparse_categorical_crossentropy',
+    model.compile(optimizer = 'adam', 
+                loss='categorical_crossentropy',
                 metrics=['accuracy'])
 
     return model
