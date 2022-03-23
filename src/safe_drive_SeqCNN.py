@@ -43,7 +43,7 @@ def generate_model_safe_drive():
         tf.keras.layers.MaxPooling2D(2, 2),
 
         #Flatten the output of the previous layer
-        #tf.keras.layers.Flatten(),
+        tf.keras.layers.Flatten(),
 
         #Anothet fully connected layer with 512 units
         tf.keras.layers.Dense(256, activation='relu'),
