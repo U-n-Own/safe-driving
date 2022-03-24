@@ -1,4 +1,5 @@
 from importlib.resources import path
+import time
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
 import cv2
@@ -15,74 +16,76 @@ import matplotlib.pyplot as plt
 model = keras.Sequential([
     keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),
  '''
- #Remove self 
+ #Remove 
 
-def get_cv2_image(self,path):
+def get_cv2_image(path):
         # Loading as Grayscale image
-        if self.color_type == 1:
+        if color_type == 1:
             img = cv2.imread(path, cv2.IMREAD_GRAYSCALE)
-        elif self.color_type == 3:
+        elif color_type == 3:
             img = cv2.imread(path, cv2.IMREAD_COLOR)
         # crop to 480x480
         img = img[:,80:560]
         # Reduce size to 240x240
-        img = cv2.resize(img, (self.img_rows, self.img_cols)) 
+        img = cv2.resize(img, (img_rows, img_cols)) 
         return img
 
-    def normalize_img(self, img):
-        #img = tf.cast(img, dtype=tf.float32)
-        # Map values in the range [-1, 1]
-        return (img / 127.5) - 1.0
+def normalize_img( img):
+    #img = tf.cast(img, dtype=tf.float32)
+    # Map values in the range [-1, 1]
+    return (img / 127.5) - 1.0
     
-    # Training
-    #Only single user 
-    def load_train(self):
-        start_time = time.time()
-        train_images = [] 
-        train_names = [] 
-        train_labels = []
-        # Loop over th
-        for classed in tqdm(range(self.NUMBER_CLASSES)):
+# Training
+#Only single user 
+def load_train():
+    start_time = time.time()
+    train_images = [] 
+    train_names = [] 
+    train_labels = []
+    # Loop over th
+    for classed in tqdm(range(NUMBER_CLASSES)):
         # for classed in [0, 1, 2, 3, 4]:
         print('Loading directory c{}'.format(classed))
-        # print(os.path.join(self.PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
-        print(os.path.join(self.PATH.format(classed), '*.png'))
-        # files = glob(os.path.join(self.PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
-        files = glob(os.path.join(self.PATH.format(classed), '*.png'))
+        # print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
+        print(os.path.join(PATH.format(classed), '*.png'))
+        # files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
+        files = glob(os.path.join(PATH.format(classed), '*.png'))
         print(len(files))
         for file in files:
-            img = self.get_cv2_image(file)
+            img = get_cv2_image(file)
             train_images.append(img)
             train_names.append(file)
             # train_labels.append(classed)
             train_labels.append(classed // 1)
-                
-        print("Data Loaded in {} second".format(time.time() - start_time))
-        self.X = train_images
-        self.labels = train_labels
-        self.names = train_names
-#1 user per test. Loading a single user
-  def train_test_split_users(self,X,y,names,user):
-        indices = [i for i, x in enumerate(names) if self.USERS[user] in x]
-        x_test = [e for i, e in enumerate(X) if i in indices]
-        x_train = [e for i, e in enumerate(X) if i not in indices]
-        y_test = [e for i, e in enumerate(y) if i in indices]
-        y_train = [e for i, e in enumerate(y) if i not in indices]
-        return x_train, x_test, y_train, y_test
-        
+            
+    print("Data Loaded in {} second".format(time.time() - start_time))
+    X = train_images
+    labels = train_labels
+    names = train_names
     
-    def normalize_train_data_user(self,user):
-        #One shot encoding
-        y = np_utils.to_categorical(self.labels, self.NUMBER_CLASSES)
-        x_train, x_test, y_train, y_test = self.train_test_split_users(self.X,y,self.names,user)
-        y_train = np.array(y_train)
-        y_test = np.array(y_test)
-        x_train = np.array(x_train, dtype=np.float32).reshape(-1,self.img_cols,self.img_rows,self.color_type)
-        x_test = np.array(x_test, dtype=np.float32).reshape(-1,self.img_cols,self.img_rows,self.color_type)
-        # x_train = x_train / 255.0
-        # x_test = x_test / 255.0
-        
-        return x_train, x_test, y_train, y_test
+# This may be useless to me
+#1 user per test. Loading a single user
+def train_test_split_users(X,y,names,user):
+    indices = [i for i, x in enumerate(names) if USERS[user] in x]
+    x_test = [e for i, e in enumerate(X) if i in indices]
+    x_train = [e for i, e in enumerate(X) if i not in indices]
+    y_test = [e for i, e in enumerate(y) if i in indices]
+    y_train = [e for i, e in enumerate(y) if i not in indices]
+    return x_train, x_test, y_train, y_test
+    
+
+def normalize_train_data_user(user):
+    #One shot encoding
+    y = np.utils.to_categorical(labels, NUMBER_CLASSES)
+    x_train, x_test, y_train, y_test = train_test_split_users(X,y,names,user)
+    y_train = np.array(y_train)
+    y_test = np.array(y_test)
+    x_train = np.array(x_train, dtype=np.float32).reshape(-1,img_cols,img_rows,color_type)
+    x_test = np.array(x_test, dtype=np.float32).reshape(-1,img_cols,img_rows,color_type)
+    # x_train = x_train / 255.0
+    # x_test = x_test / 255.0
+    
+    return x_train, x_test, y_train, y_test
 
 #For validation, stratify is used to use all classes in the test set
 train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
