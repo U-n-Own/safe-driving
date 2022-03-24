@@ -87,6 +87,9 @@ def get_cv2_image(self,path):
 #For validation, stratify is used to use all classes in the test set
 train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
 
+USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
+#Each instance work on it's own data on 29/30 users
+#In federate n copy of model e
 #Import dataset for training the dataset is divided in dataset/dataWithoutMasks/c00.. until c14
 #There are 15 classes one for each label of action per users
 #There are 30 users in the dataset with 200 image per user and each user can have 15 actions
