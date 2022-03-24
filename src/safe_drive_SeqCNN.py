@@ -39,12 +39,12 @@ def generate_model_safe_drive():
         tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
         tf.keras.layers.MaxPooling2D(2, 2),
 
-        tf.keras.layer.Dropout(),
+        tf.keras.layers.Dropout(),
 
         #Flatten the output of the previous layer
         tf.keras.layers.Flatten(),
 
-        tf.keras.layer.Dropout(),
+        tf.keras.layers.Dropout(),
 
         #Anothet fully connected layer with 512 units
         tf.keras.layers.Dense(256, activation='relu'),
