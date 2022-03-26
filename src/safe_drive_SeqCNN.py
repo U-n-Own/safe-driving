@@ -9,8 +9,8 @@ import pathlib
 import matplotlib.pyplot as plt
 
 batch_size = 32
-img_height = 256 
-img_width = 256
+img_height = 240
+img_width = 240
 num_classes = 15
 
 
@@ -22,7 +22,7 @@ def generate_model_safe_drive():
 
 
         #Rescaling the input image to a fixed size
-        tf.keras.layers.Rescaling(1./255, input_shape=(256, 256, 3)),
+        tf.keras.layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
 
         #Flatten the input to a 1-D vector
         #tf.keras.layers.Flatten(input_shape=(256, 256, 3)),
@@ -39,15 +39,15 @@ def generate_model_safe_drive():
         tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
         tf.keras.layers.MaxPooling2D(2, 2),
 
-        tf.keras.layers.Dropout(.5, input_shape=(256,256,3)),
+        tf.keras.layers.Dropout(.5, input_shape=(img_height,img_width,3)),
 
         #Flatten the output of the previous layer
         tf.keras.layers.Flatten(),
 
-        tf.keras.layers.Dropout(.5, input_shape=(256,256,3)),
+        tf.keras.layers.Dropout(.5, input_shape=(img_height,img_width,3)),
 
         #Anothet fully connected layer with 512 units
-        tf.keras.layers.Dense(256, activation='relu'),
+        tf.keras.layers.Dense(240, activation='relu'),
 
         #Final layer with 15 classes
         tf.keras.layers.Dense(num_classes, activation='softmax')
