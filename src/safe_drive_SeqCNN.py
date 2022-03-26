@@ -68,7 +68,7 @@ def model_compile(model):
 
 
 def fit_model(model):
-    model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
+    model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=5)
 
 def trained_model_evaluation(model):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
@@ -83,7 +83,7 @@ def start_training():
     fit_model(model)
     print("\n\n\nModel trained with success!\n\n\n")
     #history.results()
-#    trained_model_evaluation(model)
+    trained_model_evaluation(model)
 
 
 #Image importing + preprocessing
