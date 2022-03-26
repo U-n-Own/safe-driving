@@ -121,6 +121,8 @@ print("Visualizing class names")
 print(class_names)
 print("\n###################################################\n")
 
+print("Plotting training data")
+plt.plot(dataset_to_train[0])
 
 print("Printing image_batch.shape and label_batch.shape")
 print("\n=====================================================\n")
