@@ -12,11 +12,9 @@ import tensorflow as tf
 import pathlib
 import matplotlib.pyplot as plt
 
-''' #Model for CNN image classification on 15 classes
-model = keras.Sequential([
-    keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(150, 150, 3)),
- '''
- #Remove 
+#Declaring variables
+
+
 
 def get_cv2_image(path):
         # Loading as Grayscale image
@@ -120,6 +118,9 @@ IMAGE_SIZE = 240
 
 print("end of loading")
 #image = cv2.imread("/home/gargano/dataset/dataWithoutMasks/c00/IMAGE_NAME_HERE.png", 0) 
+
+
+def train_and_test():
 
 
 
