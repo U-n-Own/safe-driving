@@ -28,15 +28,15 @@ def generate_model_safe_drive():
         #tf.keras.layers.Flatten(input_shape=(256, 256, 3)),
 
         #First convolutional layer with 32 filters and a kernel size of 3x3
-        tf.keras.layers.Conv2D(32, (3, 3), activation='relu', input_shape=(img_height, img_width, 3)),
+        tf.keras.layers.Conv2D(16, (3, 3), activation='relu', input_shape=(img_height, img_width, 3)),
         tf.keras.layers.MaxPooling2D(2, 2),
 
         #Second convolutional layer with 64 filters and a kernel size of 3x3
-        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
+        tf.keras.layers.Conv2D(32, (3, 3), activation='relu'),
         tf.keras.layers.MaxPooling2D(2, 2),
 
         #Third convolutional layer with 128 filters and a kernel size of 3x3
-        tf.keras.layers.Conv2D(128, (3, 3), activation='relu'),
+        tf.keras.layers.Conv2D(64, (3, 3), activation='relu'),
         tf.keras.layers.MaxPooling2D(2, 2),
 
         tf.keras.layers.Dropout(.5, input_shape=(img_height,img_width,3)),
@@ -74,6 +74,8 @@ def trained_model_evaluation(model):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
     print('\nTest accuracy:', test_acc)
 
+def get_weights(model):
+    return model.get_weights()
 
 def start_training():
     model = generate_model_safe_drive()
