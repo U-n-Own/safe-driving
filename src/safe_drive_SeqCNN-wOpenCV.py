@@ -7,7 +7,7 @@ from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
 import cv2
 from cProfile import label
-import os
+from os import os
 import PIL
 import PIL.Image
 import tensorflow as tf
