@@ -61,7 +61,7 @@ def load_train():
         #print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
         print(os.path.join(PATH.format(classed), '*.png'))
         #files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
-        files = glob(os.path.join(PATH.format(classed), '*.png'))
+        files = (os.path.join(PATH.format(classed), '*.png'))
         print(len(files))
         for file in files:
             img = get_cv2_image(file)
