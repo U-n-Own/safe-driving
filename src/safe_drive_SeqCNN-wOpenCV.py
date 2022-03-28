@@ -1,5 +1,8 @@
+import glob
 from importlib.resources import path
+import random
 import time
+import tqdm
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
 import cv2
@@ -8,13 +11,23 @@ import os
 import PIL
 import PIL.Image
 import tensorflow as tf
+from sklearn.model_selection import train_test_split
 #import tensorflow_datasets as tfds
 import pathlib
 import matplotlib.pyplot as plt
 
 #Declaring variables
 
-
+color_type = 3
+#Original is 640x480
+img_cols, img_rows = 240
+NUMBER_CLASSES = 15
+PATH = '/home/gargano/dataset/dataWithoutMasks'
+USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
+root_dir = '/home/gargano/'
+DATADIR = "/home/gargano/dataset/dataWithoutMasks"
+CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
+i = 0
 
 def get_cv2_image(path):
         # Loading as Grayscale image
@@ -57,25 +70,40 @@ def load_train():
             train_labels.append(classed // 1)
             
     print("Data Loaded in {} second".format(time.time() - start_time))
+
     X = train_images
     labels = train_labels
     names = train_names
+
+    return X, labels, names
     
 # This may be useless to me
 #1 user per test. Loading a single user
-def train_test_split_users(X,y,names,user):
+''' def train_test_split_users(X,y,names,user):
     indices = [i for i, x in enumerate(names) if USERS[user] in x]
     x_test = [e for i, e in enumerate(X) if i in indices]
     x_train = [e for i, e in enumerate(X) if i not in indices]
     y_test = [e for i, e in enumerate(y) if i in indices]
     y_train = [e for i, e in enumerate(y) if i not in indices]
-    return x_train, x_test, y_train, y_test
-    
+    return x_train, x_test, y_train, y_test  
+ '''
 
-def normalize_train_data_user(user):
+#We need a function that splits the data per user, pick all data from a user and then split it in train and test for a single model
+#All the data of one user is used for test and the 29/30 of the users data is used for training
+#The file a are in a format like this: username_number_of_image.png
+#We pick only the first 29/30 users' data for training and the last one for test
+#Then we cycle and we do this for each users, so every model has one of these cycled data and it's being trained separately in only 1 epoch or 1 step of SGD
+#Finally we extract the weights of each model and we compute the mean of the weights of all the models to get the final model, this is cycled for some epochs
+def train_test_split_single_user(X, y, names, user):
+
+    #Todo
+    indices = [i for i, x in enumerate(names) if USERS[user] in x]
+
+
+def normalize_train_data_user(user, labels, names, X):
     #One shot encoding
     y = np.utils.to_categorical(labels, NUMBER_CLASSES)
-    x_train, x_test, y_train, y_test = train_test_split_users(X,y,names,user)
+    x_train, x_test, y_train, y_test = train_test_split_single_user(X,y,names,user)
     y_train = np.array(y_train)
     y_test = np.array(y_test)
     x_train = np.array(x_train, dtype=np.float32).reshape(-1,img_cols,img_rows,color_type)
@@ -85,10 +113,10 @@ def normalize_train_data_user(user):
     
     return x_train, x_test, y_train, y_test
 
-#For validation, stratify is used to use all classes in the test set
-train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
 
-USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
+
+
+
 #Each instance work on it's own data on 29/30 users
 #In federate n copy of model e
 #Import dataset for training the dataset is divided in dataset/dataWithoutMasks/c00.. until c14
@@ -98,29 +126,95 @@ USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide
 #Path to folders is ./dataset/dataWithoutMasks/c00..c14
 
 #Import dataset using OpenCV
-root_dir = '/home/gargano/'
-DATADIR = "/home/gargano/dataset/dataWithoutMasks"
-CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
-i = 0
-
-for category in CATEGORIES:
-    print(category + "is now being processed")
-    path = os.path.join(DATADIR,category) #Path to the folder divided in 15 classes
-    for img in os.listdir(path):   
-        img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
+def import_dataset_with_opencv():
     
-#Original is 640x480
-IMAGE_SIZE = 240
-
-#IMAGE_SIZE = 512
-#new_array = cv2.resize(img_to_array, (IMAGE_SIZE, IMAGE_SIZE))
-
-
-print("end of loading")
-#image = cv2.imread("/home/gargano/dataset/dataWithoutMasks/c00/IMAGE_NAME_HERE.png", 0) 
+    for category in CATEGORIES:
+        print(category + "is now being processed")
+        path = os.path.join(DATADIR,category) #Path to the folder divided in 15 classes
+        for img in os.listdir(path):   
+            img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
 
 
-def train_and_test():
+
+#Where K is number of the client and w is the weight matrix of his own model
+def fake_client_update(k, w):
+    print("Client {} is updating".format(k))
+
+
+def train_test_split_single_user():
+    #For each user
+    NUMBER_USERS = len(USERS)
+
+    for user in range(NUMBER_USERS):
+        #For each class
+        for classed in range(NUMBER_CLASSES):
+            #For each image
+            for img in range(NUMBER_IMAGES):
+                #Get the image
+                img_to_array = cv2.imread(os.path.join(PATH.format(classed), img), cv2.IMREAD_COLOR)
+                #Resize the image
+                new_array = cv2.resize(img_to_array, img_cols, img_rows)
+                #Add the image to the dataset
+                dataset.append([new_array, classed])
+                
+    #Shuffle the dataset
+    random.shuffle(dataset)
+    #Split the dataset into train and test
+    train = dataset[:TRAIN_SIZE]
+    test = dataset[TRAIN_SIZE:]
+    
+    #Create the train and test sets
+    X_train = []
+    X_test = []
+    y_train = []
+    y_test = []
+    
+    for features, label in train:
+        X_train.append(features)
+        y_train.append(label)
+        
+    for features, label in test:
+        X_test.append(features)
+        y_test.append(label)
+        
+    #Convert to numpy arrays
+    X_train = np.array(X_train).reshape(-1, IMAGE_SIZE, IMAGE_SIZE, 3)
+    X_test = np.array(X_test).reshape(-1, IMAGE_SIZE, IMAGE_SIZE, 3)
+    y_train = np.array(y_train)
+    y_test = np.array(y_test)
+    
+    #One-hot encode the labels
+    y_train = np.utils.to_categorical(y_train, NUMBER_CLASSES)
+    y_test = np.utils.to_categorical(y_test, NUMBER_CLASSES)
+    
+    return X_train, X_test, y_train, y_test    
+    
+
+#Simulation of federated learning using 30 users and using a simple iterative workflow    
+def start_fake_federated_learning():
+
+    print("Starting federated learning simulation\n\n")
+
+    #Create the dataset
+    print("Loading dataset...\n\n")
+    img = load_train()
+
+    normalize_img(img)
+
+    #Split the dataset into train and test for each user
+
+    labels, names, X = img
+
+    x_train, x_test, y_train, y_test =  normalize_train_data_user(USERS, labels, names, X)
+
+    #For validation, stratify is used to use all classes in the test set
+    tensor_test = train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
+    print("Tensor shape: {}".format(tensor_test[0].shape + "\n\n\n"))
+    tf.shape(tensor_test)
+
+
+#def train_and_test():
+
 
 
 
