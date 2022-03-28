@@ -1,4 +1,4 @@
-import glob
+from glob import glob
 from importlib.resources import path
 import random
 import time
