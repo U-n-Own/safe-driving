@@ -214,10 +214,8 @@ def start_fake_federated_learning():
     tf.shape(tensor_test)
 
 
-#def train_and_test():
 
-
-
+start_fake_federated_learning()
 
 #Todo: Copy the train and test set in new directory
 #Data augmentations maybe
