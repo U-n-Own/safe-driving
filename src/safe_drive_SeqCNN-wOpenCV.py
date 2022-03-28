@@ -2,7 +2,7 @@ import glob
 from importlib.resources import path
 import random
 import time
-import tqdm
+from tqdm import tqdm 
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
 import cv2
