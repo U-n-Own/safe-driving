@@ -58,10 +58,10 @@ def load_train():
     for classed in tqdm(range(NUMBER_CLASSES)):
         # for classed in [0, 1, 2, 3, 4]:
         print('Loading directory c{}'.format(classed))
-        # print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
+        #print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
         print(os.path.join(PATH.format(classed), '*.png'))
-        # files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
-        files = glob(os.path.join(PATH.format(classed), '*.png'))
+        files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
+        #files = glob(os.path.join(PATH.format(classed), '*.png'))
         print(len(files))
         for file in files:
             img = get_cv2_image(file)
