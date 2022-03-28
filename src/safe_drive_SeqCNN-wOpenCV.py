@@ -37,7 +37,7 @@ def get_cv2_image(path):
         elif color_type == 3:
             img = cv2.imread(path, cv2.IMREAD_COLOR)
         # crop to 480x480
-        img = img[:,80:560]
+        img[:,80:560]
         # Reduce size to 240x240
         img = cv2.resize(img, (img_rows, img_cols)) 
         return img
