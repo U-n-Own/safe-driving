@@ -78,16 +78,7 @@ def load_train():
 
     return X, labels, names
     
-# This may be useless to me
-#1 user per test. Loading a single user
-''' def train_test_split_users(X,y,names,user):
-    indices = [i for i, x in enumerate(names) if USERS[user] in x]
-    x_test = [e for i, e in enumerate(X) if i in indices]
-    x_train = [e for i, e in enumerate(X) if i not in indices]
-    y_test = [e for i, e in enumerate(y) if i in indices]
-    y_train = [e for i, e in enumerate(y) if i not in indices]
-    return x_train, x_test, y_train, y_test  
- '''
+
 
 #We need a function that splits the data per user, pick all data from a user and then split it in train and test for a single model
 #All the data of one user is used for test and the 29/30 of the users data is used for training
@@ -95,10 +86,16 @@ def load_train():
 #We pick only the first 29/30 users' data for training and the last one for test
 #Then we cycle and we do this for each users, so every model has one of these cycled data and it's being trained separately in only 1 epoch or 1 step of SGD
 #Finally we extract the weights of each model and we compute the mean of the weights of all the models to get the final model, this is cycled for some epochs
+
+#We use only the data of an user to train the model
+#An user is picked in the dictionary USERS and then we pick only the image with the same name as the user
 def train_test_split_single_user(X, y, names, user):
 
+
     #Todo
-    indices = [i for i, x in enumerate(names) if USERS[user] in x]
+    #indices = [i for i, x in enumerate(names) if USERS[user] in x]
+
+    
 
 
 def normalize_train_data_user(user, labels, names, X):
@@ -200,7 +197,7 @@ def start_fake_federated_learning():
     print("Loading dataset...\n\n")
     img = load_train()
 
-    normalize_img(img)
+    #normalize_img(img)
 
     #Split the dataset into train and test for each user
 
@@ -224,3 +221,13 @@ def augumentation_imgs
     image = tf.image.random_brightness(image, max_delta=0.07)
     return image, y
 '''
+# This may be useless to me
+#1 user per test. Loading a single user
+''' def train_test_split_users(X,y,names,user):
+    indices = [i for i, x in enumerate(names) if USERS[user] in x]
+    x_test = [e for i, e in enumerate(X) if i in indices]
+    x_train = [e for i, e in enumerate(X) if i not in indices]
+    y_test = [e for i, e in enumerate(y) if i in indices]
+    y_train = [e for i, e in enumerate(y) if i not in indices]
+    return x_train, x_test, y_train, y_test  
+ '''
