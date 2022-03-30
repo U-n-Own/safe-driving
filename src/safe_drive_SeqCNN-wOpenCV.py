@@ -192,10 +192,12 @@ def start_fake_federated_learning():
     #TODO: Split the dataset into train and test for each user
 
     labels, names, X = img
-
-    print("Labels" + labels)
-    print("'Names'" + names)
-    print("X" + X)
+    print("Labels, names, X loaded\n\n")
+    print( labels)
+    print("\n\n")
+    print(names)
+    print("\n\n")
+    print(X)
 
     #Can't run this because we don't have this much ram to store all the dataset
     #So we're going to pick only one user data per training
