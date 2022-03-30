@@ -195,11 +195,11 @@ def start_fake_federated_learning():
     labels, names, X = img
     print("Labels, names, X loaded\n\n")
     #Print one for each label, names and X
-    i = True
-    while(i):
-        i=False
+  
+    for lab in labels:
         print("Label {}: {}".format(lab, labels.count(lab)))
-    
+        break
+
 '''     print(labels)
     print("\n\n")
     print(names)
