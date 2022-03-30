@@ -3,6 +3,7 @@ from importlib.resources import path
 import random
 from re import M
 import os.path
+from sre_constants import JUMP
 import time
 from scipy import rand
 from tqdm import tqdm 
@@ -194,24 +195,25 @@ def start_fake_federated_learning():
     labels, names, X = img
     print("Labels, names, X loaded\n\n")
     #Print one for each label, names and X
-    for lab in range(1):
+    i = True
+    while(i):
+        i=False
         print("Label {}: {}".format(lab, labels.count(lab)))
-    break
-
+    
 '''     print(labels)
     print("\n\n")
     print(names)
     print("\n\n")
     print(X) '''
 
-    #Can't run this because we don't have this much ram to store all the dataset
-    #So we're going to pick only one user data per training
-    x_train, x_test, y_train, y_test =  normalize_train_data_user(USERS, labels, names, X)
+#Can't run this because we don't have this much ram to store all the dataset
+#So we're going to pick only one user data per training
+x_train, x_test, y_train, y_test =  normalize_train_data_user(USERS, labels, names, X)
 
-    #For validation, stratify is used to use all classes in the test set
-    tensor_test = train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
-    print("Tensor shape: {}".format(tensor_test[0].shape + "\n\n\n"))
-    tf.shape(tensor_test)
+#For validation, stratify is used to use all classes in the test set
+tensor_test = train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
+print("Tensor shape: {}".format(tensor_test[0].shape + "\n\n\n"))
+tf.shape(tensor_test)
 
 
 
