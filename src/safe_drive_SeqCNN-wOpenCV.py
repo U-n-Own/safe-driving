@@ -87,12 +87,12 @@ def load_train():
         print('Loading directory c{}'.format(classed))
         #print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
         #print(os.path.join(PATH.format(classed), USERS[user_chosen]+'-'+'*.png'))
-        print([i for i in os.listdir(path) if os.path.isfile(os.path.join(path,i)) and user_chosen in i])
+        print([i for i in os.listdir(PATH) if os.isfile(os.path.join(PATH,i)) and user_chosen in i])        
         #files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
         #files = glob(os.path.join(PATH.format(classed), '*.png'))
         files = glob(os.path.join(PATH.format(classed), USERS[user_chosen]+'-'+'*.png'))
         #Picking files using list comprehension
-        files = [i for i in os.listdir(path) if os.path.isfile(os.path.join(path,i)) and user_chosen in i]
+        files = [i for i in os.listdir(PATH) if os.path.isfile(os.path.join(PATH,i)) and user_chosen in i]
         print(len(files))
         for file in files:
             img = get_cv2_image(file)
