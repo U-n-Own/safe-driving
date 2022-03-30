@@ -193,11 +193,16 @@ def start_fake_federated_learning():
 
     labels, names, X = img
     print("Labels, names, X loaded\n\n")
-    print( labels)
+    #Print one for each label, names and X
+    for lab in range(1):
+        print("Label {}: {}".format(lab, labels.count(lab)))
+
+
+'''     print(labels)
     print("\n\n")
     print(names)
     print("\n\n")
-    print(X)
+    print(X) '''
 
     #Can't run this because we don't have this much ram to store all the dataset
     #So we're going to pick only one user data per training
