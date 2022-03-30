@@ -42,12 +42,8 @@ def get_cv2_image(path):
         img = cv2.resize(img, (img_rows, img_cols)) 
         return img
 
-def normalize_img( img):
-    #img = tf.cast(img, dtype=tf.float32)
-    # Map values in the range [-1, 1]
-    return (img / 127.5) - 1.0
-    
 # Training
+# Now is loading all users
 #Only single user 
 def load_train():
     start_time = time.time()
@@ -77,26 +73,11 @@ def load_train():
     names = train_names
 
     return X, labels, names
-    
 
-
-#We need a function that splits the data per user, pick all data from a user and then split it in train and test for a single model
-#All the data of one user is used for test and the 29/30 of the users data is used for training
-#The file a are in a format like this: username_number_of_image.png
-#We pick only the first 29/30 users' data for training and the last one for test
-#Then we cycle and we do this for each users, so every model has one of these cycled data and it's being trained separately in only 1 epoch or 1 step of SGD
-#Finally we extract the weights of each model and we compute the mean of the weights of all the models to get the final model, this is cycled for some epochs
-
-#We use only the data of an user to train the model
-#An user is picked in the dictionary USERS and then we pick only the image with the same name as the user
-def train_test_split_single_user(X, y, names, user):
-
-
-    #Todo
-    #indices = [i for i, x in enumerate(names) if USERS[user] in x]
-
-    
-
+def normalize_img( img):
+    #img = tf.cast(img, dtype=tf.float32)
+    # Map values in the range [-1, 1]
+    return (img / 127.5) - 1.0
 
 def normalize_train_data_user(user, labels, names, X):
     #One shot encoding
@@ -111,26 +92,35 @@ def normalize_train_data_user(user, labels, names, X):
     
     return x_train, x_test, y_train, y_test
 
+    
 
-
-
+#Structure of dataset    
 
 #Each instance work on it's own data on 29/30 users
 #In federate n copy of model e
 #Import dataset for training the dataset is divided in dataset/dataWithoutMasks/c00.. until c14
 #There are 15 classes one for each label of action per users
 #There are 30 users in the dataset with 200 image per user and each user can have 15 actions
-
 #Path to folders is ./dataset/dataWithoutMasks/c00..c14
 
-#Import dataset using OpenCV
-def import_dataset_with_opencv():
-    
-    for category in CATEGORIES:
-        print(category + "is now being processed")
-        path = os.path.join(DATADIR,category) #Path to the folder divided in 15 classes
-        for img in os.listdir(path):   
-            img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
+#Structure of training
+
+#We need a function that splits the data per user, pick all data from a user and then split it in train and test for a single model
+#All the data of one user is used for test and the 29/30 of the users data is used for training
+#The file a are in a format like this: username_number_of_image.png
+#We pick only the first 29/30 users' data for training and the last one for test
+#Then we cycle and we do this for each users, so every model has one of these cycled data and it's being trained separately in only 1 epoch or 1 step of SGD
+#Finally we extract the weights of each model and we compute the mean of the weights of all the models to get the final model, this is cycled for some epochs
+
+#We use only the data of an user to train the model
+#An user is picked in the dictionary USERS and then we pick only the image with the same name as the user
+def train_test_split_on_single_user(X, y, names, user):
+
+    return True
+    #Todo
+    #indices = [i for i, x in enumerate(names) if USERS[user] in x]
+
+
 
 
 
@@ -140,7 +130,85 @@ def fake_client_update(k, w):
 
 
 def train_test_split_single_user():
-    #For each user
+    
+    return True
+
+
+#These should be classes maybe
+
+def aggregator_update(w):
+    print("Aggregator is updating")
+
+def collaborator_update(w):
+    print("Collaborator is updating")   
+    
+
+#Simulation of federated learning using 30 users and using a simple iterative workflow    
+def start_fake_federated_learning():
+
+    print("Starting federated learning simulation\n\n")
+
+    print("Loading dataset...\n\n")
+    img = load_train()
+
+    #normalize_img(img)
+
+    #TODO: Split the dataset into train and test for each user
+
+    labels, names, X = img
+
+    x_train, x_test, y_train, y_test =  normalize_train_data_user(USERS, labels, names, X)
+
+    #For validation, stratify is used to use all classes in the test set
+    tensor_test = train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
+    print("Tensor shape: {}".format(tensor_test[0].shape + "\n\n\n"))
+    tf.shape(tensor_test)
+
+
+
+start_fake_federated_learning()
+
+
+
+
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+
+#Todo: Copy the train and test set in new directory
+
+
+
+#Data augmentations maybe
+''' 
+def augumentation_imgs 
+    image = tf.image.random_brightness(image, max_delta=0.07)
+    return image, y
+'''
+
+''' #Import dataset using OpenCV
+def import_dataset_with_opencv():
+    
+    for category in CATEGORIES:
+        print(category + "is now being processed")
+        path = os.path.join(DATADIR,category) #Path to the folder divided in 15 classes
+        for img in os.listdir(path):   
+            img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
+
+ '''
+# This may be useless to me
+#1 user per test. Loading a single user
+''' def train_test_split_users(X,y,names,user):
+    indices = [i for i, x in enumerate(names) if USERS[user] in x]
+    x_test = [e for i, e in enumerate(X) if i in indices]
+    x_train = [e for i, e in enumerate(X) if i not in indices]
+    y_test = [e for i, e in enumerate(y) if i in indices]
+    y_train = [e for i, e in enumerate(y) if i not in indices]
+    return x_train, x_test, y_train, y_test  
+ '''
+
+''' def old_split_single_usr():
+     #For each user
     NUMBER_USERS = len(USERS)
 
     for user in range(NUMBER_USERS):
@@ -186,48 +254,4 @@ def train_test_split_single_user():
     y_test = np.utils.to_categorical(y_test, NUMBER_CLASSES)
     
     return X_train, X_test, y_train, y_test    
-    
-
-#Simulation of federated learning using 30 users and using a simple iterative workflow    
-def start_fake_federated_learning():
-
-    print("Starting federated learning simulation\n\n")
-
-    #Create the dataset
-    print("Loading dataset...\n\n")
-    img = load_train()
-
-    #normalize_img(img)
-
-    #Split the dataset into train and test for each user
-
-    labels, names, X = img
-
-    x_train, x_test, y_train, y_test =  normalize_train_data_user(USERS, labels, names, X)
-
-    #For validation, stratify is used to use all classes in the test set
-    tensor_test = train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
-    print("Tensor shape: {}".format(tensor_test[0].shape + "\n\n\n"))
-    tf.shape(tensor_test)
-
-
-
-start_fake_federated_learning()
-
-#Todo: Copy the train and test set in new directory
-#Data augmentations maybe
-''' 
-def augumentation_imgs 
-    image = tf.image.random_brightness(image, max_delta=0.07)
-    return image, y
-'''
-# This may be useless to me
-#1 user per test. Loading a single user
-''' def train_test_split_users(X,y,names,user):
-    indices = [i for i, x in enumerate(names) if USERS[user] in x]
-    x_test = [e for i, e in enumerate(X) if i in indices]
-    x_train = [e for i, e in enumerate(X) if i not in indices]
-    y_test = [e for i, e in enumerate(y) if i in indices]
-    y_train = [e for i, e in enumerate(y) if i not in indices]
-    return x_train, x_test, y_train, y_test  
- '''
+     '''
