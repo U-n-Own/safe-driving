@@ -88,7 +88,8 @@ def load_train():
         #print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
         print(os.path.join(PATH.format(classed), +'.png'))
         #files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
-        files = glob(os.path.join(PATH.format(classed), USERS[user_chosen] + '*.png'))
+        #Take all the files that starts wit user_chosen-number_file.png
+        files = glob(os.path.join(PATH.format(classed), USERS[user_chosen]+'-*.png'))
         #files = glob(os.path.join(PATH.format(classed), '*.png'))
         print(len(files))
         for file in files:
