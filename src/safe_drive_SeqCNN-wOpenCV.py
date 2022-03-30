@@ -81,7 +81,8 @@ def normalize_img( img):
 
 def normalize_train_data_user(user, labels, names, X):
     #One shot encoding
-    y = np.utils.to_categorical(labels, NUMBER_CLASSES)
+    #y = np.utils.to_categorical(labels, NUMBER_CLASSES)
+    y = tf.keras.utils.to_categorical(labels, NUMBER_CLASSES)
     x_train, x_test, y_train, y_test = train_test_split_single_user(X,y,names,user)
     y_train = np.array(y_train)
     y_test = np.array(y_test)
