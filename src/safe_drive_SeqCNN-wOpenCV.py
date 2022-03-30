@@ -193,7 +193,6 @@ def start_fake_federated_learning():
 
     labels, names, X = img
 
-    print("Img tensor shape: " +  tf.shape(img))
     print('Labels' + labels)
     print('Names' + names)
     print('X' + X)
