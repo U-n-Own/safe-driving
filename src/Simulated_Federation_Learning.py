@@ -17,6 +17,30 @@ import pathlib
 import matplotlib.pyplot as plt
 
 
+
+''' 
+Aggregation server
+
+1. initialize model W0
+2. for each round t=1,…:
+3. Broadcast Wt−1 to all collaborators
+4. select C eligible participants
+5. foreach|| participant p: 
+6.  wtp = LocalUpdate(p)
+7. wt = aggregate(∀p, wtp)
+ '''
+
+'''
+Collaborator: Local Update
+
+
+
+
+''' 
+
+
+
+
 #Create two classes, one is the Aggregator and the other is the Collaborator
 
 # Aggregator: Initialize the model, send the model to the collaborators (there are 30 collaborators), then every 

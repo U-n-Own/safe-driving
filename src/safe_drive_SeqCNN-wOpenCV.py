@@ -1,7 +1,9 @@
 from glob import glob
 from importlib.resources import path
 import random
+from re import M
 import time
+from scipy import rand
 from tqdm import tqdm 
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
@@ -25,6 +27,8 @@ img_rows = 240
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
 USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
+USERS_DONE = []
+USER_TRAINED = list(range(len(USERS)))
 root_dir = '/home/gargano/'
 DATADIR = "/home/gargano/dataset/dataWithoutMasks"
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
@@ -42,21 +46,49 @@ def get_cv2_image(path):
         img = cv2.resize(img, (img_rows, img_cols)) 
         return img
 
+
+def pick_random_user():
+
+    #Maybe this is useless and we can pick one user witch a cycle
+
+    #Pick only one user data from the users using random pick
+    #To do this we pick one in USERS lenght and then we pick the image with the same name as the user in the array
+
+    rand_user_pick = random.randint(0, len(USERS)-1)
+    print("User picked: {}".format(USERS[rand_user_pick]))
+
+    if len(USERS_DONE) == len(USERS):
+        print("All users done")
+        return None
+
+    if USERS[rand_user_pick] in USERS_DONE:
+        return pick_random_user()
+
+    if USERS[rand_user_pick] not in USERS_DONE:
+        USERS_DONE.append(USERS[rand_user_pick])
+        return rand_user_pick
+
 # Training
 # Now is loading all users
-#Only single user 
+#we want only single user 
 def load_train():
     start_time = time.time()
     train_images = [] 
     train_names = [] 
     train_labels = []
-    # Loop over th
+  
+
+    user_chosen = pick_random_user()
+
+    #Pick only image of user_chosen   
+    
     for classed in tqdm(range(NUMBER_CLASSES)):
         # for classed in [0, 1, 2, 3, 4]:
         print('Loading directory c{}'.format(classed))
         #print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
-        print(os.path.join(PATH.format(classed), '*.png'))
-        files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
+        print(os.path.join(PATH.format(classed), +'.png'))
+        #files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
+        files = glob(os.path.join(PATH.format(classed), USERS[user_chosen] + '*.png'))
         #files = glob(os.path.join(PATH.format(classed), '*.png'))
         print(len(files))
         for file in files:
@@ -158,6 +190,8 @@ def start_fake_federated_learning():
 
     labels, names, X = img
 
+    #Can't run this because we don't have this much ram to store all the dataset
+    #So we're going to pick only one user data per training
     x_train, x_test, y_train, y_test =  normalize_train_data_user(USERS, labels, names, X)
 
     #For validation, stratify is used to use all classes in the test set
