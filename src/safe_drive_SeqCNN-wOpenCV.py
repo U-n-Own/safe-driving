@@ -88,7 +88,7 @@ def load_train():
         print('Loading directory c{}'.format(classed))
                          
         #Print the file name of user_chosen
-        print(glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png')))  
+        #print(glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png')))  
         files = glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png'))
         #print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
         #print(os.path.join(PATH.format(classed), USERS[user_chosen]+'-'+'*.png'))
