@@ -196,7 +196,7 @@ def start_fake_federated_learning():
     #Print one for each label, names and X
     for lab in range(1):
         print("Label {}: {}".format(lab, labels.count(lab)))
-
+    break
 
 '''     print(labels)
     print("\n\n")
