@@ -56,7 +56,8 @@ def pick_random_user():
     #To do this we pick one in USERS lenght and then we pick the image with the same name as the user in the array
 
     rand_user_pick = random.randint(0, len(USERS)-1)
-    print("User picked: {}".format(USERS[rand_user_pick]))
+    
+    #print("User picked: {}".format(USERS[rand_user_pick]))
 
     if len(USERS_DONE) == len(USERS):
         print("All users done")
@@ -72,7 +73,7 @@ def pick_random_user():
 # Training
 # Now is loading all users
 #we want only single user 
-def load_train():
+def load_train_single_user():
     start_time = time.time()
     train_images = [] 
     train_names = [] 
@@ -87,19 +88,10 @@ def load_train():
         
         print('Loading directory c{}'.format(classed))
                          
-        #Print the file name of user_chosen
+        
         #print(glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png')))  
         files = glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png'))
-        #print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
-        #print(os.path.join(PATH.format(classed), USERS[user_chosen]+'-'+'*.png'))
-        #print([i for i in os.listdir(PATH) if os.isfile(os.path.join(PATH,i)) and user_chosen in i])        
-        #files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
-        #files = glob(os.path.join(PATH.format(classed), '*.png'))
 
-        #files = glob(os.path.join(PATH.format(classed), USERS[user_chosen]+'-'+'*.png'))
-        
-        #Picking files using list comprehension
-        #files = [i for i in os.listdir(PATH) if os.path.isfile(os.path.join(PATH,i)) and user_chosen in i]
         
         print(len(files))
         for file in files:
@@ -192,14 +184,19 @@ def start_fake_federated_learning():
 
     print("Starting federated learning simulation\n\n")
 
-    print("Loading dataset...\n\n")
-    img = load_train()
+    print("Loading dataset for one user...\n\n")
+    img = load_train_single_user()
 
     #normalize_img(img)
 
     #TODO: Split the dataset into train and test for each user
 
     labels, names, X = img
+
+    print("Img tensor shape: " +  tf.shape(img))
+    print('Labels' + labels)
+    print('Names' + names)
+    print('X' + X)
 
     #Can't run this because we don't have this much ram to store all the dataset
     #So we're going to pick only one user data per training
