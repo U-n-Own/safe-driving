@@ -84,17 +84,23 @@ def load_train():
     #Pick only image of user_chosen   
     
     for classed in tqdm(range(NUMBER_CLASSES)):
-        # for classed in [0, 1, 2, 3, 4]:
+        
         print('Loading directory c{}'.format(classed))
+                         
+        #Print the file name of user_chosen
+        print(os.path.join(PATH, USERS[user_chosen], CATEGORIES[classed]))  
+        files = glob(os.path.join(PATH, USERS[user_chosen], CATEGORIES[classed], '*.png'))
         #print(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
         #print(os.path.join(PATH.format(classed), USERS[user_chosen]+'-'+'*.png'))
         #print([i for i in os.listdir(PATH) if os.isfile(os.path.join(PATH,i)) and user_chosen in i])        
-        print([i for i in os.listdir(PATH) if os.path.join(PATH,i) and user_chosen in i])
         #files = glob(os.path.join(PATH, 'c' + ('0'+str(classed) if classed < 10 else str(classed)), '*.png'))
         #files = glob(os.path.join(PATH.format(classed), '*.png'))
-        files = glob(os.path.join(PATH.format(classed), USERS[user_chosen]+'-'+'*.png'))
+
+        #files = glob(os.path.join(PATH.format(classed), USERS[user_chosen]+'-'+'*.png'))
+        
         #Picking files using list comprehension
-        files = [i for i in os.listdir(PATH) if os.path.isfile(os.path.join(PATH,i)) and user_chosen in i]
+        #files = [i for i in os.listdir(PATH) if os.path.isfile(os.path.join(PATH,i)) and user_chosen in i]
+        
         print(len(files))
         for file in files:
             img = get_cv2_image(file)
