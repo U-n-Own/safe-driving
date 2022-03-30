@@ -207,7 +207,9 @@ def start_fake_federated_learning():
 
 
 
-    start_fake_federated_learning()
+
+
+start_fake_federated_learning()
 
 
 
