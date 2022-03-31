@@ -196,9 +196,9 @@ def start_fake_federated_learning():
     #normalize_img(img)
 
     #TODO: Split the dataset into train and test for each user
-
-    labels, names, X = img
-
+     
+    X, labels, names = img
+    
 
 
     #Can't run this because we don't have this much ram to store all the dataset
