@@ -124,7 +124,7 @@ def normalize_train_data_user(user, labels, names, X):
     print("Printing labels\n", labels)
     
     y = tf.keras.utils.to_categorical(labels, NUMBER_CLASSES)
-    x_train, x_test, y_train, y_test = train_test_split_single_user(X,y,names,user)
+    x_train, x_test, y_train, y_test = train_test_split_on_single_user(X,y,names,user)
     y_train = np.array(y_train)
     y_test = np.array(y_test)
     x_train = np.array(x_train, dtype=np.float32).reshape(-1,img_cols,img_rows,color_type)
@@ -157,13 +157,16 @@ def normalize_train_data_user(user, labels, names, X):
 #We use only the data of an user to train the model
 #An user is picked in the dictionary USERS and then we pick only the image with the same name as the user
 def train_test_split_on_single_user(X, y, names, user):
-
-    return True
+    
+    indices = [i for i, x in enumerate(names) if USERS[user] in x]
+    x_test = [e for i, e in enumerate(X) if i in indices]
+    x_train = [e for i, e in enumerate(X) if i not in indices]
+    y_test = [e for i, e in enumerate(y) if i in indices]
+    y_train = [e for i, e in enumerate(y) if i not in indices]
+    return x_train, x_test, y_train, y_test  
+  
     #Todo
     #indices = [i for i, x in enumerate(names) if USERS[user] in x]
-
-
-
 
 
 #Where K is number of the client and w is the weight matrix of his own model
@@ -171,13 +174,7 @@ def fake_client_update(k, w):
     print("Client {} is updating".format(k))
 
 
-def train_test_split_single_user():
-    
-    return True
-
-
 #These should be classes maybe
-
 def aggregator_update(w):
     print("Aggregator is updating")
 
@@ -197,13 +194,15 @@ def start_fake_federated_learning():
 
     #TODO: Split the dataset into train and test for each user
      
+
     X, labels, names = img
     
+    print(names)
 
 
     #Can't run this because we don't have this much ram to store all the dataset
     #So we're going to pick only one user data per training
-    x_train, x_test, y_train, y_test =  normalize_train_data_user(USERS, labels, names, X)
+    x_train, x_test, y_train, y_test =  normalize_train_data_user(USERS[], labels, names, X)
 
     #For validation, stratify is used to use all classes in the test set
     tensor_test = train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
