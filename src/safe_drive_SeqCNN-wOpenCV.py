@@ -69,6 +69,7 @@ def pick_random_user():
 
     if USERS[rand_user_pick] not in USERS_DONE:
         USERS_DONE.append(USERS[rand_user_pick])
+        selected_usr = rand_user_pick
         return rand_user_pick
 
 # Training
@@ -108,7 +109,7 @@ def load_train_single_user():
     labels = train_labels
     names = train_names
 
-    return X, labels, names
+    return X, labels, names, user_chosen
 
 def normalize_img( img):
     #img = tf.cast(img, dtype=tf.float32)
@@ -195,14 +196,15 @@ def start_fake_federated_learning():
     #TODO: Split the dataset into train and test for each user
      
 
-    X, labels, names = img
+    X, labels, names, usr = img
+    
     
     print(names)
 
 
     #Can't run this because we don't have this much ram to store all the dataset
     #So we're going to pick only one user data per training
-    x_train, x_test, y_train, y_test =  normalize_train_data_user(USERS[], labels, names, X)
+    x_train, x_test, y_train, y_test =  normalize_train_data_user(usr, labels, names, X)
 
     #For validation, stratify is used to use all classes in the test set
     tensor_test = train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
