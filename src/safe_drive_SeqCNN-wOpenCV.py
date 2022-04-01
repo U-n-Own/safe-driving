@@ -202,7 +202,7 @@ def start_fake_federated_learning():
     x_train, x_test, y_train, y_test =  normalize_train_data_user(usr, labels, names, X)
 
     #For validation, stratify is used to use all classes in the test set
-    tensor_test = train_test_split(x_train, test_size=0.2, random_state=42, stratify=y_train)
+    tensor_test = train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
     print("Tensor shape: {}".format(tensor_test[0].shape + "\n\n\n"))
     tf.shape(tensor_test)
 
