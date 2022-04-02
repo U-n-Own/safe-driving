@@ -117,7 +117,7 @@ dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
     subset = 'validation'
 )
 
-#Saving class names
+''' #Saving class names
 class_names = dataset_to_train.class_names
 print("Visualizing class names")
 print(class_names)
@@ -133,3 +133,4 @@ for image_batch, labels_batch in dataset_to_train:
 
 #Generate model, compile it and fit it
 start_training()
+ '''
