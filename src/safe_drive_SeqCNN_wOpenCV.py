@@ -203,6 +203,8 @@ def start_simulated_federated_learning_loading_data(current_user_index):
 
     #For validation, stratify is used to use all classes in the test set
     x_train, x_test, y_train, y_test = train_test_split(x_train, y_train, test_size=0.2, random_state=42, stratify=y_train)
+
+    print("Train test split done\n\n")
     
     #This is not working
     return x_train, x_test, y_train, y_test 
