@@ -124,7 +124,9 @@ def normalize_train_data_user(user, labels, names, X):
     print("Printing labels\n", labels, "\n\nLabels lenght: ", len(labels))
     
     y = tf.keras.utils.to_categorical(labels, NUMBER_CLASSES)
-    x_train, x_test, y_train, y_test = train_test_split_on_single_user(X,y,names,user)
+    
+    #x_train, x_test, y_train, y_test = train_test_split_on_single_user(X,y,names,user)
+    
     y_train = np.array(y_train)
     y_test = np.array(y_test)
     x_train = np.array(x_train, dtype=np.float32).reshape(-1,img_cols,img_rows,color_type)

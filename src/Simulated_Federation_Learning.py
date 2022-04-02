@@ -91,6 +91,9 @@ class Aggregator(object):
 
             start_simulated_federated_learning_loading_data(USERS.index(user))
 
+            
+
+
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
 
