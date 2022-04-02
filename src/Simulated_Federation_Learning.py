@@ -144,4 +144,4 @@ class Collaborator(object):
 
 aggregator = Aggregator(generate_model_safe_drive(), 30)
 
-start_round_training()
+aggregator.start_round_training()
