@@ -1,3 +1,7 @@
+from safe_drive_SeqCNN_wOpenCV import *
+from safe_drive_SeqCNN import *
+
+
 from glob import glob
 from importlib.resources import path
 import random
@@ -32,14 +36,11 @@ Aggregation server
 
 '''
 Collaborator: Local Update
-
-
-
-
+get model from aggregation server
+select batch (all of current user)
+gb <- compute gradient for batch
+send model to aggregation server
 ''' 
-
-
-
 
 #Create two classes, one is the Aggregator and the other is the Collaborator
 
@@ -61,29 +62,74 @@ NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
 USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
-
+MODELS = []
 
 
 
 class Aggregator(object):
+
     def __init__(self, model, num_clients):
         self.model = model
         self.num_clients = num_clients
-        self.weights = []
-        self.losses = []
+
+
+
+    #Initialize model from safe_drive_SeqCNN.py
+    def initialize_local_model(self):
+        return generate_model_safe_drive()
+
+
+    #After we got the data as tensor we start the fake federation learning with 30 users
+    def start_round_training(self):
+        
+
+        #For each users in users we will do the training using the data of the user
+        for user in USERS:
+
+
+            print("\nUser data loading number" + str(USERS.index(user)))
+
+            start_simulated_federated_learning_loading_data(USERS.index(user))
+
+    #Take a list of models and return the mean of the models (mean of the weights)
+    def local_update(self, models):
+
+        models = MODELS
+        weights = []
+
+        #Take the weights of the models and compute the mean then return the weights to an updated model
+        for model in models:
+            #store the weights of current model
+            weights.append(model.get_weights())
+    
+        #compute the mean of the weights
+        weights = np.mean(weights, axis=0)
+
+        #update the model with the mean of the weights
+        self.model.set_weights(weights)
+
+        return self.model
+
+        
+
+
+    def extract_weights(self):
+            return np.mean(self.weights, axis=0)
+
 
     def update(self, weights):
         self.weights.append(weights)
         self.losses.append(self.model.evaluate(self.weights))
 
-    def extract_weights(self):
-        return np.mean(self.weights, axis=0)
 
 
+#Code for fake collaborator class in simulted federation learning
 class Collaborator(object):
-    def __init__(self, model, user):
+
+    def __init__(self, model, num_clients):
         self.model = model
-        self.user = user
+        self.num_clients = num_clients
+
 
     def update(self, weights):
         self.weights.append(weights)
@@ -92,3 +138,10 @@ class Collaborator(object):
     def extract_weights(self):
         return self.weights[-1]
 
+
+
+
+
+aggregator = Aggregator(generate_model_safe_drive(), 30)
+
+start_round_training()
