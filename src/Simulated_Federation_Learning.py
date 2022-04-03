@@ -144,9 +144,14 @@ model = model_compile(model)
 aggregator = Aggregator(model, num_clients)
 
 #Initialize the collaborators
-for training_session in range(num_clients): 
-    collaborators[training_session] = Collaborator(model)
+for i in range(num_clients):
+    collaborator = Collaborator(model)
+    collaborators.append(collaborator)
 
+
+''' for training_session in range(num_clients): 
+    collaborators[training_session] = Collaborator(model)
+ '''
 
 aggregator.start_round_training()
 
