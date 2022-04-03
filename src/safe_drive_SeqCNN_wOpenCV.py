@@ -161,8 +161,6 @@ def normalize_train_data_user(user, labels, names, X):
 
 def train_test_split_on_single_user(X, y, names, user):
     
-    print("Train test split on single user\n\nShowing enumerate(names)\n", enumerate(names))
-
     #Extract the index of the user in USERS
     indices = [i for i, x in enumerate(names) if x.startswith(USERS[user])]
     x_test = [e for i, e in enumerate(X) if i in indices]

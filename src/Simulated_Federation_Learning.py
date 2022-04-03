@@ -88,10 +88,11 @@ class Aggregator(object):
 
             print("\nUser data loading number" + str(USERS.index(user)))
 
-            start_simulated_federated_learning_loading_data(USERS.index(user))
+            x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
+            print("Showing shape of training data")
+            print(x_train.shape)
             
-
 
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
