@@ -86,7 +86,6 @@ class Aggregator(object):
         #For each users in users we will do the training using the data of the user
         for user in USERS:
 
-
             print("\nUser data loading number" + str(USERS.index(user)))
 
             start_simulated_federated_learning_loading_data(USERS.index(user))
@@ -112,9 +111,6 @@ class Aggregator(object):
         self.model.set_weights(weights)
 
         return self.model
-
-        
-
 
     def extract_weights(self):
             return np.mean(self.weights, axis=0)
