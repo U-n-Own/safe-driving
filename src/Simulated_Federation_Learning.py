@@ -63,7 +63,7 @@ PATH = '/home/gargano/dataset/dataWithoutMasks'
 USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 MODELS = []
-
+collaborators = []
 
 
 class Aggregator(object):
@@ -79,21 +79,6 @@ class Aggregator(object):
         return generate_model_safe_drive()
 
 
-    #After we got the data as tensor we start the fake federation learning with 30 users
-    def start_round_training(self):
-        
-
-        #For each users in users we will do the training using the data of the user
-        for user in USERS:
-
-            print("\nUser data loading number" + str(USERS.index(user)))
-
-            x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
-
-            print("Showing shape of training data")
-            print(x_train.shape)
-            
-
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
 
@@ -106,6 +91,7 @@ class Aggregator(object):
             weights.append(model.get_weights())
     
         #compute the mean of the weights
+        #This might not work
         weights = np.mean(weights, axis=0)
 
         #update the model with the mean of the weights
@@ -113,22 +99,32 @@ class Aggregator(object):
 
         return self.model
 
-    def extract_weights(self):
-            return np.mean(self.weights, axis=0)
+
+    #After we got the data as tensor we start the fake federation learning with 29 users
+    def start_round_training(self):
+        
+
+        #For each users in users we will do the training using the data of the user
+        for user in USERS:
+
+            print("\nUser data loading number" + str(USERS.index(user)))
+
+            x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
+
+            print("Showing shape of training data")
+            print(x_train.shape) #-> (Tensor 175 240 240 3) Bath is 0.8 of the total data of this user
 
 
-    def update(self, weights):
-        self.weights.append(weights)
-        self.losses.append(self.model.evaluate(self.weights))
-
+            #Send the model to the collaborators, we are in a simulated environment so we train with the aggregator itself
+            
 
 
 #Code for fake collaborator class in simulted federation learning
 class Collaborator(object):
 
-    def __init__(self, model, num_clients):
+    def __init__(self, model, num_client):
         self.model = model
-        self.num_clients = num_clients
+        self.num_clients = num_client
 
 
     def update(self, weights):
@@ -138,10 +134,17 @@ class Collaborator(object):
     def extract_weights(self):
         return self.weights[-1]
 
+    #def train_one_step(self, x_train, y_train):
 
 
 
+#Initialize the aggregator
+aggregator = Aggregator(model = generate_model_safe_drive(), num_clients = 30)
 
-aggregator = Aggregator(generate_model_safe_drive(), 30)
+#Initialize the collaborators
+for training_session in range(len(USERS)):    
+    collaborators[training_session] = Collaborator(model = generate_model_safe_drive(), num_client = training_session)
+
+
 
 aggregator.start_round_training()
