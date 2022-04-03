@@ -126,7 +126,7 @@ def normalize_train_data_user(user, labels, names, X):
     y = tf.keras.utils.to_categorical(labels, NUMBER_CLASSES)
     
     #x_train, x_test, y_train, y_test = train_test_split_on_single_user(X,y,names,user)
-    
+
     y_train = np.array(y_train)
     y_test = np.array(y_test)
     x_train = np.array(x_train, dtype=np.float32).reshape(-1,img_cols,img_rows,color_type)
@@ -158,6 +158,7 @@ def normalize_train_data_user(user, labels, names, X):
 
 #We use only the data of an user to train the model
 #An user is picked in the dictionary USERS and then we pick only the image with the same name as the user
+
 def train_test_split_on_single_user(X, y, names, user):
     
     indices = [i for i, x in enumerate(names) if USERS[user] in x]
@@ -165,6 +166,7 @@ def train_test_split_on_single_user(X, y, names, user):
     x_train = [e for i, e in enumerate(X) if i not in indices]
     y_test = [e for i, e in enumerate(y) if i in indices]
     y_train = [e for i, e in enumerate(y) if i not in indices]
+    
     return x_train, x_test, y_train, y_test  
   
     #Todo
