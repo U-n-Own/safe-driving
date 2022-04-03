@@ -80,7 +80,7 @@ def load_train_single_user(current_user_index):
     train_images = [] 
     train_names = [] 
     train_labels = []
-  
+   
 
     #user_chosen = pick_random_user()
  
@@ -118,14 +118,14 @@ def normalize_img( img):
 def normalize_train_data_user(user, labels, names, X):
     #One shot encoding
     #y = np.utils.to_categorical(labels, NUMBER_CLASSES)
-
+    
 
     #Print labels
     print("Printing labels\n", labels, "\n\nLabels lenght: ", len(labels))
     
     y = tf.keras.utils.to_categorical(labels, NUMBER_CLASSES)
     
-    #x_train, x_test, y_train, y_test = train_test_split_on_single_user(X,y,names,user)
+    x_train, x_test, y_train, y_test = train_test_split_on_single_user(X,y,names,user)
 
     y_train = np.array(y_train)
     y_test = np.array(y_test)
@@ -161,7 +161,9 @@ def normalize_train_data_user(user, labels, names, X):
 
 def train_test_split_on_single_user(X, y, names, user):
     
-    indices = [i for i, x in enumerate(names) if USERS[user] in x]
+    print("Train test split on single user\n\nShowing enumerate(names)\n", enumerate(names))
+
+    indices = [i for i, x in enumerate(names) if user in x]
     x_test = [e for i, e in enumerate(X) if i in indices]
     x_train = [e for i, e in enumerate(X) if i not in indices]
     y_test = [e for i, e in enumerate(y) if i in indices]
@@ -203,10 +205,10 @@ def start_simulated_federated_learning_loading_data(current_user_index):
   
     #Can't run this because we don't have this much ram to store all the dataset
     #So we're going to pick only one user data per training
-    #x_train, x_test, y_train, y_test =  normalize_train_data_user(usr, labels, names, X)
+    x_train, x_test, y_train, y_test =  normalize_train_data_user(usr, labels, names, X)
 
     #For validation, stratify is used to use all classes in the test set
-    x_train, x_test, y_train, y_test = train_test_split(X , y_train, test_size=0.2, random_state=42, stratify=y_train)
+    x_train, x_test, y_train, y_test = train_test_split(x_train , y_train, test_size=0.2, random_state=42, stratify=y_train)
 
     print("Train test split done\n\n")
     
