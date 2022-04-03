@@ -163,7 +163,8 @@ def train_test_split_on_single_user(X, y, names, user):
     
     print("Train test split on single user\n\nShowing enumerate(names)\n", enumerate(names))
 
-    indices = [i for i, x in enumerate(names) if user in x]
+    #Extract the index of the user in USERS
+    indices = [i for i, x in enumerate(names) if x.startswith(USERS[user])]
     x_test = [e for i, e in enumerate(X) if i in indices]
     x_train = [e for i, e in enumerate(X) if i not in indices]
     y_test = [e for i, e in enumerate(y) if i in indices]
