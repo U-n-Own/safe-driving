@@ -64,7 +64,7 @@ USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 MODELS = []
 collaborators = []
-
+num_clients = len(USERS)
 
 class Aggregator(object):
 
@@ -141,10 +141,10 @@ class Collaborator(object):
 model = generate_model_safe_drive()
 model = model_compile(model)
 
-aggregator = Aggregator(model, num_clients = 30)
+aggregator = Aggregator(model, num_clients)
 
 #Initialize the collaborators
-for training_session in len(USERS): 
+for training_session in range(num_clients): 
     collaborators[training_session] = Collaborator(model)
 
 
