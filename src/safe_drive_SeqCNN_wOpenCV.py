@@ -211,7 +211,6 @@ def start_simulated_federated_learning_loading_data(current_user_index):
 
     print("Train test split done\n\n")
     
-    #This is not working
     return x_train, x_test, y_train, y_test 
 
 

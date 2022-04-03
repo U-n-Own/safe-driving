@@ -13,12 +13,43 @@ img_height = 240
 img_width = 240
 num_classes = 15
 
+#Image importing + preprocessing
+#This preprocessing does reshaping and splitting of the dataset
+def loading_dataset():
+
+    dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
+        '/home/gargano/dataset/dataWithoutMasks',
+        labels = 'inferred',
+        label_mode = "categorical", #Maybe int? user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
+        image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
+        batch_size=batch_size,
+        color_mode="rgb", #Don't know what format images are can try both?
+        shuffle = True,
+        seed = 123,
+        validation_split = 0.2,
+        subset = 'training'
+    )
+
+    dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
+        '/home/gargano/dataset/dataWithoutMasks',
+        labels = 'inferred',
+        label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
+        image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
+        batch_size=batch_size,
+        color_mode="rgb", #Don't know what format images are can try both?
+        shuffle = True,
+        seed = 123,
+        validation_split = 0.2,
+        subset = 'validation'
+    )
+
+    return dataset_to_train, dataset_to_validate
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
 # We use a CNN with 3 convolutional layers and a fully connected layer, and we use a softmax activation function for the last layer.
 def generate_model_safe_drive():
-    
+
     model = tf.keras.Sequential([
 
 
@@ -68,10 +99,10 @@ def model_compile(model):
     return model
 
 
-def fit_model(model):
+def fit_model(model, dataset_to_train, dataset_to_validate):
     model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
 
-def trained_model_evaluation(model):
+def trained_model_evaluation(model, dataset_to_validate):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
     print('\nTest accuracy:', test_acc)
 
@@ -79,62 +110,14 @@ def get_weights(model):
     return model.get_weights()
 
 def start_training():
+
+    dataset_to_train, dataset_to_validate = loading_dataset()
+
     model = generate_model_safe_drive()
     print("\n\n\nModel generated with success!\n\n\n")
     model = model_compile(model)
     print("\n\n\nModel compiled with success!\n\n\n")
-    fit_model(model)
+    fit_model(model, dataset_to_train, dataset_to_validate)
     print("\n\n\nModel trained with success!\n\n\n")
     #history.results()
-    trained_model_evaluation(model)
-
-
-#Image importing + preprocessing
-#This preprocessing does reshaping and splitting of the dataset
-def loading_dataset():
-
-    dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
-        '/home/gargano/dataset/dataWithoutMasks',
-        labels = 'inferred',
-        label_mode = "categorical", #Maybe int? user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
-        image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-        batch_size=batch_size,
-        color_mode="rgb", #Don't know what format images are can try both?
-        shuffle = True,
-        seed = 123,
-        validation_split = 0.2,
-        subset = 'training'
-    )
-
-    dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
-        '/home/gargano/dataset/dataWithoutMasks',
-        labels = 'inferred',
-        label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
-        image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-        batch_size=batch_size,
-        color_mode="rgb", #Don't know what format images are can try both?
-        shuffle = True,
-        seed = 123,
-        validation_split = 0.2,
-        subset = 'validation'
-    )
-
-    return dataset_to_train, dataset_to_validate
-
-''' #Saving class names
-class_names = dataset_to_train.class_names
-print("Visualizing class names")
-print(class_names)
-print("\n###################################################\n")
-
-
-print("Printing image_batch.shape and label_batch.shape")
-print("\n=====================================================\n")
-for image_batch, labels_batch in dataset_to_train:
-  print(image_batch.shape)
-  print(labels_batch.shape)
-  break
-
-#Generate model, compile it and fit it
-start_training()
- '''
+    trained_model_evaluation(model, dataset_to_validate)

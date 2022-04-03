@@ -119,10 +119,41 @@ class Aggregator(object):
             
 
 
-#Code for fake collaborator class in simulted federation learning
+#Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
 class Collaborator(object):
+    
+        def __init__(self, model):
+            self.model = model
+    
+        #Take the model from the aggregator and train the model with the data of the user
+        def local_update_collaborator(self, model):
+            self.model = model
+            
+            #Train the model with the data of the user
 
-    def __init__(self, model, num_client):
+
+
+            return self.model
+
+
+
+#Initialize the aggregator
+model = generate_model_safe_drive()
+model = model_compile(model)
+
+aggregator = Aggregator(model, num_clients = 30)
+
+#Initialize the collaborators
+for training_session in range(len(USERS)):    
+    collaborators[training_session] = Collaborator(model)
+
+
+aggregator.start_round_training()
+
+
+''' class Collaborator(object):
+
+    def __init__(self, num_client):
         self.model = model
         self.num_clients = num_client
 
@@ -136,15 +167,4 @@ class Collaborator(object):
 
     #def train_one_step(self, x_train, y_train):
 
-
-
-#Initialize the aggregator
-aggregator = Aggregator(model = generate_model_safe_drive(), num_clients = 30)
-
-#Initialize the collaborators
-for training_session in range(len(USERS)):    
-    collaborators[training_session] = Collaborator(model = generate_model_safe_drive(), num_client = training_session)
-
-
-
-aggregator.start_round_training()
+ '''
