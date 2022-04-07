@@ -71,6 +71,7 @@ class Aggregator(object):
     def __init__(self, model, num_clients):
         self.model = model
         self.num_clients = num_clients
+        self.collaborators = []
 
 
 
@@ -111,8 +112,9 @@ class Aggregator(object):
 
             x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
-            print("Showing shape of training data")
-            print(x_train.shape) #-> (Tensor 175 240 240 3) Bath is 0.8 of the total data of this user
+            
+            #print("Showing shape of training data")
+            #print(x_train.shape) #-> (Tensor 175 240 240 3) Bath is 0.8 of the total data of this user
 
 
             #Send the model to the collaborators, we are in a simulated environment so we train with the aggregator itself
@@ -141,19 +143,22 @@ class Collaborator(object):
 model = generate_model_safe_drive()
 model = model_compile(model)
 
-aggregator = Aggregator(model, num_clients)
 
 #Initialize the collaborators
 for i in range(num_clients):
     collaborator = Collaborator(model)
     collaborators.append(collaborator)
 
+aggregator = Aggregator(model, num_clients, collaborators)
+
+
+aggregator.start_round_training()
+
 
 ''' for training_session in range(num_clients): 
     collaborators[training_session] = Collaborator(model)
  '''
 
-aggregator.start_round_training()
 
 
 ''' class Collaborator(object):

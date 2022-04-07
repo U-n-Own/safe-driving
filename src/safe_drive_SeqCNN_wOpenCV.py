@@ -196,7 +196,7 @@ def start_simulated_federated_learning_loading_data(current_user_index):
 
     img = load_train_single_user(current_user_index)
 
-    #normalize_img(img)
+    normalize_img(img)
 
     #TODO: Split the dataset into train and test for each user
      
