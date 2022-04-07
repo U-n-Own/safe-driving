@@ -63,7 +63,7 @@ PATH = '/home/gargano/dataset/dataWithoutMasks'
 USERS_FULL =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
 USERS =['Amparore', 'Baccega']
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
-MODELS = []
+all_models = []
 collaborators = []
 num_clients = len(USERS)
 
@@ -120,8 +120,10 @@ class Aggregator(object):
 
             print("\n\nEnd training model of user number" + str(USERS.index(user)))
 
-            #After the training we will send the updated model to the aggregation server, add the model to the list of models
-            MODELS.append(self.model)
+            #After the training we will send the updated model to the aggregation server
+            # For simulating this will save the models in an np array
+            all_models[USERS.index(user)] = self.model
+            
         
 
             
