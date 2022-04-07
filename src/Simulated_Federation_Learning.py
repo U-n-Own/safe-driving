@@ -72,6 +72,7 @@ class Aggregator(object):
         self.model = model
         self.num_clients = num_clients
         self.collaborators = collaborators
+        
 
 
 
@@ -111,6 +112,18 @@ class Aggregator(object):
             print("\nUser data loading number" + str(USERS.index(user)))
 
             x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
+
+            print("\n\nStart training model of user number" + str(USERS.index(user)))
+
+            fit_model_federation(self.model, x_train, y_train, x_test, y_test)
+
+            print("\n\nEnd training model of user number" + str(USERS.index(user)))
+
+            #After the training we will send the updated model to the aggregation server, add the model to the list of models
+            MODELS.append(self.model)
+        
+
+            
 
             
             #print("Showing shape of training data")
@@ -153,6 +166,11 @@ aggregator = Aggregator(model, num_clients, collaborators)
 
 
 aggregator.start_round_training()
+
+#local update of the model in the aggregator
+aggregator.model = aggregator.local_update(MODELS)
+
+
 
 
 ''' for training_session in range(num_clients): 

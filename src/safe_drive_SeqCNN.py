@@ -102,6 +102,11 @@ def model_compile(model):
 def fit_model(model, dataset_to_train, dataset_to_validate):
     model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
 
+
+def fit_model_federation(model, x_train, y_train, x_test, y_test):
+    model.fit(x_train, y_train, validation_data = (x_test, y_test), epochs=1)
+
+
 def trained_model_evaluation(model, dataset_to_validate):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
     print('\nTest accuracy:', test_acc)
