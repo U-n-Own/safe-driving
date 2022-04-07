@@ -85,7 +85,7 @@ class Aggregator(object):
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
 
-        models = MODELS
+        #models = MODELS
         weights = []
 
         #Take the weights of the models and compute the mean then return the weights to an updated model
@@ -171,7 +171,7 @@ aggregator = Aggregator(model, num_clients, collaborators)
 aggregator.start_round_training()
 
 #local update of the model in the aggregator
-aggregator.model = aggregator.local_update(MODELS)
+aggregator.model = aggregator.local_update(all_models)
 
 
 
