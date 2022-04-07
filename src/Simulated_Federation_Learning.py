@@ -68,10 +68,10 @@ num_clients = len(USERS)
 
 class Aggregator(object):
 
-    def __init__(self, model, num_clients):
+    def __init__(self, model, num_clients, collaborators):
         self.model = model
         self.num_clients = num_clients
-        self.collaborators = []
+        self.collaborators = collaborators
 
 
 
