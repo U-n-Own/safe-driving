@@ -89,19 +89,42 @@ class Aggregator(object):
         weights = []
         count_layer = 0
         #Take the weights of the models and compute the mean then return the weights to an updated model
+
         for model in models:
             for layer in model.layers:
                 #print(model.layers[0].weights)
                 #print(layer.name, layer)
                 #weights.append(model.layer.weights)
                 count_layer+=1 
-                print("\nCounting total layers: " + str(count_layer))
+                print("\nCounting total layers: " + str(count_layer)) # 12 per model
                 weights.append(model.get_layer(layer.name).weights)
     
 
         #compute the mean of the weights
-        #This might not work
-        weights = np.mean(weights, axis=0)
+        # Be careful :  Maybe this is not generic and  works only for two models
+
+        #weights is a list containing the weights of each layer per each model
+        # Mean in computed in this way the first 12 layers, contains the weights of the first model
+        # The mean woulde be the sum for each component in weights at the place mod12
+        # So that we sum 0 and 11, 1 and 12 elements in weights and so on. Then we divde by len(models)
+        for weight in weights:
+
+            first_index, second_index = 0, 11
+
+            while second_index <= len(weights):
+
+                weighted_sum = sum(weights[first_index][0].numpy() + weights[second_index][0].numpy())
+
+                first_index=+1
+                second_index+=1
+
+        mean_weight = weighted_sum/len(models)
+
+        print("\n\nCurrent shape of weighted_sum, after mean\n\n")
+        print(mean_weight.shape)
+
+
+        #weights = np.mean(weights, axis=0)
 
         print("\n\nCurrent shape of weights, after mean\n\n")
         print(weights.shape) # result [20,]
