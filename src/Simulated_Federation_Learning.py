@@ -93,18 +93,17 @@ class Aggregator(object):
                 #print(model.layers[0].weights)
                 #print(layer.name, layer)
                 #weights.append(model.layer.weights)
+                count_layer = count_layer + 1
+                print("\nCounting total layers: " + count_layer)
                 weights.append(model.get_layer(layer.name).weights)
     
-
-        print("\n\nCurrent shape of weights, before mean\n\n")
-        print(weights.shape)
 
         #compute the mean of the weights
         #This might not work
         weights = np.mean(weights, axis=0)
 
         print("\n\nCurrent shape of weights, after mean\n\n")
-        print(weights.shape)
+        print(weights.shape) # result [20,]
 
         #update the model with the mean of the weights
         self.model.set_weights(weights)
