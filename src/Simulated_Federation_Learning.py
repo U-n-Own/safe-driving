@@ -87,7 +87,6 @@ class Aggregator(object):
 
         #models = MODELS
         weights = []
-
         #Take the weights of the models and compute the mean then return the weights to an updated model
         for model in models:
             for layer in model.layers:
@@ -120,7 +119,10 @@ class Aggregator(object):
 
             print("\n\nStart training model of user number" + str(USERS.index(user)))
 
-            fit_model_federation(self.model, x_train, y_train, x_test, y_test)
+            #Use the Collaborator model
+            #fit_model_federation(, x_train, y_train, x_test, y_test)
+
+            fit_model_federation(self.collaborators[USERS.index(user)].model, x_train, y_train, x_test, y_test)
 
             print("\n\nEnd training model of user number" + str(USERS.index(user)))
 
@@ -156,6 +158,14 @@ class Collaborator(object):
 
 
             return self.model
+
+
+#Describing workflow: 
+# 1. Initialize the model
+# 2. For each round t=1,…:
+# 3. Assign the model to the collaborators, each collarator has the same initial model
+# 4. Assign collaborators to the aggregation server
+# 5. In the collaborator we 
 
 
 
