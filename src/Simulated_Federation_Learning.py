@@ -101,6 +101,12 @@ class Aggregator(object):
     
 
         #compute the mean of the weights
+        mean_weights = []
+        
+        for weight in weights:
+            sum(weight)
+        
+        mean_weights.append(sum(weight)/len(weight))
 
 
 
