@@ -100,6 +100,9 @@ class Aggregator(object):
         #This might not work
         weights = np.mean(weights, axis=0)
 
+        print("Current shape of weights, after mean")
+        print(weights.shape)
+
         #update the model with the mean of the weights
         self.model.set_weights(weights)
 
