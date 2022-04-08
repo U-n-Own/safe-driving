@@ -92,8 +92,9 @@ class Aggregator(object):
         for model in models:
             for layer in model.layers:
                 #print(model.layers[0].weights)
-                print(layer.name, layer)
-                #weights.append(model.layer[layer].weights)
+                #print(layer.name, layer)
+                #weights.append(model.layer.weights)
+                weights.append(model.get_layer(layer.name).weights)
     
 
         #compute the mean of the weights
