@@ -101,35 +101,13 @@ class Aggregator(object):
     
 
         #compute the mean of the weights
-        # Be careful :  Maybe this is not generic and  works only for two models
 
-        #weights is a list containing the weights of each layer per each model
-        # Mean in computed in this way the first 12 layers, contains the weights of the first model
-        # The mean woulde be the sum for each component in weights at the place mod12
-        # So that we sum 0 and 11, 1 and 12 elements in weights and so on. Then we divde by len(models)
-        
-        first_index, second_index = 0, 11
-        
-        for weight in weights:
-
-
-            while second_index <= len(weights):
-
-                weighted_sum = weights[first_index] + weights[second_index]
-
-                first_index=+1
-                second_index+=1
-
-        mean_weight = weighted_sum/len(models)
-
-        print("\n\nCurrent shape of weighted_sum, after mean\n\n")
-        print(mean_weight.shape)
 
 
         #weights = np.mean(weights, axis=0)
 
         print("\n\nCurrent shape of weights, after mean\n\n")
-        print(weights.shape) # result [20,]
+        print(weights.shape) # result tensor [20,]
 
         #update the model with the mean of the weights
         self.model.set_weights(weights)
@@ -221,26 +199,29 @@ aggregator.model = aggregator.local_update(all_models)
 
 
 
-''' for training_session in range(num_clients): 
-    collaborators[training_session] = Collaborator(model)
- '''
+#################################################
 
 
 
-''' class Collaborator(object):
 
-    def __init__(self, num_client):
-        self.model = model
-        self.num_clients = num_client
+#Old solution for weights computing mean
 
+"""         # Be careful :  Maybe this is not generic and  works only for two models
 
-    def update(self, weights):
-        self.weights.append(weights)
-        self.losses.append(self.model.evaluate(self.weights))
+        #weights is a list containing the weights of each layer per each model
+        # Mean in computed in this way the first 12 layers, contains the weights of the first model
+        # The mean woulde be the sum for each component in weights at the place mod12
+        # So that we sum 0 and 11, 1 and 12 elements in weights and so on. Then we divde by len(models)
+        
+        for weight in weights:
+    
+                weighted_sum = weights[first_index] + weights[second_index]
 
-    def extract_weights(self):
-        return self.weights[-1]
+                first_index=+1
+                second_index+=1
 
-    #def train_one_step(self, x_train, y_train):
+        mean_weight = weighted_sum/len(models)
 
- '''
+        print("\n\nCurrent shape of weighted_sum, after mean\n\n")
+        print(mean_weight.shape)
+ """
