@@ -128,7 +128,7 @@ class Aggregator(object):
 
             #After the training we will send the updated model to the aggregation server
             # For simulating this will save the models in an np array
-            all_models[USERS.index(user)] = self.model
+            all_models[USERS.index(user)] = self.collaborators[USERS.index(user)].model
             
         
 
