@@ -87,6 +87,7 @@ class Aggregator(object):
 
         #models = MODELS
         weights = []
+        count_layer = 0
         #Take the weights of the models and compute the mean then return the weights to an updated model
         for model in models:
             for layer in model.layers:
