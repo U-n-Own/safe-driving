@@ -94,9 +94,6 @@ class Aggregator(object):
             for layer in model.layers:
                 #print(model.layers[0].weights)
                 #print(layer.name, layer)
-                #weights.append(model.layer.weights)
-                count_layer+=1 
-                print("\nCounting total layers: " + str(count_layer)) # 12 per model
                 weights.append(model.get_layer(layer.name).weights)
     
 

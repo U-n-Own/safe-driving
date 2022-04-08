@@ -121,7 +121,7 @@ def normalize_train_data_user(user, labels, names, X):
     
 
     #Print labels
-    print("Printing labels\n", labels, "\n\nLabels lenght: ", len(labels))
+    #print("Printing labels\n", labels, "\n\nLabels lenght: ", len(labels))
     
     y = tf.keras.utils.to_categorical(labels, NUMBER_CLASSES)
     
@@ -174,19 +174,6 @@ def train_test_split_on_single_user(X, y, names, user):
     #indices = [i for i, x in enumerate(names) if USERS[user] in x]
 
 
-#Where K is number of the client and w is the weight matrix of his own model
-def fake_client_update(k, w):
-    print("Client {} is updating".format(k))
-
-
-#These should be classes maybe
-def aggregator_update(w):
-    print("Aggregator is updating")
-
-def collaborator_update(w):
-    print("Collaborator is updating")   
-    
-
 #Simulation of federated learning using 30 users and using a simple iterative workflow    
 def start_simulated_federated_learning_loading_data(current_user_index):
 
@@ -209,7 +196,7 @@ def start_simulated_federated_learning_loading_data(current_user_index):
     #For validation, stratify is used to use all classes in the test set
     x_train, x_test, y_train, y_test = train_test_split(x_train , y_train, test_size=0.2, random_state=42, stratify=y_train)
 
-    print("Train test split done\n\n")
+    print("\n\nTrain test split done\n\n")
     
     return x_train, x_test, y_train, y_test 
 
