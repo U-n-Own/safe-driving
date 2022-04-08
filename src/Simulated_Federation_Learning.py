@@ -91,7 +91,8 @@ class Aggregator(object):
         #Take the weights of the models and compute the mean then return the weights to an updated model
         for model in models:
             for layer in model.layers:
-                weights.append(model.layer[layer].weights)
+                print(model.layers[0].weights)
+                #weights.append(model.layer[layer].weights)
     
 
         #compute the mean of the weights
