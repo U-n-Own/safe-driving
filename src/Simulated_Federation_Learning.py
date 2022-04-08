@@ -107,13 +107,15 @@ class Aggregator(object):
         # Mean in computed in this way the first 12 layers, contains the weights of the first model
         # The mean woulde be the sum for each component in weights at the place mod12
         # So that we sum 0 and 11, 1 and 12 elements in weights and so on. Then we divde by len(models)
+        
+        first_index, second_index = 0, 11
+        
         for weight in weights:
 
-            first_index, second_index = 0, 11
 
             while second_index <= len(weights):
 
-                weighted_sum = weight[first_index] + weight[second_index]
+                weighted_sum = weights[first_index] + weights[second_index]
 
                 first_index=+1
                 second_index+=1
