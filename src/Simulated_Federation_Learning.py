@@ -113,7 +113,7 @@ class Aggregator(object):
 
             while second_index <= len(weights):
 
-                weighted_sum = sum(weights[first_index][0].numpy() + weights[second_index][0].numpy())
+                weighted_sum = weight[first_index] + weight[second_index]
 
                 first_index=+1
                 second_index+=1
