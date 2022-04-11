@@ -97,20 +97,22 @@ class Aggregator(object):
                 weights.append(model.get_layer(layer.name).weights)
     
 
-        #compute the mean of the weights
-        mean_weights = []
-        
-        for weight in weights:
-            sum(weight)
-        
-        mean_weights.append(sum(weight)/len(weight))
+        #weights list contains the weights of each layer of each model
+        #weights[0] contains the weights of the first layer of the first model
+        #Transform weights in a list of weights for each layer of each model so that the weights are the mean of each model
+        mean_of_weights = []
+
+        for weight in weights[0]:
+            mean_of_weights.append(np.mean(np.array([model.get_layer(weight.name).get_weights() for model in models]), axis=0))
+    
 
 
 
         #weights = np.mean(weights, axis=0)
 
         print("\n\nCurrent shape of weights, after mean\n\n")
-        print(weights.shape) # result tensor [20,]
+        #print(weights.shape) # result tensor [20,]
+    
 
         #update the model with the mean of the weights
         self.model.set_weights(weights)
