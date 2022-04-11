@@ -89,6 +89,42 @@ def generate_model_safe_drive():
 
     return model
 
+def generate_simplyfied_model_safe_drive():
+
+    model = tf.keras.Sequential([
+
+
+        #Rescaling the input image to a fixed size
+        tf.keras.layers.Rescaling(1./255, input_shape=(img_height, img_width, 3)),
+
+        #First convolutional layer with 32 filters and a kernel size of 3x3
+        tf.keras.layers.Conv2D(4, (3, 3), activation='relu', input_shape=(img_height, img_width, 3)),
+        tf.keras.layers.MaxPooling2D(2, 2),
+
+        #Second convolutional layer with 64 filters and a kernel size of 3x3
+        tf.keras.layers.Conv2D(8, (3, 3), activation='relu'),
+        tf.keras.layers.MaxPooling2D(2, 2),
+
+
+        tf.keras.layers.Dropout(.5, input_shape=(img_height,img_width,3)),
+
+        #Flatten the output of the previous layer
+        tf.keras.layers.Flatten(),
+
+        tf.keras.layers.Dropout(.5, input_shape=(img_height,img_width,3)),
+
+        #Anothet fully connected layer with 512 units
+        tf.keras.layers.Dense(240, activation='relu'),
+
+        #Final layer with 15 classes
+        tf.keras.layers.Dense(num_classes, activation='softmax')
+    ])
+
+    model.summary()
+
+    return model
+
+
 #Try experimenting with different optimizers and different optimizer configs
 def model_compile(model):
 
