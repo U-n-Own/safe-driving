@@ -185,8 +185,8 @@ class Collaborator(object):
 
 
 #Initialize the aggregator
-#model = generate_model_safe_drive()
-model = generate_simplyfied_model_safe_drive()
+model = generate_model_safe_drive()
+#model = generate_simplyfied_model_safe_drive()
 model = model_compile(model)
 
 
