@@ -79,8 +79,8 @@ class Aggregator(object):
 
     #Initialize model from safe_drive_SeqCNN.py
     def initialize_local_model(self):
-        return generate_simplyfied_model_safe_drive()
-        #return generate_model_safe_drive()
+        #return generate_simplyfied_model_safe_drive()
+        return generate_model_safe_drive()
 
 
     #Take a list of models and return the mean of the models (mean of the weights)
@@ -185,7 +185,8 @@ class Collaborator(object):
 
 
 #Initialize the aggregator
-model = generate_model_safe_drive()
+#model = generate_model_safe_drive()
+model = generate_simplyfied_model_safe_drive()
 model = model_compile(model)
 
 
