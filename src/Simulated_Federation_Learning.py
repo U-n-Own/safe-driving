@@ -106,7 +106,8 @@ class Aggregator(object):
         for weight in weights[0]:
             mean_of_weights.append(np.mean(np.array([model.get_layer(weight.name).get_weights() for model in models]), axis=0))
     
-
+        #make np arrays mean_of_weights
+        weight_after_mean = np.array(mean_of_weights)
 
         #weights = np.mean(weights, axis=0)
 
