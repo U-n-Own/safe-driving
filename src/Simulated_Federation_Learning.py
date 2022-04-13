@@ -101,12 +101,11 @@ class Aggregator(object):
         #weights list contains the weights of each layer of each model
         #weights[0] contains the weights of the first layer of the first model
         #Transform weights in a list of weights for each layer of each model so that the weights are the mean of each model
-        """   mean_of_weights = []
+        mean_of_weights = []
 
         for weight in weights[0]:
             mean_of_weights.append(np.mean(np.array([model.get_layer(weight.name).get_weights() for model in models]), axis=0))
     
-        """
 
 
         #weights = np.mean(weights, axis=0)
