@@ -99,8 +99,7 @@ class Aggregator(object):
                 weights = layer.get_weights()
 
 
-                print("\n\nCurrent shape weights, after mean\n\n")
-                print(weights.shape) # OLD result tensor [20,], New (0,)
+               
 
     
 
@@ -122,7 +121,7 @@ class Aggregator(object):
         """
 
         #update the model with the mean of the weights
-        self.model.set_weights(mean_of_weights)
+        self.model.set_weights(weights)
 
         return self.model
 
