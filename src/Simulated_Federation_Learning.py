@@ -87,7 +87,7 @@ class Aggregator(object):
     def local_update(self, models):
 
         #models = MODELS
-        weights = []
+
         count_layer = 0
         #Take the weights of the models and compute the mean then return the weights to an updated model
 
@@ -95,25 +95,31 @@ class Aggregator(object):
             for layer in model.layers:
                 #print(model.layers[0].weights)
                 #print(layer.name, layer)
-                weights.append(model.get_layer(layer.name).weights)
+                #weights = model.get_layer(layer.name).get_weights()
+                weights = layer.get_weights()
+
+
+                print("\n\nCurrent shape weights, after mean\n\n")
+                print(weights.shape) # OLD result tensor [20,], New (0,)
+
     
 
         #weights list contains the weights of each layer of each model
         #weights[0] contains the weights of the first layer of the first model
         #Transform weights in a list of weights for each layer of each model so that the weights are the mean of each model
-        mean_of_weights = []
+        """         mean_of_weights = []
 
-        for weight in weights[0]:
-            mean_of_weights.append(np.mean(np.array([model.get_layer(weight.name).get_weights() for model in models]), axis=0))
-    
-        #make np arrays mean_of_weights
-        weight_after_mean = np.array(mean_of_weights)
+                for weight in weights[0]:
+                    mean_of_weights.append(np.mean(np.array([model.get_layer(weight.name).get_weights() for model in models]), axis=0))
+            
+                #make np arrays mean_of_weights
+                weight_after_mean = np.array(mean_of_weights)
 
-        #weights = np.mean(weights, axis=0)
+                #weights = np.mean(weights, axis=0)
 
-        print("\n\nCurrent shape weights, after mean\n\n")
-        print(weight_after_mean.shape) # OLD result tensor [20,], 
-    
+                print("\n\nCurrent shape weights, after mean\n\n")
+                print(weight_after_mean.shape) # OLD result tensor [20,], New (0,)
+        """
 
         #update the model with the mean of the weights
         self.model.set_weights(mean_of_weights)
