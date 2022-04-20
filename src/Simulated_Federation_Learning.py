@@ -174,9 +174,9 @@ class Collaborator(object):
 
 
 #Initialize the aggregator model
-aggregator_model = generate_model_safe_drive()
+model = generate_model_safe_drive()
 #model = generate_simplyfied_model_safe_drive()
-aggregator_model = model_compile(model)
+model = model_compile(model)
 
 
 #Initialize the collaborators
@@ -184,7 +184,7 @@ for i in range(num_clients):
     collaborator = Collaborator(model)
     collaborators.append(collaborator)
 
-aggregator = Aggregator(aggregator_model, num_clients, collaborators, num_fed_round)
+aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 
 
 aggregator.start_round_training()
