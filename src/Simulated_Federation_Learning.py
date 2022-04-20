@@ -56,7 +56,7 @@ send model to aggregation server
 color_type = 3
 img_cols = 240
 img_rows = 240
-
+num_fed_round = 1
 
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
@@ -67,12 +67,14 @@ all_models = list(range(0,2))
 collaborators = []
 num_clients = len(USERS)
 
+
 class Aggregator(object):
 
-    def __init__(self, model, num_clients, collaborators):
+    def __init__(self, model, num_clients, collaborators, num_fed_round):
         self.model = model
         self.num_clients = num_clients
         self.collaborators = collaborators
+        self.num_fed_round = num_fed_round
         
 
 
@@ -86,55 +88,24 @@ class Aggregator(object):
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
 
-        #models = MODELS
-        old_weights = []
-        avg_weights = []
-        count_layer = 0
-        #Take the weights of the models and compute the mean then return the weights to an updated model
+    #This function performs the Federated Learning
 
-        for model in models:
-            for layer in model.layers:
-                print("===== LAYER: ", layer.name, " =====")
-                if layer.get_weights() != []:
-                    #print(model.layers[0].weights)
-                    #print(layer.name, layer)
-                    #weights = model.get_layer(layer.name).get_weights()
-                    weights = layer.get_weights()
-                    print("Weights\n\n")
-                    print(weights)
-                
-            avg_weights = np.mean(np.array([old_weights, avg_weights]), axis=0)
-
-        print("Avg weights\n\n")
-        print(avg_weights.shape)
-        #Compute the mean of weights  
-        #weights = np.mean(weights, axis=0)
-
-        for layer in self.model.layers:
-            self.model.set_weights(avg_weights)     
-
-    
-
-        #weights list contains the weights of each layer of each model
-        #weights[0] contains the weights of the first layer of the first model
-        #Transform weights in a list of weights for each layer of each model so that the weights are the mean of each model
-        """         mean_of_weights = []
-
-                for weight in weights[0]:
-                    mean_of_weights.append(np.mean(np.array([model.get_layer(weight.name).get_weights() for model in models]), axis=0))
+   
+        for fl in range(self.num_fed_round):
+            print('Federated learning aggregation: ',fl+1)
+            # initialize empty weights
+            weights = np.array(self.model, dtype='object')*0  
             
-                #make np arrays mean_of_weights
-                weight_after_mean = np.array(mean_of_weights)
-
-                #weights = np.mean(weights, axis=0)
-
-                print("\n\nCurrent shape weights, after mean\n\n")
-                print(weight_after_mean.shape) # OLD result tensor [20,], New (0,)
-        """
-
-        #update the model with the mean of the weights
-        #for layer in self.model.layers:
-        #   self.model.set_weights(weights)
+            
+            for client_model in models:
+                client_weights = client_model.get_weights()
+                weights = weights + np.array(client_weights, dtype='object')
+            
+            # aggregate weights, computing the mean
+            FL_weights = weights/len(models)
+        
+            # set aggregated weights
+            self.model.set_weights(FL_weights)
 
         return self.model
 
@@ -142,7 +113,9 @@ class Aggregator(object):
     #After we got the data as tensor we start the fake federation learning with 29 users
     def start_round_training(self):
         
-
+    
+       #print('\n\nStarting round federated learning' + self.num_fed_round + '\n\n')
+    
         #For each users in users we will do the training using the data of the user
         for user in USERS:
 
@@ -164,7 +137,7 @@ class Aggregator(object):
             all_models[USERS.index(user)] = self.collaborators[USERS.index(user)].model
             
         
-
+            #return all_models
             
 
             
@@ -186,9 +159,7 @@ class Collaborator(object):
         def local_update_collaborator(self, model):
             self.model = model
             
-            #Train the model with the data of the user
-
-
+            #Train the model with the data of the use
 
             return self.model
 
@@ -202,10 +173,10 @@ class Collaborator(object):
 
 
 
-#Initialize the aggregator
-model = generate_model_safe_drive()
+#Initialize the aggregator model
+aggregator_model = generate_model_safe_drive()
 #model = generate_simplyfied_model_safe_drive()
-model = model_compile(model)
+aggregator_model = model_compile(model)
 
 
 #Initialize the collaborators
@@ -213,7 +184,7 @@ for i in range(num_clients):
     collaborator = Collaborator(model)
     collaborators.append(collaborator)
 
-aggregator = Aggregator(model, num_clients, collaborators)
+aggregator = Aggregator(aggregator_model, num_clients, collaborators, num_fed_round)
 
 
 aggregator.start_round_training()
@@ -250,3 +221,34 @@ aggregator.model = aggregator.local_update(all_models)
         print("\n\nCurrent shape of weighted_sum, after mean\n\n")
         print(mean_weight.shape)
  """
+
+
+"""    
+Another old solution for weights computing mean
+
+        #models = MODELS
+        old_weights = []
+        avg_weights = []
+        count_layer = 0
+        #Take the weights of the models and compute the mean then return the weights to an updated model
+
+        for model in models:
+            for layer in model.layers:
+                print("===== LAYER: ", layer.name, " =====")
+                if layer.get_weights() != []:
+                    #print(model.layers[0].weights)
+                    #print(layer.name, layer)
+                    #weights = model.get_layer(layer.name).get_weights()
+                    weights = layer.get_weights()
+                    print("Weights\n\n")
+                    print(weights)
+                
+            avg_weights = np.mean(np.array([old_weights, avg_weights]), axis=0)
+
+        print("Avg weights\n\n")
+        print(avg_weights.shape)
+        #Compute the mean of weights  
+        #weights = np.mean(weights, axis=0)
+
+        for layer in self.model.layers:
+            self.model.set_weights(avg_weights)      """
