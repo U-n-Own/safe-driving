@@ -136,3 +136,57 @@ class CNNModel(epochs = 10):
         trained_model_evaluation(model)
 
 '''
+
+
+#Old solution for weights computing mean
+
+"""         # Be careful :  Maybe this is not generic and  works only for two models
+
+        #weights is a list containing the weights of each layer per each model
+        # Mean in computed in this way the first 12 layers, contains the weights of the first model
+        # The mean woulde be the sum for each component in weights at the place mod12
+        # So that we sum 0 and 11, 1 and 12 elements in weights and so on. Then we divde by len(models)
+        
+        for weight in weights:
+    
+                weighted_sum = weights[first_index] + weights[second_index]
+
+                first_index=+1
+                second_index+=1
+
+        mean_weight = weighted_sum/len(models)
+
+        print("\n\nCurrent shape of weighted_sum, after mean\n\n")
+        print(mean_weight.shape)
+ """
+
+
+"""    
+Another old solution for weights computing mean
+
+        #models = MODELS
+        old_weights = []
+        avg_weights = []
+        count_layer = 0
+        #Take the weights of the models and compute the mean then return the weights to an updated model
+
+        for model in models:
+            for layer in model.layers:
+                print("===== LAYER: ", layer.name, " =====")
+                if layer.get_weights() != []:
+                    #print(model.layers[0].weights)
+                    #print(layer.name, layer)
+                    #weights = model.get_layer(layer.name).get_weights()
+                    weights = layer.get_weights()
+                    print("Weights\n\n")
+                    print(weights)
+                
+            avg_weights = np.mean(np.array([old_weights, avg_weights]), axis=0)
+
+        print("Avg weights\n\n")
+        print(avg_weights.shape)
+        #Compute the mean of weights  
+        #weights = np.mean(weights, axis=0)
+
+        for layer in self.model.layers:
+            self.model.set_weights(avg_weights)      """
