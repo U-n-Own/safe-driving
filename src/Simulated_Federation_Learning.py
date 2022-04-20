@@ -105,6 +105,8 @@ class Aggregator(object):
                 
             avg_weights = np.mean(np.array([old_weights, avg_weights]), axis=0)
 
+        print("Avg weights\n\n")
+        print(avg_weights.shape)
         #Compute the mean of weights  
         #weights = np.mean(weights, axis=0)
 
