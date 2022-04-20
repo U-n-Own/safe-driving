@@ -87,19 +87,29 @@ class Aggregator(object):
     def local_update(self, models):
 
         #models = MODELS
-
+        old_weights = []
+        avg_weights = []
         count_layer = 0
         #Take the weights of the models and compute the mean then return the weights to an updated model
 
         for model in models:
             for layer in model.layers:
-                #print(model.layers[0].weights)
-                #print(layer.name, layer)
-                #weights = model.get_layer(layer.name).get_weights()
-                weights = layer.get_weights()
+                print("===== LAYER: ", layer.name, " =====")
+                if layer.get_weights() != []:
+                    #print(model.layers[0].weights)
+                    #print(layer.name, layer)
+                    #weights = model.get_layer(layer.name).get_weights()
+                    weights = layer.get_weights()[layer]
+                    print("Weights\n\n")
+                    print(weights)
+                
+            avg_weights = np.mean(np.array([old_weights, avg_weights]), axis=0)
 
+        #Compute the mean of weights  
+        #weights = np.mean(weights, axis=0)
 
-               
+        for layer in self.model.layers:
+            self.model.set_weights(weights)     
 
     
 
@@ -121,7 +131,8 @@ class Aggregator(object):
         """
 
         #update the model with the mean of the weights
-        self.model.set_weights(weights)
+        for layer in self.model.layers:
+            self.model.set_weights(weights)
 
         return self.model
 
