@@ -99,7 +99,7 @@ class Aggregator(object):
                     #print(model.layers[0].weights)
                     #print(layer.name, layer)
                     #weights = model.get_layer(layer.name).get_weights()
-                    weights = layer.get_weights()[layer]
+                    weights = layer.get_weights()
                     print("Weights\n\n")
                     print(weights)
                 
@@ -109,7 +109,7 @@ class Aggregator(object):
         #weights = np.mean(weights, axis=0)
 
         for layer in self.model.layers:
-            self.model.set_weights(weights)     
+            self.model.set_weights(avg_weights)     
 
     
 
@@ -131,8 +131,8 @@ class Aggregator(object):
         """
 
         #update the model with the mean of the weights
-        for layer in self.model.layers:
-            self.model.set_weights(weights)
+        #for layer in self.model.layers:
+        #   self.model.set_weights(weights)
 
         return self.model
 
