@@ -94,7 +94,7 @@ class Aggregator(object):
         for fl in range(self.num_fed_round):
             print('Federated learning aggregation: ',fl+1)
             # initialize empty weights
-            weights = np.array(self.model, dtype='object')*0  
+            weights = np.array(self.model.get_weigts(), dtype='object')*0  
             
             
             for client_model in models:
