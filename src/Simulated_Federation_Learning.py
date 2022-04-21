@@ -174,7 +174,7 @@ aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 
 #Load the data of the users
 for user in USERS:
-    x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
+    x_train, x_test, y_train, y_test = loading_data_all_users(USERS.index(user))
 
 
 #Start the training of the model
