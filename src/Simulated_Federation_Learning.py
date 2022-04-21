@@ -60,8 +60,8 @@ num_fed_round = 5
 
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
-USERS_FULL =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
-USERS =['Amparore', 'Baccega']
+USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
+USERS_TWO =['Amparore', 'Baccega']
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 all_models = list(range(0,2))
 collaborators = []
@@ -185,7 +185,7 @@ for round in range(num_fed_round):
     print('\n\nSending model to collaborators...\n\n')
     aggregator.send_model_to_collaborators()
 
-
+print('End of federated learning\n\nEvaluation of the model...\n\n')
 validation = x_test 
 trained_model_evaluation(aggregator.model, validation)
 
