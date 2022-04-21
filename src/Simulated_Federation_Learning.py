@@ -106,14 +106,14 @@ class Aggregator(object):
 
 
     #After we got the data as tensor we start the fake federation learning with 29 users
-    def start_round_training(self):
+    def start_round_training(self, x_train, y_train, x_test, y_test):
     
         #For each users in users we will do the training using the data of the user
         for user in USERS:
 
-            print("\nUser data loading number" + str(USERS.index(user)))
+            #print("\nUser data loading number" + str(USERS.index(user)))
 
-            x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
+            #x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
             print("\n\nStart training model of user number" + str(USERS.index(user)))
 
@@ -127,14 +127,11 @@ class Aggregator(object):
             
         
             #return all_models
-            
-            #Send the model to the collaborators, we are in a simulated environment so we train with the aggregator itself
 
     def send_model_to_collaborators(self):
 
         for collaborator in self.collaborators:
             collaborator.model = self.model
-
 
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
 class Collaborator(object):
@@ -161,8 +158,6 @@ class Collaborator(object):
 
 
 
-
-
 #Initialize the aggregator model
 model = generate_model_safe_drive()
 #model = generate_simplyfied_model_safe_drive()
@@ -177,17 +172,21 @@ for i in range(num_clients):
 #Initialize the collaborator 
 aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 
+#Load the data of the users
+for user in USERS:
+    x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
+
+#Start the training of the model
 for round in range(num_fed_round):
 
-    aggregator.start_round_training()
+    aggregator.start_round_training(x_train, y_train, x_test, y_test)
     #local update of the model in the aggregator
     aggregator.model = aggregator.local_update(all_models)
-
     aggregator.send_model_to_collaborators()
 
-validation = load_validation_data(random.randint(0, num_clients-1))[1]
 
+validation = x_test 
 trained_model_evaluation(aggregator.model, validation)
 
 #################################################
