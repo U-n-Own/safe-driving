@@ -175,9 +175,7 @@ def train_test_split_on_single_user(X, y, names, user):
 
 
 #Simulation of federated learning using 30 users and using a simple iterative workflow    
-def start_simulated_federated_learning_loading_data(current_user_index):
-
-    print("Starting federated learning simulation\n\n")
+def loading_data_all_users(current_user_index):
 
     print("Loading dataset for one user...\n\n")
 
@@ -204,24 +202,6 @@ def start_simulated_federated_learning_loading_data(current_user_index):
 
 
 
-
-def load_validation_data(random_user_index):
-
-    print("Loading dataset for one user for validation...\n\n")
-
-    img = load_train_single_user(random_user_index)
-
-    #normalize_img(img)
-
-    X, labels, names, usr = img
-  
-    #So we're going to pick only one user data per training
-    x_train, x_test, y_train, y_test =  normalize_train_data_user(usr, labels, names, X)
-
-    #For validation, stratify is used to use all classes in the test set
-    x_train, x_test, y_train, y_test = train_test_split(x_train , y_train, test_size=0.2, random_state=42, stratify=y_train)
-    
-    return x_train, x_test, y_train, y_test 
 
 
 
