@@ -56,7 +56,7 @@ send model to aggregation server
 color_type = 3
 img_cols = 240
 img_rows = 240
-num_fed_round = 1
+num_fed_round = 2
 
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
@@ -75,8 +75,6 @@ class Aggregator(object):
         self.num_clients = num_clients
         self.collaborators = collaborators
         self.num_fed_round = num_fed_round
-        
-
 
 
     #Initialize model from safe_drive_SeqCNN.py
@@ -88,9 +86,6 @@ class Aggregator(object):
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
 
-    #This function performs the Federated Learning
-
-   
         for fl in range(self.num_fed_round):
             print('Federated learning aggregation: ',fl+1)
             # initialize empty weights
@@ -112,9 +107,6 @@ class Aggregator(object):
 
     #After we got the data as tensor we start the fake federation learning with 29 users
     def start_round_training(self):
-        
-    
-       #print('\n\nStarting round federated learning' + self.num_fed_round + '\n\n')
     
         #For each users in users we will do the training using the data of the user
         for user in USERS:
@@ -124,9 +116,6 @@ class Aggregator(object):
             x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
             print("\n\nStart training model of user number" + str(USERS.index(user)))
-
-            #Use the Collaborator model
-            #fit_model_federation(, x_train, y_train, x_test, y_test)
 
             fit_model_federation(self.collaborators[USERS.index(user)].model, x_train, y_train, x_test, y_test)
 
@@ -139,14 +128,12 @@ class Aggregator(object):
         
             #return all_models
             
-
-            
-            #print("Showing shape of training data")
-            #print(x_train.shape) #-> (Tensor 175 240 240 3) Bath is 0.8 of the total data of this user
-
-
             #Send the model to the collaborators, we are in a simulated environment so we train with the aggregator itself
-            
+
+    def send_model_to_collaborators(self):
+
+        for collaborator in self.collaborators:
+            collaborator.model = self.model
 
 
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
@@ -173,10 +160,17 @@ class Collaborator(object):
 
 
 
+
+
+
 #Initialize the aggregator model
 model = generate_model_safe_drive()
 #model = generate_simplyfied_model_safe_drive()
 model = model_compile(model)
+
+
+#Initialize the collaborator 
+aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 
 
 #Initialize the collaborators
@@ -184,16 +178,17 @@ for i in range(num_clients):
     collaborator = Collaborator(model)
     collaborators.append(collaborator)
 
-aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
+for round in num_fed_round:
 
+    aggregator.start_round_training()
+    #local update of the model in the aggregator
+    aggregator.model = aggregator.local_update(all_models)
 
-aggregator.start_round_training()
+    aggregator.send_model_to_collaborators()
 
-#local update of the model in the aggregator
-aggregator.model = aggregator.local_update(all_models)
+validation = load_validation_data(random.randint(0, num_clients-1))[1]
 
-
-
+trained_model_evaluation(aggregator.model, validation)
 
 #################################################
 
