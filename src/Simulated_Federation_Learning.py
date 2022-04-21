@@ -178,7 +178,7 @@ for i in range(num_clients):
     collaborator = Collaborator(model)
     collaborators.append(collaborator)
 
-for round in num_fed_round:
+for round in range(num_fed_round):
 
     aggregator.start_round_training()
     #local update of the model in the aggregator
