@@ -203,11 +203,29 @@ def start_simulated_federated_learning_loading_data(current_user_index):
 
 
 
+
+
+def load_validation_data(random_user_index):
+
+    print("Loading dataset for one user for validation...\n\n")
+
+    img = load_train_single_user(random_user_index)
+
+    #normalize_img(img)
+
+    X, labels, names, usr = img
+  
+    #So we're going to pick only one user data per training
+    x_train, x_test, y_train, y_test =  normalize_train_data_user(usr, labels, names, X)
+
+    #For validation, stratify is used to use all classes in the test set
+    x_train, x_test, y_train, y_test = train_test_split(x_train , y_train, test_size=0.2, random_state=42, stratify=y_train)
+    
+    return x_train, x_test, y_train, y_test 
+
+
+
 # ----------------------------------------------------------------------------------------------------------------------
-
-#Todo: Copy the train and test set in new directory
-
-
 
 #Data augmentations maybe
 ''' 
@@ -215,73 +233,3 @@ def augumentation_imgs
     image = tf.image.random_brightness(image, max_delta=0.07)
     return image, y
 '''
-
-''' #Import dataset using OpenCV
-def import_dataset_with_opencv():
-    
-    for category in CATEGORIES:
-        print(category + "is now being processed")
-        path = os.path.join(DATADIR,category) #Path to the folder divided in 15 classes
-        for img in os.listdir(path):   
-            img_to_array = cv2.imread(os.path.join(path, img), cv2.IMREAD_COLOR)
-
- '''
-# This may be useless to me
-#1 user per test. Loading a single user
-''' def train_test_split_users(X,y,names,user):
-    indices = [i for i, x in enumerate(names) if USERS[user] in x]
-    x_test = [e for i, e in enumerate(X) if i in indices]
-    x_train = [e for i, e in enumerate(X) if i not in indices]
-    y_test = [e for i, e in enumerate(y) if i in indices]
-    y_train = [e for i, e in enumerate(y) if i not in indices]
-    return x_train, x_test, y_train, y_test  
- '''
-
-''' def old_split_single_usr():
-     #For each user
-    NUMBER_USERS = len(USERS)
-
-    for user in range(NUMBER_USERS):
-        #For each class
-        for classed in range(NUMBER_CLASSES):
-            #For each image
-            for img in range(NUMBER_IMAGES):
-                #Get the image
-                img_to_array = cv2.imread(os.path.join(PATH.format(classed), img), cv2.IMREAD_COLOR)
-                #Resize the image
-                new_array = cv2.resize(img_to_array, img_cols, img_rows)
-                #Add the image to the dataset
-                dataset.append([new_array, classed])
-                
-    #Shuffle the dataset
-    random.shuffle(dataset)
-    #Split the dataset into train and test
-    train = dataset[:TRAIN_SIZE]
-    test = dataset[TRAIN_SIZE:]
-    
-    #Create the train and test sets
-    X_train = []
-    X_test = []
-    y_train = []
-    y_test = []
-    
-    for features, label in train:
-        X_train.append(features)
-        y_train.append(label)
-        
-    for features, label in test:
-        X_test.append(features)
-        y_test.append(label)
-        
-    #Convert to numpy arrays
-    X_train = np.array(X_train).reshape(-1, IMAGE_SIZE, IMAGE_SIZE, 3)
-    X_test = np.array(X_test).reshape(-1, IMAGE_SIZE, IMAGE_SIZE, 3)
-    y_train = np.array(y_train)
-    y_test = np.array(y_test)
-    
-    #One-hot encode the labels
-    y_train = np.utils.to_categorical(y_train, NUMBER_CLASSES)
-    y_test = np.utils.to_categorical(y_test, NUMBER_CLASSES)
-    
-    return X_train, X_test, y_train, y_test    
-     '''
