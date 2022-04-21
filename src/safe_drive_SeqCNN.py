@@ -147,9 +147,6 @@ def trained_model_evaluation(model, dataset_to_validate):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
     print('\nTest accuracy:', test_acc)
 
-def get_weights(model):
-    return model.get_weights()
-
 def start_training():
 
     dataset_to_train, dataset_to_validate = loading_dataset()
