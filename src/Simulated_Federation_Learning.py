@@ -86,7 +86,7 @@ class Aggregator(object):
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
 
-        print('Federated learning aggregation: ',fl+1)
+        print('Federated learning aggregation: ', round)
         # initialize empty weights
         weights = np.array(self.model.get_weights(), dtype='object')*0  
         
