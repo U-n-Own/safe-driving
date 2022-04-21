@@ -86,21 +86,20 @@ class Aggregator(object):
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
 
-        for fl in range(self.num_fed_round):
-            print('Federated learning aggregation: ',fl+1)
-            # initialize empty weights
-            weights = np.array(self.model.get_weights(), dtype='object')*0  
-            
-            
-            for client_model in models:
-                client_weights = client_model.get_weights()
-                weights = weights + np.array(client_weights, dtype='object')
-            
-            # aggregate weights, computing the mean
-            FL_weights = weights/len(models)
+        print('Federated learning aggregation: ',fl+1)
+        # initialize empty weights
+        weights = np.array(self.model.get_weights(), dtype='object')*0  
         
-            # set aggregated weights
-            self.model.set_weights(FL_weights)
+        
+        for client_model in models:
+            client_weights = client_model.get_weights()
+            weights = weights + np.array(client_weights, dtype='object')
+        
+        # aggregate weights, computing the mean
+        FL_weights = weights/len(models)
+    
+        # set aggregated weights
+        self.model.set_weights(FL_weights)
 
         return self.model
 
@@ -115,11 +114,11 @@ class Aggregator(object):
 
             #x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
-            print("\n\nStart training model of user number" + str(USERS.index(user)))
+            print("\n\nStart training model of user number " + str(USERS.index(user)) + "\n\n")
 
             fit_model_federation(self.collaborators[USERS.index(user)].model, x_train, y_train, x_test, y_test)
 
-            print("\n\nEnd training model of user number" + str(USERS.index(user)))
+            print("\n\nEnd training model of user number " + str(USERS.index(user)) + "\n\n")
 
             #After the training we will send the updated model to the aggregation server
             # For simulating this will save the models in an np array
@@ -179,7 +178,7 @@ for user in USERS:
 
 #Start the training of the model
 for round in range(num_fed_round):
-
+    print('Federated learning round: ',round+1)
     aggregator.start_round_training(x_train, y_train, x_test, y_test)
     #local update of the model in the aggregator
     aggregator.model = aggregator.local_update(all_models)
