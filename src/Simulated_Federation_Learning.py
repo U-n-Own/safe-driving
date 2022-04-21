@@ -168,15 +168,15 @@ model = generate_model_safe_drive()
 #model = generate_simplyfied_model_safe_drive()
 model = model_compile(model)
 
-
-#Initialize the collaborator 
-aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
-
-
 #Initialize the collaborators
 for i in range(num_clients):
     collaborator = Collaborator(model)
     collaborators.append(collaborator)
+
+
+#Initialize the collaborator 
+aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
+
 
 for round in range(num_fed_round):
 
