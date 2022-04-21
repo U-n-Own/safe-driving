@@ -56,7 +56,7 @@ send model to aggregation server
 color_type = 3
 img_cols = 240
 img_rows = 240
-num_fed_round = 2
+num_fed_round = 5
 
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
@@ -178,10 +178,11 @@ for user in USERS:
 
 #Start the training of the model
 for round in range(num_fed_round):
-    print('Federated learning round: ',round+1)
+    print('Federated learning round: ',round+1, '\n\n')
     aggregator.start_round_training(x_train, y_train, x_test, y_test)
     #local update of the model in the aggregator
     aggregator.model = aggregator.local_update(all_models)
+    print('\n\nSending model to collaborators...\n\n')
     aggregator.send_model_to_collaborators()
 
 
