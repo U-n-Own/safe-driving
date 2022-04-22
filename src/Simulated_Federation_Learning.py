@@ -187,16 +187,14 @@ for round in range(num_fed_round):
     print('Federated learning round: ',round+1, '\n\n')
 
     for i in range(len(USERS)-1):
-
         aggregator.start_round_training(aggregator.collaborators[i].data)
-    #local update of the model in the aggregator
-
-aggregator.model = aggregator.local_update(all_models)
-print('\n\nSending model to collaborators...\n\n')
-aggregator.send_model_to_collaborators()
+    #local update of the model in the aggregato
+    aggregator.model = aggregator.local_update(all_models)
+    print('\n\nSending model to collaborators...\n\n')
+    aggregator.send_model_to_collaborators()
 
 print('End of federated learning\n\nEvaluation of the model...\n\n')
-validation = x_test 
+validation = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[1]
 trained_model_evaluation(aggregator.model, validation)
 
 #################################################
