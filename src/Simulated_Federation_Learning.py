@@ -64,7 +64,7 @@ USERS_ALL =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Da
 USERS = ['Amparore', 'Baccega']
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 num_clients = len(USERS)
-all_models = list(range(0,num_clients))
+all_models = []
 collaborators = []
 
 
@@ -86,7 +86,7 @@ class Aggregator(object):
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
 
-        print('Federated learning aggregation...', round)
+        print('Federated learning aggregation...')
         
         
         # initialize empty weights
@@ -127,7 +127,7 @@ class Aggregator(object):
         print('\n\nEnd training model of user number ', index_user , '\n\n')
 
         #After the training we will send the updated model to the aggregation server
-        all_models[index_user] = self.collaborators[index_user].model
+        all_models.append(self.collaborators[index_user].model)
 
         print("\n\n\n########### TESTING ##############\n\n\n")
         for model in all_models:
