@@ -1,7 +1,6 @@
 from safe_drive_SeqCNN_wOpenCV import *
 from safe_drive_SeqCNN import *
 
-from time import sleep
 from glob import glob
 from importlib.resources import path
 import random
