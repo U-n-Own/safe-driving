@@ -55,7 +55,7 @@ send model to aggregation server
 color_type = 3
 img_cols = 240
 img_rows = 240
-num_fed_round = 5
+num_fed_round = 10
 
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
@@ -137,8 +137,9 @@ class Aggregator(object):
 
 
     def accuracy_federated_learning(self, X_test, y_test):
-        test_acc = self.model.evaluate(X_test, y_test, verbose=0)
+        test_loss, test_acc = self.model.evaluate(X_test, y_test, verbose=0)
         print('\nTest accuracy:', test_acc)
+        print('\nTest loss:', test_loss)
 
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
 #Data is a n-uple of (x_train, y_train, x_test, y_test)
