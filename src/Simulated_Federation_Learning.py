@@ -28,7 +28,7 @@ Aggregation server
 1. initialize model W0
 2. for each round t=1,…:
 3. Broadcast Wt−1 to all collaborators
-4. select C eligible participants
+4. select C eligible participants 
 5. foreach|| participant p: 
 6.  wtp = LocalUpdate(p)
 7. wt = aggregate(∀p, wtp)
@@ -105,8 +105,11 @@ class Aggregator(object):
 
 
     #After we got the data as tensor we start the fake federation learning with 29 users
-    def start_round_training(self, x_train, y_train, x_test, y_test):
+    def start_round_training(self, data):
     
+        
+        x_train, y_train, x_test, y_test = data
+
         #For each users in users we will do the training using the data of the user
         for user in USERS:
 
@@ -133,10 +136,12 @@ class Aggregator(object):
             collaborator.model = self.model
 
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
+#Data is a n-uple of (x_train, y_train, x_test, y_test)
 class Collaborator(object):
     
-        def __init__(self, model):
+        def __init__(self, model, data):
             self.model = model
+            self.data = data
     
         #Take the model from the aggregator and train the model with the data of the user
         def local_update_collaborator(self, model):
@@ -162,9 +167,12 @@ model = generate_model_safe_drive()
 #model = generate_simplyfied_model_safe_drive()
 model = model_compile(model)
 
-#Initialize the collaborators
-for i in range(num_clients):
-    collaborator = Collaborator(model)
+
+#Initialize the collaborators with own data and model
+for user in USERS:
+    x_train, x_test, y_train, y_test = loading_data_user(USERS.index(user))
+    data = (x_train, y_train, x_test, y_test)
+    collaborator = Collaborator(model, data)
     collaborators.append(collaborator)
 
 
@@ -172,18 +180,20 @@ for i in range(num_clients):
 aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 
 #Load the data of the users
-for user in USERS:
-    x_train, x_test, y_train, y_test = loading_data_all_users(USERS.index(user))
 
 
 #Start the training of the model
 for round in range(num_fed_round):
     print('Federated learning round: ',round+1, '\n\n')
-    aggregator.start_round_training(x_train, y_train, x_test, y_test)
+
+    for i in range(len(USERS)-1):
+
+        aggregator.start_round_training(aggregator.collaborators[i].data)
     #local update of the model in the aggregator
-    aggregator.model = aggregator.local_update(all_models)
-    print('\n\nSending model to collaborators...\n\n')
-    aggregator.send_model_to_collaborators()
+
+aggregator.model = aggregator.local_update(all_models)
+print('\n\nSending model to collaborators...\n\n')
+aggregator.send_model_to_collaborators()
 
 print('End of federated learning\n\nEvaluation of the model...\n\n')
 validation = x_test 

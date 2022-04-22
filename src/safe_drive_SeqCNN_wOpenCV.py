@@ -175,9 +175,9 @@ def train_test_split_on_single_user(X, y, names, user):
 
 
 #Simulation of federated learning using 30 users and using a simple iterative workflow    
-def loading_data_all_users(current_user_index):
+def loading_data_user(current_user_index):
 
-    print("Loading dataset for one user...\n\n")
+    print('Loading dataset for user '+ current_user_index + '...\n\n')
 
     img = load_train_single_user(current_user_index)
 
