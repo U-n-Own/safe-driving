@@ -118,11 +118,11 @@ class Aggregator(object):
 
             #x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
-        print('\n\nStart training model of user number ' + index_user + '\n\n')
+        print('\n\nStart training model of user number ', index_user, '\n\n')
 
         fit_model_federation(self.collaborators[index_user].model, x_train, y_train, x_test, y_test)
 
-        print("\n\nEnd training model of user number " + index_user + "\n\n")
+        print('\n\nEnd training model of user number ', index_user , '\n\n')
 
         #After the training we will send the updated model to the aggregation server
         # For simulating this will save the models in an np array
