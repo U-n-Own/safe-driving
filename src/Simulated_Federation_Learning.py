@@ -129,11 +129,6 @@ class Aggregator(object):
         #After the training we will send the updated model to the aggregation server
         all_models.append(self.collaborators[index_user].model)
 
-        print("\n\n\n########### TESTING ##############\n\n\n")
-        for model in all_models:
-            print(model)
-            print("\n\n\n")
-
 
     def send_model_to_collaborators(self):
 
