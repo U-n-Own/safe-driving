@@ -186,7 +186,7 @@ for round in range(num_fed_round):
     aggregator.send_model_to_collaborators()
 
 print('End of federated learning\n\nEvaluation of the model...\n\n')
-validation = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[1]
+validation = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[2]
 trained_model_evaluation(aggregator.model, validation)
 
 #################################################
