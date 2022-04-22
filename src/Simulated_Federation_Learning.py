@@ -119,11 +119,11 @@ class Aggregator(object):
 
             #x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
-        print('\n\nStart training model of user number ', index_user, '\n\n')
+        #print('\n\nStart training model of user number ', index_user, '\n\n')
 
         fit_model_federation(self.collaborators[index_user].model, x_train, y_train, x_test, y_test)
 
-        print('\n\nEnd training model of user number ', index_user , '\n\n')
+        #print('\n\nEnd training model of user number ', index_user , '\n\n')
 
         #After the training we will send the updated model to the aggregation server
         all_models.append(self.collaborators[index_user].model)
@@ -192,7 +192,7 @@ for round in range(num_fed_round):
     print('\n\nSending model to collaborators...\n\n')
     aggregator.send_model_to_collaborators()
 
-    print('End of federated learning\n\nEvaluation of the model...\n\n')
+    print('End of federated learning round\n\nEvaluation of the model...\n\n')
     x_test = aggregator.collaborators[random_pick].data[2]
     y_test = aggregator.collaborators[random_pick].data[3]
     aggregator.accuracy_federated_learning(x_test, y_test)
