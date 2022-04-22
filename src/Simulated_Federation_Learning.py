@@ -129,8 +129,11 @@ class Aggregator(object):
         #After the training we will send the updated model to the aggregation server
         all_models[index_user] = self.collaborators[index_user].model
 
-        
-        
+        print("\n\n\n########### TESTING ##############\n\n\n")
+        for model in all_models:
+            print(model)
+            print("\n\n\n")
+
 
     def send_model_to_collaborators(self):
 
@@ -146,12 +149,6 @@ class Collaborator(object):
             self.data = data
     
         #Take the model from the aggregator and train the model with the data of the user
-        def local_update_collaborator(self, model):
-            self.model = model
-            
-            #Train the model with the data of the use
-
-            return self.model
 
 
 #Describing workflow: 
