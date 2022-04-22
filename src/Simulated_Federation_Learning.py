@@ -183,7 +183,7 @@ for round in range(num_fed_round):
 
     #local update of the model in the aggregato
     aggregator.model = aggregator.local_update(all_models)
-    print('\n\nSending model to collaborators...\n\n', sleep(1))
+    print('\n\nSending model to collaborators...\n\n')
     aggregator.send_model_to_collaborators()
 
 print('End of federated learning\n\nEvaluation of the model...\n\n')
