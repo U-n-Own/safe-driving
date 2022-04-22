@@ -1,7 +1,7 @@
 from safe_drive_SeqCNN_wOpenCV import *
 from safe_drive_SeqCNN import *
 
-
+from time import sleep
 from glob import glob
 from importlib.resources import path
 import random
@@ -60,8 +60,8 @@ num_fed_round = 5
 
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
-USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
-USERS_TWO =['Amparore', 'Baccega']
+USERS_ALL =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
+USERS = ['Amparore', 'Baccega']
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 num_clients = len(USERS)
 all_models = list(range(0,num_clients))
@@ -86,7 +86,8 @@ class Aggregator(object):
     #Take a list of models and return the mean of the models (mean of the weights)
     def local_update(self, models):
 
-        print('Federated learning aggregation: ', round)
+        print('Federated learning aggregation...', round, sleep(1))
+        
         # initialize empty weights
         weights = np.array(self.model.get_weights(), dtype='object')*0  
         
@@ -105,27 +106,27 @@ class Aggregator(object):
 
 
     #After we got the data as tensor we start the fake federation learning with 29 users
-    def start_round_training(self, data):
+    def start_round_training(self, data, index_user):
     
         
         x_train, y_train, x_test, y_test = data
 
         #For each users in users we will do the training using the data of the user
-        for user in USERS:
+        #for user in USERS:
 
             #print("\nUser data loading number" + str(USERS.index(user)))
 
             #x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
-            print("\n\nStart training model of user number " + str(USERS.index(user)) + "\n\n")
+        print("\n\nStart training model of user number " + index_user + "\n\n")
 
-            fit_model_federation(self.collaborators[USERS.index(user)].model, x_train, y_train, x_test, y_test)
+        fit_model_federation(self.collaborators[index_user].model, x_train, y_train, x_test, y_test)
 
-            print("\n\nEnd training model of user number " + str(USERS.index(user)) + "\n\n")
+        print("\n\nEnd training model of user number " + index_user + "\n\n")
 
-            #After the training we will send the updated model to the aggregation server
-            # For simulating this will save the models in an np array
-            all_models[USERS.index(user)] = self.collaborators[USERS.index(user)].model
+        #After the training we will send the updated model to the aggregation server
+        # For simulating this will save the models in an np array
+        all_models[index_user] = self.collaborators[index_user].model
             
         
             #return all_models
@@ -179,18 +180,17 @@ for user in USERS:
 #Initialize the collaborator 
 aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 
-#Load the data of the users
-
 
 #Start the training of the model
 for round in range(num_fed_round):
     print('Federated learning round: ',round+1, '\n\n')
 
     for i in range(len(USERS)-1):
-        aggregator.start_round_training(aggregator.collaborators[i].data)
+        aggregator.start_round_training(aggregator.collaborators[i].data, i)
+
     #local update of the model in the aggregato
     aggregator.model = aggregator.local_update(all_models)
-    print('\n\nSending model to collaborators...\n\n')
+    print('\n\nSending model to collaborators...\n\n', sleep(1))
     aggregator.send_model_to_collaborators()
 
 print('End of federated learning\n\nEvaluation of the model...\n\n')
