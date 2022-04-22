@@ -84,15 +84,21 @@ class Aggregator(object):
 
 
     #Take a list of models and return the mean of the models (mean of the weights)
-    def local_update(self, models):
+    def local_update(self):
 
-        print('Federated learning aggregation...', round, sleep(1))
+        print('Federated learning aggregation...', round)
+        
         
         # initialize empty weights
         weights = np.array(self.model.get_weights(), dtype='object')*0  
         
         
-        for client_model in models:
+#            for client_model in models:
+#            client_weights = client_model.get_weights()
+#            weights = weights + np.array(client_weights, dtype='object')
+
+
+        for client_model in self.collaborators.model:
             client_weights = client_model.get_weights()
             weights = weights + np.array(client_weights, dtype='object')
         
@@ -126,7 +132,7 @@ class Aggregator(object):
 
         #After the training we will send the updated model to the aggregation server
         # For simulating this will save the models in an np array
-        all_models[index_user] = self.collaborators[index_user].model
+        #all_models[index_user] = self.collaborators[index_user].model
             
         
             #return all_models
@@ -189,7 +195,7 @@ for round in range(num_fed_round):
         aggregator.start_round_training(aggregator.collaborators[i].data, i)
 
     #local update of the model in the aggregato
-    aggregator.model = aggregator.local_update(all_models)
+    aggregator.model = aggregator.local_update()
     print('\n\nSending model to collaborators...\n\n', sleep(1))
     aggregator.send_model_to_collaborators()
 
