@@ -181,10 +181,10 @@ for round in range(num_fed_round):
     for i in range(len(USERS)):
         aggregator.start_round_training(aggregator.collaborators[i].data, i)
 
-    #local update of the model in the aggregato
-    aggregator.model = aggregator.local_update(all_models)
-    print('\n\nSending model to collaborators...\n\n', sleep(1))
-    aggregator.send_model_to_collaborators()
+#local update of the model in the aggregato
+aggregator.model = aggregator.local_update(all_models)
+print('\n\nSending model to collaborators...\n\n', sleep(1))
+aggregator.send_model_to_collaborators()
 
 print('End of federated learning\n\nEvaluation of the model...\n\n')
 validation = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[1]
