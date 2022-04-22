@@ -178,7 +178,7 @@ aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 for round in range(num_fed_round):
     print('Federated learning round: ',round+1, '\n\n')
 
-    for i in range(len(USERS)-1):
+    for i in range(len(USERS)):
         aggregator.start_round_training(aggregator.collaborators[i].data, i)
 
     #local update of the model in the aggregato
