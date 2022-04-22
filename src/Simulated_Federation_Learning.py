@@ -65,7 +65,6 @@ CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10",
 num_clients = len(USERS)
 all_models = []
 collaborators = []
-random_pick = random.randint(0,len(USERS)-1)
 
 class Aggregator(object):
 
@@ -193,6 +192,7 @@ for round in range(num_fed_round):
     aggregator.send_model_to_collaborators()
 
     print('End of federated learning round\n\nEvaluation of the model...\n\n')
+    random_pick = random.randint(0,len(USERS)-1)
     x_test = aggregator.collaborators[random_pick].data[2]
     y_test = aggregator.collaborators[random_pick].data[3]
     aggregator.accuracy_federated_learning(x_test, y_test)
