@@ -197,7 +197,7 @@ for round in range(num_fed_round):
 print('End of federated learning\n\nEvaluation of the model...\n\n')
 x_test = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[2]
 y_test = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[3]
-aggregator.preditction_aggregation(x_test, y_test)
+aggregator.prediction_aggregation(x_test, y_test)
 #trained_model_evaluation(aggregator.model, validation)
 
 #################################################
