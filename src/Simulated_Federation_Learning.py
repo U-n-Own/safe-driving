@@ -142,6 +142,7 @@ class Aggregator(object):
         acc = np.mean(y_pred == y_test_argmax)
         print("Federated Accuracy: ", acc)
         acc_fl.append(acc)
+        return acc_fl
 
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
 #Data is a n-uple of (x_train, y_train, x_test, y_test)
@@ -194,11 +195,12 @@ for round in range(num_fed_round):
     print('\n\nSending model to collaborators...\n\n')
     aggregator.send_model_to_collaborators()
 
-print('End of federated learning\n\nEvaluation of the model...\n\n')
-x_test = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[2]
-y_test = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[3]
-aggregator.prediction_aggregation(x_test, y_test)
-#trained_model_evaluation(aggregator.model, validation)
+    print('End of federated learning\n\nEvaluation of the model...\n\n')
+    x_test = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[2]
+    y_test = aggregator.collaborators[random.randint(0,len(USERS)-1)].data[3]
+    aggregator.prediction_aggregation(x_test, y_test)
+
+    #trained_model_evaluation(aggregator.model, validation)
 
 #################################################
 
