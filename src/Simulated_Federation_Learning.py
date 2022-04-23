@@ -133,14 +133,14 @@ class Aggregator(object):
 
     def plot_results_federation(self,fed_acc):
 
-        plt.figure(figsize=(10,8))
+        plt.figure(figsize=(5,4))
         plt.plot(fed_acc,label='Federated Learning')
         plt.xlabel('Number of epochs')
         plt.ylabel('Validation accuracy')
         plt.legend()
         plt.grid()
-        plt.xticks(np.arange(0,21,1),np.arange(1,22,1))
-        plt.xlim(0,19)
+        plt.xticks(np.arange(0,9,1),np.arange(1,10,1))
+        plt.xlim(0,9)
         plt.savefig('federated_learning_plot.png',dpi=300)
     
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
