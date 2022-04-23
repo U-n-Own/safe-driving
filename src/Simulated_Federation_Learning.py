@@ -20,7 +20,6 @@ import pathlib
 import matplotlib.pyplot as plt
 
 
-
 ''' 
 Aggregation server
 
@@ -129,7 +128,20 @@ class Aggregator(object):
         test_loss, test_acc = self.model.evaluate(X_test, y_test, verbose=0)
         print('\nTest accuracy:', test_acc)
         print('\nTest loss:', test_loss)
+        return test_acc
 
+    def plot_results_federation(self,fed_acc):
+
+        plt.figure(figsize=(10,8))
+        plt.plot(fed_acc,label='Federated Learning')
+        plt.xlabel('Number of epochs')
+        plt.ylabel('Validation accuracy')
+        plt.legend()
+        plt.grid()
+        plt.xticks(np.arange(0,21,1),np.arange(1,22,1))
+        plt.xlim(0,19)
+        plt.savefig('federated_learning_plot.png',dpi=300)
+    
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
 #Data is a n-uple of (x_train, y_train, x_test, y_test)
 # Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
@@ -185,7 +197,11 @@ for round in range(num_fed_round):
     random_pick = random.randint(0,len(USERS)-1)
     x_test = aggregator.collaborators[random_pick].data[2]
     y_test = aggregator.collaborators[random_pick].data[3]
-    aggregator.accuracy_federated_learning(x_test, y_test)
+    fed_acc = aggregator.accuracy_federated_learning(x_test, y_test)
+
+
+    #Plot the results
+    aggregator.plot_results_federation(fed_acc)
     #aggregator.prediction_aggregation(x_test, y_test)
 
     #trained_model_evaluation(aggregator.model, validation)
