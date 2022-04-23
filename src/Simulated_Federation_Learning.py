@@ -64,6 +64,7 @@ CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10",
 num_clients = len(USERS)
 all_models = []
 collaborators = []
+fed_acc = []
 
 class Aggregator(object):
 
@@ -132,15 +133,15 @@ class Aggregator(object):
 
     def plot_results_federation(self,fed_acc):
 
-        plt.figure(figsize=(10,8))
+        plt.figure(figsize=(5,4))
         plt.plot(fed_acc,label='Federated Learning')
         plt.xlabel('Number of epochs')
         plt.ylabel('Validation accuracy')
         plt.legend()
         plt.grid()
-        plt.xticks(np.arange(0,21,1),np.arange(1,22,1))
-        plt.xlim(0,19)
-        plt.savefig('federated_learning_plot.png',dpi=300)
+        plt.xticks(np.arange(0,10,1),np.arange(1,11,1))
+        plt.xlim(0,10)
+        plt.savefig('plots/federated_learning_plot.png',dpi=150)
     
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
 #Data is a n-uple of (x_train, y_train, x_test, y_test)
@@ -197,7 +198,7 @@ for round in range(num_fed_round):
     random_pick = random.randint(0,len(USERS)-1)
     x_test = aggregator.collaborators[random_pick].data[2]
     y_test = aggregator.collaborators[random_pick].data[3]
-    fed_acc = aggregator.accuracy_federated_learning(x_test, y_test)
+    fed_acc.append(aggregator.accuracy_federated_learning(x_test, y_test))
 
 
     #Plot the results
