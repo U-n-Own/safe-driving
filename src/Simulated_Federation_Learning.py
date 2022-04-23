@@ -54,7 +54,7 @@ send model to aggregation server
 color_type = 3
 img_cols = 240
 img_rows = 240
-num_fed_round = 5
+num_fed_round = 10 
 
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
