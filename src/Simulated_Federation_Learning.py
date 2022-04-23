@@ -64,6 +64,7 @@ CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10",
 num_clients = len(USERS)
 all_models = []
 collaborators = []
+fed_acc = []
 
 class Aggregator(object):
 
@@ -197,7 +198,7 @@ for round in range(num_fed_round):
     random_pick = random.randint(0,len(USERS)-1)
     x_test = aggregator.collaborators[random_pick].data[2]
     y_test = aggregator.collaborators[random_pick].data[3]
-    fed_acc = aggregator.accuracy_federated_learning(x_test, y_test)
+    fed_acc.append(aggregator.accuracy_federated_learning(x_test, y_test))
 
 
     #Plot the results
