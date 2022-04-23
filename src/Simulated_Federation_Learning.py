@@ -41,14 +41,14 @@ gb <- compute gradient for batch
 send model to aggregation server
 ''' 
 
-#Create two classes, one is the Aggregator and the other is the Collaborator
+#Two classes, one is the Aggregator and the other is the Collaborator
 
-# Aggregator: Initialize the model, send the model to the collaborators (there are 30 collaborators), then every 
-# Collaborator will update the model with the initial weights of the Collaborator, 
-# finally the aggregator will extract the weights 
-# of the Collaborators and update the model with the mean of the weights. This is repeated for some epochs.
+# Aggregator: Initialize the model, send the model to the collaborators (there are 30 collaborators) 
+# Every collaborator will update the model with the initial weights of the Aggregator, 
+# finally the aggregator will extract the weights of the Collaborators and update the model with the mean of the weights.
 
-# Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
+#  This is repeated for some epochs.
+
 
 #Declaring global variables
 
@@ -104,19 +104,11 @@ class Aggregator(object):
 
         return self.model
 
-
-    #After we got the data as tensor we start the fake federation learning with 29 users
-    def start_round_training(self, data, index_user):
+    #Perfome single epoch fit for each collaborator and store current epoch model
+    def train_collaborator(self, data, index_user):
     
         
         x_train, y_train, x_test, y_test = data
-
-        #For each users in users we will do the training using the data of the user
-        #for user in USERS:
-
-            #print("\nUser data loading number" + str(USERS.index(user)))
-
-            #x_train, x_test, y_train, y_test = start_simulated_federated_learning_loading_data(USERS.index(user))
 
         #print('\n\nStart training model of user number ', index_user, '\n\n')
 
@@ -133,8 +125,6 @@ class Aggregator(object):
         for collaborator in self.collaborators:
             collaborator.model = self.model
 
-
-
     def accuracy_federated_learning(self, X_test, y_test):
         test_loss, test_acc = self.model.evaluate(X_test, y_test, verbose=0)
         print('\nTest accuracy:', test_acc)
@@ -142,14 +132,13 @@ class Aggregator(object):
 
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
 #Data is a n-uple of (x_train, y_train, x_test, y_test)
+# Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
 class Collaborator(object):
     
         def __init__(self, model, data):
             self.model = model
             self.data = data
     
-        #Take the model from the aggregator and train the model with the data of the user
-
 
 #Describing workflow: 
 # 1. Initialize the model
@@ -163,7 +152,7 @@ class Collaborator(object):
 
 #Initialize the aggregator model
 model = generate_model_safe_drive()
-#model = generate_simplyfied_model_safe_drive()
+#model = generate_simplyfied_model_safe_drive(model)
 model = model_compile(model)
 
 
@@ -184,7 +173,7 @@ for round in range(num_fed_round):
     print('Federated learning round: ',round+1, '\n\n')
 
     for i in range(len(USERS)):
-        aggregator.start_round_training(aggregator.collaborators[i].data, i)
+        aggregator.train_collaborator(aggregator.collaborators[i].data, i)
 
     #local update of the model in the aggregato
     aggregator.model = aggregator.local_update(all_models)
@@ -202,16 +191,3 @@ for round in range(num_fed_round):
     #trained_model_evaluation(aggregator.model, validation)
 
 #################################################
-
-
-
-"""     def prediction_aggregation(self, X_test, y_test):
-        acc_fl = []
-        # compute predictions using aggregated weights
-        y_pred = np.argmax(self.model.predict(X_test),axis=1)
-        y_test_argmax = np.argmax(y_test,axis=1)
-        acc = np.mean(y_pred == y_test_argmax)
-        print("Federated Accuracy: ", acc)
-        acc_fl.append(acc)
-        return acc_fl 
-"""
