@@ -139,7 +139,7 @@ class Aggregator(object):
         plt.ylabel('Validation accuracy')
         plt.legend()
         plt.grid()
-        plt.xticks(np.arange(0,11,1),np.arange(1,11,1))
+        plt.xticks(np.arange(0,10,1),np.arange(1,11,1))
         plt.xlim(0,10)
         plt.savefig('plots/federated_learning_plot.png',dpi=150)
     
