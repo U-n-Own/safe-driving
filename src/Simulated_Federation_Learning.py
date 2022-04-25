@@ -166,7 +166,7 @@ history_centralized_learning = train_model_centralized()
 
 #Initialize the aggregator model
 #model = generate_model_safe_drive()
-model = generate_simplyfied_model_safe_drive(model)
+model = generate_simplyfied_model_safe_drive()
 model = model_compile(model)
 
 
