@@ -136,7 +136,8 @@ def model_compile(model):
 
 
 def fit_model(model, dataset_to_train, dataset_to_validate):
-    model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
+    history = model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
+    return history
 
 
 def fit_model_federation(model, x_train, y_train, x_test, y_test):
@@ -146,16 +147,20 @@ def fit_model_federation(model, x_train, y_train, x_test, y_test):
 def trained_model_evaluation(model, dataset_to_validate):
     test_loss, test_acc = model.evaluate(dataset_to_validate)
     print('\nTest accuracy:', test_acc)
+    return test_acc
 
-def start_training():
+#No Federated learning, data is not distributed
+def train_model_centralized():
 
     dataset_to_train, dataset_to_validate = loading_dataset()
-
+    print("\n\n\t\tClassical training\n\n")
     model = generate_model_safe_drive()
     print("\n\n\nModel generated with success!\n\n\n")
     model = model_compile(model)
     print("\n\n\nModel compiled with success!\n\n\n")
-    fit_model(model, dataset_to_train, dataset_to_validate)
+    history = fit_model(model, dataset_to_train, dataset_to_validate)
     print("\n\n\nModel trained with success!\n\n\n")
     #history.results()
-    trained_model_evaluation(model, dataset_to_validate)
+    classical_accuracy = trained_model_evaluation(model, dataset_to_validate)
+
+    return history

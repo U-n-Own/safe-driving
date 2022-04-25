@@ -131,10 +131,12 @@ class Aggregator(object):
         print('\nTest loss:', test_loss)
         return test_acc
 
-    def plot_results_federation(self,fed_acc):
+    def plot_results_federation(self,fed_acc, history_centralized_learning):
 
         plt.figure(figsize=(5,4))
         plt.plot(fed_acc,label='Federated Learning')
+        #plt.plot(centralized_accuracy, label='Centralized Learning')
+        plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
         plt.xlabel('Number of epochs')
         plt.ylabel('Validation accuracy')
         plt.legend()
@@ -142,7 +144,7 @@ class Aggregator(object):
         plt.xticks(np.arange(0,10,1),np.arange(1,11,1))
         plt.xlim(0,10)
         plt.savefig('plots/federated_learning_plot.png',dpi=150)
-    
+
 #Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
 #Data is a n-uple of (x_train, y_train, x_test, y_test)
 # Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
@@ -160,8 +162,7 @@ class Collaborator(object):
 # 4. Assign collaborators to the aggregation server
 # 5. In the collaborator we 
 
-
-
+history_centralized_learning = train_model_centralized()
 
 #Initialize the aggregator model
 model = generate_model_safe_drive()
@@ -202,7 +203,7 @@ for round in range(num_fed_round):
 
 
     #Plot the results
-    aggregator.plot_results_federation(fed_acc)
+    aggregator.plot_results_federation(fed_acc, history_centralized_learning)
     #aggregator.prediction_aggregation(x_test, y_test)
 
     #trained_model_evaluation(aggregator.model, validation)
