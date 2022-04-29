@@ -40,15 +40,6 @@ gb <- compute gradient for batch
 send model to aggregation server
 ''' 
 
-#Two classes, one is the Aggregator and the other is the Collaborator
-
-# Aggregator: Initialize the model, send the model to the collaborators (there are 30 collaborators) 
-# Every collaborator will update the model with the initial weights of the Aggregator, 
-# finally the aggregator will extract the weights of the Collaborators and update the model with the mean of the weights.
-
-#  This is repeated for some epochs.
-
-
 #Declaring global variables
 
 color_type = 3
@@ -145,9 +136,8 @@ class Aggregator(object):
         plt.xlim(0,10)
         plt.savefig('plots/federated_learning_plot.png',dpi=150)
 
-#Code for collaborator class in simulated federation learning, collaboratos take the model from the aggregator that initialize it
-#Data is a n-uple of (x_train, y_train, x_test, y_test)
-# Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
+#Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
+#Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
 class Collaborator(object):
     
         def __init__(self, model, data):
@@ -159,10 +149,18 @@ class Collaborator(object):
 # 1. Initialize the model
 # 2. For each round t=1,…:
 # 3. Assign the model to the collaborators, each collarator has the same initial model
-# 4. Assign collaborators to the aggregation server
-# 5. In the collaborator we 
+# 4. Each collaborator trains for an epoch
+# 5. Assign collaborators' models weights to the old model of aggregation server 
+# 6. Compute mean
+# 7. Send the new model to the collaborators
+
+
+#   [Centralized learning] 
 
 history_centralized_learning = train_model_centralized()
+
+
+#   [Federated Learning]
 
 #Initialize the aggregator model
 #model = generate_model_safe_drive()
@@ -178,7 +176,7 @@ for user in USERS:
     collaborators.append(collaborator)
 
 
-#Initialize the collaborator 
+#Initialize the aggregator 
 aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 
 
@@ -189,13 +187,14 @@ for round in range(num_fed_round):
     for i in range(len(USERS)):
         aggregator.train_collaborator(aggregator.collaborators[i].data, i)
 
-    #local update of the model in the aggregato
+    #local update of the model in the aggregator
     aggregator.model = aggregator.local_update(all_models)
     print('\n\nSending model to collaborators...\n\n')
     aggregator.send_model_to_collaborators()
 
     print('End of federated learning round\n\nEvaluation of the model...\n\n')
     
+    #Each time we use validation set of a random user to predict the accuracy
     random_pick = random.randint(0,len(USERS)-1)
     x_test = aggregator.collaborators[random_pick].data[2]
     y_test = aggregator.collaborators[random_pick].data[3]
@@ -205,7 +204,6 @@ for round in range(num_fed_round):
     #Plot the results
     aggregator.plot_results_federation(fed_acc, history_centralized_learning)
     #aggregator.prediction_aggregation(x_test, y_test)
-
     #trained_model_evaluation(aggregator.model, validation)
 
 #################################################
