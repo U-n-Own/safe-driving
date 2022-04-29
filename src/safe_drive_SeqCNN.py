@@ -154,7 +154,7 @@ def train_model_centralized():
 
     dataset_to_train, dataset_to_validate = loading_dataset()
     print("\n\n\t\tClassical training\n\n")
-    model = generate_model_safe_drive()
+    model = generate_simplyfied_model_safe_drive()
     print("\n\n\nModel generated with success!\n\n\n")
     model = model_compile(model)
     print("\n\n\nModel compiled with success!\n\n\n")
