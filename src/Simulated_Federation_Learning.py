@@ -49,7 +49,9 @@ num_fed_round = 10
 
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
-USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
+ALL_USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
+USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider']
+USERS_TEST =['Thomas']
 USERS_TWO = ['Amparore', 'Baccega']
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 num_clients = len(USERS)
@@ -195,9 +197,12 @@ for round in range(num_fed_round):
     print('End of federated learning round\n\nEvaluation of the model...\n\n')
     
     #Each time we use validation set of a random user to predict the accuracy
-    random_pick = random.randint(0,len(USERS)-1)
-    x_test = aggregator.collaborators[random_pick].data[2]
-    y_test = aggregator.collaborators[random_pick].data[3]
+#    random_pick = random.randint(0,len(USERS)-1)
+#    x_test = aggregator.collaborators[random_pick].data[2]
+#    y_test = aggregator.collaborators[random_pick].data[3]
+
+
+
     fed_acc.append(aggregator.accuracy_federated_learning(x_test, y_test))
 
 
