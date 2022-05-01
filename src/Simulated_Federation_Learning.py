@@ -201,8 +201,11 @@ for round in range(num_fed_round):
     fed_acc.append(aggregator.accuracy_federated_learning(x_test, y_test))
 
 
-    #Plot the results
-    aggregator.plot_results_federation(fed_acc, history_centralized_learning)
+    #Plot the results, on all users
+    #TODO
+
+    #aggregator.plot_results_federation(fed_acc, history_centralized_learning)
+    
     #aggregator.prediction_aggregation(x_test, y_test)
     #trained_model_evaluation(aggregator.model, validation)
 
