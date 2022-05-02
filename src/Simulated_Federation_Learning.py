@@ -58,6 +58,7 @@ num_clients = len(USERS)
 all_models = []
 collaborators = []
 fed_acc = []
+fed_acc_used = []
 
 class Aggregator(object):
 
@@ -124,10 +125,11 @@ class Aggregator(object):
         print('\nTest loss:', test_loss)
         return test_acc
 
-    def plot_results_federation(self,fed_acc, history_centralized_learning):
+    def plot_results_federation(self,fed_acc, fed_acc_used):
 
         plt.figure(figsize=(5,4))
         plt.plot(fed_acc,label='Federated Learning')
+        plt.plot(fed_acc_used, label='Federated Learning used')
         #plt.plot(centralized_accuracy, label='Centralized Learning')
         #plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
         plt.xlabel('Number of epochs')
@@ -207,9 +209,13 @@ for round in range(num_fed_round):
     #Pick the last collaborator that we've not trained on
     X_test = aggregator.collaborators[-1].data[2]
     Y_test = aggregator.collaborators[-1].data[3]
-    fed_acc.append(aggregator.accuracy_federated_learning(X_test, Y_test))
+    X_test_used = aggregator.collaborators[0].data[2]
+    Y_test_used = aggregator.collaborators[0].data[3]
     
-    aggregator.plot_results_federation(fed_acc, history_centralized_learning)
+    fed_acc.append(aggregator.accuracy_federated_learning(X_test, Y_test))
+    fed_acc_used.append(aggregator.accuracy_federated_learning(X_test_used, Y_test_used))
+
+    aggregator.plot_results_federation(fed_acc, fed_acc_used)
 
     #Plot the results, on all users
     #TODO: try to plot for each user in a separate graph
