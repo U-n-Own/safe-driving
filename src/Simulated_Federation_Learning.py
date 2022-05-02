@@ -185,8 +185,8 @@ aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 #Start the training of the model
 for round in range(num_fed_round):
     print('Federated learning round: ',round+1, '\n\n')
-
-    for i in range(len(USERS)):
+    #On all users but not the last that we use as a check same with the centralized
+    for i in range(len(USERS) - 1):
         aggregator.train_collaborator(aggregator.collaborators[i].data, i)
 
     #local update of the model in the aggregator
@@ -198,11 +198,13 @@ for round in range(num_fed_round):
     
     #Each time we use validation set of a random user to predict the accuracy
 #    random_pick = random.randint(0,len(USERS)-1)
-#    x_test = aggregator.collaborators[random_pick].data[2]
+#    x_test = aggregator.collaborators[random_pick].data[1]
 #    y_test = aggregator.collaborators[random_pick].data[3]
 
 
-
+    #Pick the last collaborator that we've not trained on
+    x_test = aggregator.collaborators[-1].data[1]
+    y_test = aggregator.collaborators[-1].data[3]
     fed_acc.append(aggregator.accuracy_federated_learning(x_test, y_test))
 
 
