@@ -45,7 +45,7 @@ send model to aggregation server
 color_type = 3
 img_cols = 240
 img_rows = 240
-num_fed_round = 10 
+num_fed_round = 20
 
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
@@ -134,9 +134,11 @@ class Aggregator(object):
         plt.ylabel('Validation accuracy')
         plt.legend()
         plt.grid()
-        plt.xticks(np.arange(0,10,1),np.arange(1,11,1))
-        plt.xlim(0,10)
+        plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
+        plt.xlim(0,20)
         plt.savefig('plots/federated_learning_plot_after_rework.png',dpi=150)
+
+    def plots_result_federation_clients():
 
 #Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
 #Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
@@ -206,10 +208,11 @@ for round in range(num_fed_round):
     X_test = aggregator.collaborators[-1].data[2]
     Y_test = aggregator.collaborators[-1].data[3]
     fed_acc.append(aggregator.accuracy_federated_learning(X_test, Y_test))
-
+    
+    aggregator.plot_results_federation(fed_acc, history_centralized_learning)
 
     #Plot the results, on all users
-    #TODO
+    #TODO: try to plot for each user in a separate graph
 
     #aggregator.plot_results_federation(fed_acc, history_centralized_learning)
     
