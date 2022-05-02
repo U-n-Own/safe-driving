@@ -129,14 +129,14 @@ class Aggregator(object):
         plt.figure(figsize=(5,4))
         plt.plot(fed_acc,label='Federated Learning')
         #plt.plot(centralized_accuracy, label='Centralized Learning')
-        plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
+        #plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
         plt.xlabel('Number of epochs')
         plt.ylabel('Validation accuracy')
         plt.legend()
         plt.grid()
         plt.xticks(np.arange(0,10,1),np.arange(1,11,1))
         plt.xlim(0,10)
-        plt.savefig('plots/federated_learning_plot.png',dpi=150)
+        plt.savefig('plots/federated_learning_plot_after_rework.png',dpi=150)
 
 #Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
 #Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
@@ -159,7 +159,7 @@ class Collaborator(object):
 
 #   [Centralized learning] 
 
-history_centralized_learning = train_model_centralized()
+#history_centralized_learning = train_model_centralized()
 
 
 #   [Federated Learning]
@@ -198,12 +198,12 @@ for round in range(num_fed_round):
     
     #Each time we use validation set of a random user to predict the accuracy
 #    random_pick = random.randint(0,len(USERS)-1)
-#    x_test = aggregator.collaborators[random_pick].data[1]
+#    x_test = aggregator.collaborators[random_pick].data[2]
 #    y_test = aggregator.collaborators[random_pick].data[3]
 
 
     #Pick the last collaborator that we've not trained on
-    x_test = aggregator.collaborators[-1].data[1]
+    x_test = aggregator.collaborators[-1].data[2]
     y_test = aggregator.collaborators[-1].data[3]
     fed_acc.append(aggregator.accuracy_federated_learning(x_test, y_test))
 
