@@ -1,4 +1,5 @@
 from cProfile import label
+from safe_drive_SeqCNN_wOpenCV import loading_data_user
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
 import os
@@ -44,6 +45,10 @@ def loading_dataset():
     )
 
     return dataset_to_train, dataset_to_validate
+
+def loading_dataset_standardized():
+
+    loading_data_user()
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
@@ -152,7 +157,8 @@ def trained_model_evaluation(model, dataset_to_validate):
 #No Federated learning, data is not distributed
 def train_model_centralized():
 
-    dataset_to_train, dataset_to_validate = loading_dataset()
+    #dataset_to_train, dataset_to_validate = loading_dataset()
+    dataset_to_train, dataset_to_validate = loading_dataset_standardized()
     print("\n\n\t\tClassical training\n\n")
     model = generate_simplyfied_model_safe_drive()
     print("\n\n\nModel generated with success!\n\n\n")
