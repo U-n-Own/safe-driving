@@ -203,9 +203,9 @@ for round in range(num_fed_round):
 
 
     #Pick the last collaborator that we've not trained on
-    x_test = aggregator.collaborators[-1].data[2]
-    y_test = aggregator.collaborators[-1].data[3]
-    fed_acc.append(aggregator.accuracy_federated_learning(x_test, y_test))
+    X_test = aggregator.collaborators[-1].data[2]
+    Y_test = aggregator.collaborators[-1].data[3]
+    fed_acc.append(aggregator.accuracy_federated_learning(X_test, Y_test))
 
 
     #Plot the results, on all users
