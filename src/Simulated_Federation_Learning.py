@@ -141,6 +141,7 @@ class Aggregator(object):
         plt.savefig('plots/federated_learning_plot_after_rework.png',dpi=150)
 
     def plots_result_federation_clients():
+        return 
 
 #Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
 #Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
