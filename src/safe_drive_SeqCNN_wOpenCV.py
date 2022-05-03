@@ -48,30 +48,6 @@ def get_cv2_image(path):
         img = cv2.resize(img, (img_rows, img_cols)) 
         return img
 
-
-def pick_random_user():
-
-    #Maybe this is useless and we can pick one user witch a cycle
-
-    #Pick only one user data from the users using random pick
-    #To do this we pick one in USERS lenght and then we pick the image with the same name as the user in the array
-
-    rand_user_pick = random.randint(0, len(USERS)-1)
-    
-    #print("User picked: {}".format(USERS[rand_user_pick]))
-
-    if len(USERS_DONE) == len(USERS):
-        print("All users done")
-        return None
-
-    if USERS[rand_user_pick] in USERS_DONE:
-        return pick_random_user()
-
-    if USERS[rand_user_pick] not in USERS_DONE:
-        USERS_DONE.append(USERS[rand_user_pick])
-        selected_usr = rand_user_pick
-        return rand_user_pick
-
 # Training
 # Now is loading all users
 #we want only single user 
@@ -170,10 +146,6 @@ def train_test_split_on_single_user(X, y, names, user):
     
     return x_train, x_test, y_train, y_test  
   
-    #Todo
-    #indices = [i for i, x in enumerate(names) if USERS[user] in x]
-
-
 #Simulation of federated learning using 30 users and using a simple iterative workflow    
 def loading_data_user(current_user_index):
 
