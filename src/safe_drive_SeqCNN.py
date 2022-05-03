@@ -52,7 +52,7 @@ def loading_dataset_standardized():
     dataset_to_train = []
     dataset_to_validate  = []
 
-    for user in range(len(USERS)):
+    for user in range(len(USERS) - 1):
         
         x_train, x_test, y_train, y_test = loading_data_user(user)
     
