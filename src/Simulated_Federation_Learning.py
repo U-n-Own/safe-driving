@@ -59,6 +59,8 @@ all_models = []
 collaborators = []
 fed_acc = []
 fed_acc_used = []
+score_clients = []
+history_clients = []
 
 class Aggregator(object):
 
@@ -106,7 +108,7 @@ class Aggregator(object):
 
         #print('\n\nStart training model of user number ', index_user, '\n\n')
 
-        fit_model_federation(self.collaborators[index_user].model, x_train, y_train, x_test, y_test)
+        history_clients[index_user] = fit_model_federation(self.collaborators[index_user].model, x_train, y_train, x_test, y_test)
 
         #print('\n\nEnd training model of user number ', index_user , '\n\n')
 
@@ -129,7 +131,7 @@ class Aggregator(object):
 
         plt.figure(figsize=(5,4))
         plt.plot(fed_acc,label='Federated Learning')
-        plt.plot(fed_acc_used, label='Federated Learning used')
+        plt.plot(fed_acc_used, label='Federated Learning data used')
         #plt.plot(centralized_accuracy, label='Centralized Learning')
         #plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
         plt.xlabel('Number of epochs')
@@ -140,7 +142,21 @@ class Aggregator(object):
         plt.xlim(0,20)
         plt.savefig('plots/federated_learning_plot_after_rework.png',dpi=150)
 
-    def plots_result_federation_clients():
+    def plots_result_federation_clients(self, history_clients):
+        
+        plt.figure(figsize=(5,4))
+        
+        for i in range(len(USERS)-1):
+            plt.plot(history_clients[i].history['val_accuracy'],label='client learning, client '+str(i+1))
+        #plt.plot(centralized_accuracy, label='Centralized Learning')
+        #plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
+        plt.xlabel('Number of epochs')
+        plt.ylabel('Validation accuracy')
+        plt.legend()
+        plt.grid()
+        plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
+        plt.xlim(0,20)
+        plt.savefig('plots/federated_learning_plot_after_rework.png',dpi=150)
 
 #Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
 #Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
@@ -214,7 +230,8 @@ for round in range(num_fed_round):
     
     fed_acc.append(aggregator.accuracy_federated_learning(X_test, Y_test))
     fed_acc_used.append(aggregator.accuracy_federated_learning(X_test_used, Y_test_used))
-
+    
+    aggregator.plots_result_federation_clients(history_clients)
     aggregator.plot_results_federation(fed_acc, fed_acc_used)
 
     #Plot the results, on all users
