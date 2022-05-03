@@ -60,7 +60,7 @@ collaborators = []
 fed_acc = []
 fed_acc_used = []
 score_clients = []
-history_clients = []*29
+history_clients = []
 
 class Aggregator(object):
 
@@ -108,7 +108,7 @@ class Aggregator(object):
 
         #print('\n\nStart training model of user number ', index_user, '\n\n')
 
-        history_clients[index_user] = fit_model_federation(self.collaborators[index_user].model, x_train, y_train, x_test, y_test)
+        history_clients.append(fit_model_federation(self.collaborators[index_user].model, x_train, y_train, x_test, y_test))
 
         #print('\n\nEnd training model of user number ', index_user , '\n\n')
 
