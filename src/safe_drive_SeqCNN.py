@@ -172,19 +172,3 @@ def trained_model_evaluation(model, dataset_to_validate):
     print('\nTest accuracy:', test_acc)
     return test_acc
 
-#No Federated learning, data is not distributed
-def train_model_centralized():
-
-    #dataset_to_train, dataset_to_validate = loading_dataset()
-    dataset_to_train, dataset_to_validate = loading_dataset_standardized()
-    print("\n\n\t\tClassical training\n\n")
-    model = generate_model_safe_drive()
-    print("\n\n\nModel generated with success!\n\n\n")
-    model = model_compile(model)
-    print("\n\n\nModel compiled with success!\n\n\n")
-    history = fit_model(model, dataset_to_train, dataset_to_validate)
-    print("\n\n\nModel trained with success!\n\n\n")
-    #history.results()
-    classical_accuracy = trained_model_evaluation(model, dataset_to_validate)
-
-    return history
