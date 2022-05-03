@@ -60,7 +60,7 @@ collaborators = []
 fed_acc = []
 fed_acc_used = []
 score_clients = []
-history_clients = []
+history_clients = []*29
 
 class Aggregator(object):
 
