@@ -1,5 +1,6 @@
 from cProfile import label
 from safe_drive_SeqCNN_wOpenCV import loading_data_user
+from Simulated_Federation_Learning import *
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
 import os
@@ -48,7 +49,18 @@ def loading_dataset():
 
 def loading_dataset_standardized():
 
-    loading_data_user()
+    dataset_to_train = []
+    dataset_to_validate  = []
+
+    for user in range(len(USERS)):
+        
+        x_train, x_test, y_train, y_test = loading_data_user(user)
+    
+        dataset_to_train.append(x_train, y_train)
+        dataset_to_validate.append(x_test, y_test)
+
+    return dataset_to_train, dataset_to_validate
+
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user

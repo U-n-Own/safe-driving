@@ -59,7 +59,6 @@ all_models = []
 collaborators = []
 fed_acc = []
 fed_acc_used = []
-score_clients = []
 history_clients = []
 
 class Aggregator(object):
@@ -103,7 +102,8 @@ class Aggregator(object):
     #Perfome single epoch fit for each collaborator and store current epoch model
     def train_collaborator(self, data, index_user):
     
-        
+        #Problem: we can get access to data from self.collaborators[index_user].data
+        #But i keep this format for how the fit_model_federation takes arguments
         x_train, y_train, x_test, y_test = data
 
         #print('\n\nStart training model of user number ', index_user, '\n\n')
@@ -127,13 +127,12 @@ class Aggregator(object):
         print('\nTest loss:', test_loss)
         return test_acc
 
-    def plot_results_federation(self,fed_acc, fed_acc_used):
+    def plot_results_federation(self, fed_acc, fed_acc_used):
 
         plt.figure(figsize=(5,4))
         plt.plot(fed_acc,label='Federated Learning')
         plt.plot(fed_acc_used, label='Federated Learning data used')
-        #plt.plot(centralized_accuracy, label='Centralized Learning')
-        #plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
+        plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
         plt.xlabel('Number of epochs')
         plt.ylabel('Validation accuracy')
         plt.legend()
@@ -142,21 +141,7 @@ class Aggregator(object):
         plt.xlim(0,20)
         plt.savefig('plots/federated_learning_plot_after_rework.png',dpi=150)
 
-    def plots_result_federation_clients(self, history_clients):
-        
-        plt.figure(figsize=(5,4))
-        
-        for i in range(len(USERS)-1):
-            plt.plot(history_clients[i].history['val_accuracy'],label='client learning, client '+str(i+1))
-        #plt.plot(centralized_accuracy, label='Centralized Learning')
-        #plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
-        plt.xlabel('Number of epochs')
-        plt.ylabel('Validation accuracy')
-        plt.legend()
-        plt.grid()
-        plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
-        plt.xlim(0,20)
-        plt.savefig('plots/federated_learning_plot_each_user.png',dpi=150)
+
 
 #Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
 #Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
@@ -179,7 +164,7 @@ class Collaborator(object):
 
 #   [Centralized learning] 
 
-#history_centralized_learning = train_model_centralized()
+history_centralized_learning = train_model_centralized()
 
 
 #   [Federated Learning]
@@ -225,13 +210,15 @@ for round in range(num_fed_round):
     #Pick the last collaborator that we've not trained on
     X_test = aggregator.collaborators[-1].data[2]
     Y_test = aggregator.collaborators[-1].data[3]
+    
+    #Pick collaborator which data are used to train
     X_test_used = aggregator.collaborators[0].data[2]
     Y_test_used = aggregator.collaborators[0].data[3]
     
     fed_acc.append(aggregator.accuracy_federated_learning(X_test, Y_test))
     fed_acc_used.append(aggregator.accuracy_federated_learning(X_test_used, Y_test_used))
 
-    aggregator.plots_result_federation_clients(history_clients)
+    
     aggregator.plot_results_federation(fed_acc, fed_acc_used)
 
     #Plot the results, on all users
