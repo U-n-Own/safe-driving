@@ -156,7 +156,7 @@ class Aggregator(object):
         plt.grid()
         plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
         plt.xlim(0,20)
-        plt.savefig('plots/federated_learning_plot_after_rework.png',dpi=150)
+        plt.savefig('plots/federated_learning_plot_each_user.png',dpi=150)
 
 #Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
 #Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
@@ -230,7 +230,7 @@ for round in range(num_fed_round):
     
     fed_acc.append(aggregator.accuracy_federated_learning(X_test, Y_test))
     fed_acc_used.append(aggregator.accuracy_federated_learning(X_test_used, Y_test_used))
-    
+
     aggregator.plots_result_federation_clients(history_clients)
     aggregator.plot_results_federation(fed_acc, fed_acc_used)
 
