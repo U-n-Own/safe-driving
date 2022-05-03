@@ -151,9 +151,14 @@ def model_compile(model):
 
     return model
 
-
+#I'm trying to use the last user as test set
 def fit_model(model, dataset_to_train, dataset_to_validate):
-    history = model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
+    
+    x_train, x_test, y_train, y_test = loading_data_user(len(USERS))
+
+    #history = model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
+    history = model.fit(dataset_to_train, validation_data = (x_test, y_test), epochs=10)
+
     return history
 
 
