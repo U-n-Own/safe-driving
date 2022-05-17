@@ -55,7 +55,7 @@ def loading_dataset_standardized():
     x_train, x_test, y_train, y_test = load_full_dataset() 
 
 
-    #TODO : Extract last users as test set
+    #TODO : Extract last users
 
     return x_train, x_test, y_train, y_test
         
@@ -153,9 +153,8 @@ def model_compile(model):
 
 #I'm trying to use the last user as test set
 def fit_model_centralized(model, x_train, x_test, y_train, y_test):
-    
-    #history = model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
-    history = model.fit(dataset_to_train =(x_train, y_train), validation_data = (x_test, y_test), epochs=10)
+
+    history = model.fit(x_train, y_train, validation_data = (x_test, y_test), epochs=10)
 
     return history
     
