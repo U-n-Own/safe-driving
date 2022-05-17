@@ -139,9 +139,7 @@ class Aggregator(object):
         plt.grid()
         plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
         plt.xlim(0,20)
-        plt.savefig('plots/federated_learning_plot_after_rework.png',dpi=150)
-
-
+        plt.savefig('plots/federated_learning_plot_after_rework-federation.png',dpi=150)
 
 #Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
 #Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
@@ -165,6 +163,7 @@ class Collaborator(object):
 #   [Centralized learning] 
 
 history_centralized_learning = train_model_centralized()
+
 
 
 #   [Federated Learning]
