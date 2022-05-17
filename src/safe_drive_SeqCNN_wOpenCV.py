@@ -20,6 +20,29 @@ from sklearn.model_selection import train_test_split
 import pathlib
 import matplotlib.pyplot as plt
 
+#Structure of dataset    
+
+#Each instance work on it's own data on 29/30 users
+#In federate n copy of model e
+#Import dataset for training the dataset is divided in dataset/dataWithoutMasks/c00.. until c14
+#There are 15 classes one for each label of action per users
+#There are 30 users in the dataset with 200 image per user and each user can have 15 actions
+#Path to folders is ./dataset/dataWithoutMasks/c00..c14
+
+#How we want to train the model
+
+#We need a function that splits the data per user, pick all data from a user and then split it in train and test for a single model
+#All the data of one user is used for test and the 29/30 of the users data is used for training
+#The file a are in a format like this: username_number_of_image.png
+#We pick only the first 29/30 users' data for training and the last one for test
+#Then we cycle and we do this for each users, so every model has one of these cycled data and it's being trained separately in only 1 epoch or 1 step of SGD
+#Finally we extract the weights of each model and we compute the mean of the weights of all the models to get the final model, this is cycled for some epochs
+
+#We use only the data of an user to train the model
+#An user is picked in the dictionary USERS and then we pick only the image with the same name as the user
+
+
+
 #Declaring variables
 
 color_type = 3
@@ -86,6 +109,7 @@ def load_train_single_user(current_user_index):
 
     return X, labels, names, current_user_index
 
+
 def normalize_img( img):
     #img = tf.cast(img, dtype=tf.float32)
     # Map values in the range [-1, 1]
@@ -112,28 +136,6 @@ def normalize_train_data_user(user, labels, names, X):
     
     return x_train, x_test, y_train, y_test
 
-    
-
-#Structure of dataset    
-
-#Each instance work on it's own data on 29/30 users
-#In federate n copy of model e
-#Import dataset for training the dataset is divided in dataset/dataWithoutMasks/c00.. until c14
-#There are 15 classes one for each label of action per users
-#There are 30 users in the dataset with 200 image per user and each user can have 15 actions
-#Path to folders is ./dataset/dataWithoutMasks/c00..c14
-
-#How we want to train the model
-
-#We need a function that splits the data per user, pick all data from a user and then split it in train and test for a single model
-#All the data of one user is used for test and the 29/30 of the users data is used for training
-#The file a are in a format like this: username_number_of_image.png
-#We pick only the first 29/30 users' data for training and the last one for test
-#Then we cycle and we do this for each users, so every model has one of these cycled data and it's being trained separately in only 1 epoch or 1 step of SGD
-#Finally we extract the weights of each model and we compute the mean of the weights of all the models to get the final model, this is cycled for some epochs
-
-#We use only the data of an user to train the model
-#An user is picked in the dictionary USERS and then we pick only the image with the same name as the user
 
 def train_test_split_on_single_user(X, y, names, user):
     
@@ -144,7 +146,9 @@ def train_test_split_on_single_user(X, y, names, user):
     y_test = [e for i, e in enumerate(y) if i in indices]
     y_train = [e for i, e in enumerate(y) if i not in indices]
     
-    return x_train, x_test, y_train, y_test  
+    return x_train, x_test, y_train, y_test
+
+
   
 #Simulation of federated learning using 30 users and using a simple iterative workflow    
 def loading_data_user(current_user_index):
@@ -169,11 +173,6 @@ def loading_data_user(current_user_index):
     print("\n\nTrain test split done\n\n")
     
     return x_train, x_test, y_train, y_test 
-
-
-
-
-
 
 
 

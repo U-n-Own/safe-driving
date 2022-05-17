@@ -1,5 +1,7 @@
 from cProfile import label
-from safe_drive_SeqCNN_wOpenCV import USERS, loading_data_user
+from safe_drive_SeqCNN_wOpenCV import USERS, loading_data_user, load_full_dataset
+from data_centralized_util import *
+
 
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
@@ -49,17 +51,13 @@ def loading_dataset():
 
 def loading_dataset_standardized():
 
-    dataset_to_train = []
-    dataset_to_validate  = []
-
     for user in range(len(USERS) - 1):
         
-        x_train, x_test, y_train, y_test = loading_data_user(user)
+        x_train, x_test, y_train, y_test = load_full_dataset()
     
-        dataset_to_train.append(x_train, y_train)
-        dataset_to_validate.append(x_test, y_test)
-
-    return dataset_to_train, dataset_to_validate
+    return x_train, x_test, y_train, y_test
+        
+    
 
 
 # Model for image classification on 15 classes, 
@@ -152,12 +150,16 @@ def model_compile(model):
     return model
 
 #I'm trying to use the last user as test set
-def fit_model(model, dataset_to_train, dataset_to_validate):
+def fit_model_centralized(model, x_train, x_test, y_train, y_test):
     
-    x_train, x_test, y_train, y_test = loading_data_user(len(USERS))
-
     #history = model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
-    history = model.fit(dataset_to_train, validation_data = (x_test, y_test), epochs=10)
+    history = model.fit(dataset_to_train =(x_train, y_train), validation_data = (x_test, y_test), epochs=10)
+
+    return history
+    
+def old_fit_model(model, dataset_to_train, dataset_to_validate):
+    
+    history = model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
 
     return history
 
@@ -176,15 +178,21 @@ def trained_model_evaluation(model, dataset_to_validate):
 def train_model_centralized():
 
     #dataset_to_train, dataset_to_validate = loading_dataset()
-    dataset_to_train, dataset_to_validate = loading_dataset_standardized()
+    x_train, x_test, y_train, y_test = loading_dataset_standardized()
     print("\n\n\t\tClassical training\n\n")
     model = generate_model_safe_drive()
     print("\n\n\nModel generated with success!\n\n\n")
     model = model_compile(model)
     print("\n\n\nModel compiled with success!\n\n\n")
-    history = fit_model(model, dataset_to_train, dataset_to_validate)
+
+    #Old fit using dataset_to_train and dataset_to_validate
+    #history = old_fit_model(model, dataset_to_train, dataset_to_validate)
+
+    #New fit using x_train and y_train
+    history = fit_model_centralized(model, x_train, x_test, y_train, y_test)
+
     print("\n\n\nModel trained with success!\n\n\n")
     #history.results()
-    classical_accuracy = trained_model_evaluation(model, dataset_to_validate)
+    #classical_accuracy = trained_model_evaluation(model, dataset_to_validate)
 
     return history
