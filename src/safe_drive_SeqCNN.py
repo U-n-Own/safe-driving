@@ -156,9 +156,6 @@ def fit_model_centralized(model, x_train, x_test, y_train, y_test):
 
     history = model.fit(x_train, y_train, validation_data = (x_test, y_test), epochs=10)
     
-    #Get rid of data
-    del x_train, x_test, y_train, y_test
-
     return history
     
 def old_fit_model(model, dataset_to_train, dataset_to_validate):
