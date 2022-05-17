@@ -49,12 +49,14 @@ def loading_dataset():
 
     return dataset_to_train, dataset_to_validate
 
+#Loading dataset keeping last user as validation set
 def loading_dataset_standardized():
 
-    for user in range(len(USERS) - 1):
-        
-        x_train, x_test, y_train, y_test = load_full_dataset()
-    
+    x_train, x_test, y_train, y_test = load_full_dataset() 
+
+
+    #TODO : Extract last users as test set
+
     return x_train, x_test, y_train, y_test
         
     
@@ -178,7 +180,7 @@ def trained_model_evaluation(model, dataset_to_validate):
 def train_model_centralized():
 
     #dataset_to_train, dataset_to_validate = loading_dataset()
-    x_train, x_test, y_train, y_test = loading_dataset_standardized()
+    x_train, x_test, y_train, y_test = load_full_dataset() 
     print("\n\n\t\tClassical training\n\n")
     model = generate_model_safe_drive()
     print("\n\n\nModel generated with success!\n\n\n")
