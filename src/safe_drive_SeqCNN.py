@@ -1,5 +1,5 @@
 from cProfile import label
-from safe_drive_SeqCNN_wOpenCV import USERS, loading_data_user, load_full_dataset
+from safe_drive_SeqCNN_wOpenCV import USERS, loading_data_user
 from data_centralized_util import *
 
 
