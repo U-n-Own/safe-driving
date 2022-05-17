@@ -132,7 +132,7 @@ class Aggregator(object):
         plt.figure(figsize=(5,4))
         plt.plot(fed_acc,label='Federated Learning')
         plt.plot(fed_acc_used, label='Federated Learning data used')
-        plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
+        #plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
         plt.xlabel('Number of epochs')
         plt.ylabel('Validation accuracy')
         plt.legend()
