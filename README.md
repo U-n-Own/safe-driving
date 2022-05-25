@@ -15,7 +15,7 @@
 <img src="https://github.com/U-n-Own/safe-driving/blob/main/src/plots/orizontalPlot.png">
 
 ## Testing result for Images in dataset vs. Held Aside test set 
-<img src="https://github.com/U-n-Own/safe-driving/blob/main/src/plots/federated_learning_plot_after_rework.png?raw=true">
+<img src="https://github.com/U-n-Own/safe-driving/blob/main/src/plots/graph-correct-version.png">
 
 ## About Federated Learning 
 + Main property we want are : 
