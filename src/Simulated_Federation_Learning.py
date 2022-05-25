@@ -139,7 +139,7 @@ class Aggregator(object):
         plt.grid()
         plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
         plt.xlim(0,20)
-        plt.savefig('plots/federated_learning_plot_after_rework-federation.png',dpi=150)
+        plt.savefig('plots/federated_learning_plot_25_05.png',dpi=150)
 
     def plot_results_centrlized(self):
 
