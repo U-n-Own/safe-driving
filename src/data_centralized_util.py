@@ -41,16 +41,17 @@ def load_train_all_users():
     train_labels = []
 
     for classed in tqdm(range(NUMBER_CLASSES)):
-        
+
         print('Loading directory c{}'.format(classed))
                         
+    
+        #files = glob(os.path.join(PATH, CATEGORIES[classed], '*.png'))
         
-        #print(glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png')))  
-        #files = glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png'))
+        #using os.path.join pick only the files that doesn't start with user named 'Thomas' or 'flipped_Thomas'
+        files = glob(os.path.join(PATH, CATEGORIES[classed], '*[^Thomas]*.png', '*[^flipped_Thomas]*.png'))
+        
+        print(glob(os.path.join(PATH, CATEGORIES[classed], '*[^Thomas]*.png', '*[^flipped_Thomas]*.png')))
 
-        #files = glob(os.path.join(PATH, CATEGORIES[classed], USERS[current_user_index] + '*.png'))
-        
-        files = glob(os.path.join(PATH, CATEGORIES[classed], '*.png'))
 
         print(len(files))
         for file in files:
@@ -133,8 +134,6 @@ def load_full_dataset():
 
     #normalize_img(img)
 
-    #TODO: Split the dataset into train and test for each user
-     
     X, labels, names = img
   
     #Can't run this because we don't have this much ram to store all the dataset
