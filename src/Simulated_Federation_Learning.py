@@ -45,10 +45,14 @@ send model to aggregation server
 color_type = 3
 img_cols = 240
 img_rows = 240
-num_fed_round = 10
+num_fed_round = 50
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
 USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
+USERS_EXCLUDED =['Amparore']
+#A lambda function that filter and exclude the n-th user of user in the for loop
+USERS_TRAINING = list(filter(lambda x: x not in USERS_EXCLUDED, USERS))
+
 # Users without last user in lista
 #USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider']
 
@@ -132,7 +136,7 @@ class Aggregator(object):
 
         plt.figure(figsize=(5,4))
         plt.plot(fed_acc,label='Federated Learning')
-        plt.plot(fed_acc_used, label='Federated Learning data used')
+        plt.plot(fed_acc_used, label='Federated Learning exluding user')
         #plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
         plt.xlabel('Number of epochs')
         plt.ylabel('Validation accuracy')
@@ -140,20 +144,8 @@ class Aggregator(object):
         plt.grid()
         plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
         plt.xlim(0,20)
-        plt.savefig('plots/federated_learning_plot_25_05.png',dpi=150)
+        plt.savefig('plots/federated_learning_plot_Amparore_excluded.png',dpi=150)
 
-
-def plot_results_centrlized(self):
-
-    plt.figure(figsize=(5,4))
-    plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralized learning')
-    plt.xlabel('Number of epochs')
-    plt.ylabel('Validation accuracy')
-    plt.legend()
-    plt.grid()
-    plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
-    plt.xlim(0,20)
-    plt.savefig('plots/federated_learning_plot_after_centrlized_27_05.png',dpi=150)
 
 #Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
 #Collaborator: Do one step of SGD with the data of one user and then send the updated model to the aggregator
@@ -173,12 +165,6 @@ class Collaborator(object):
 # 6. Compute mean
 # 7. Send the new model to the collaborators
 
-
-#   [Centralized learning] 
-
-history_centralized_learning = train_model_centralized()
-plot_results_centrlized()
-
 #   [Federated Learning]
 
 #Initialize the aggregator model
@@ -188,11 +174,22 @@ model = model_compile(model)
 
 
 #Initialize the collaborators with own data and model
-for user in USERS:
+''' for user in USERS:
     x_train, x_test, y_train, y_test = loading_data_user(USERS.index(user))
     data = (x_train, y_train, x_test, y_test)
     collaborator = Collaborator(model, data)
+    collaborators.append(collaborator) '''
+
+for user in USERS_TRAINING:
+    x_train, x_test, y_train, y_test = loading_data_user(USERS_TRAINING.index(user))
+    data = (x_train, y_train, x_test, y_test)
+    collaborator = Collaborator(model, data)
     collaborators.append(collaborator)
+
+
+#Pick the collaborator that we've not trained on in this round
+print("\n\nLoading test user:\n\n\n")
+x_train, X_test, y_train, Y_test = loading_data_user(USERS.index(USERS_EXCLUDED))
 
 
 #Initialize the aggregator 
@@ -202,9 +199,14 @@ aggregator = Aggregator(model, num_clients, collaborators, num_fed_round)
 #Start the training of the model
 for round in range(num_fed_round):
     print('Federated learning round: ',round+1, '\n\n')
-    #On all users but not the last that we use as a check same with the centralized
-    for i in range(len(USERS) - 1):
+
+
+    for i in range(len(USERS_TRAINING)):
         aggregator.train_collaborator(aggregator.collaborators[i].data, i)
+
+
+#    for i in range(len(USERS) - 1):
+#        aggregator.train_collaborator(aggregator.collaborators[i].data, i)
 
     #local update of the model in the aggregator
     aggregator.model = aggregator.local_update(all_models)
@@ -213,15 +215,8 @@ for round in range(num_fed_round):
 
     print('End of federated learning round\n\nEvaluation of the model...\n\n')
     
-    #Each time we use validation set of a random user to predict the accuracy
-#    random_pick = random.randint(0,len(USERS)-1)
-#    x_test = aggregator.collaborators[random_pick].data[2]
-#    y_test = aggregator.collaborators[random_pick].data[3]
-
-
-    #Pick the last collaborator that we've not trained on
-    X_test = aggregator.collaborators[-1].data[2]
-    Y_test = aggregator.collaborators[-1].data[3]
+    #X_test = aggregator.collaborators[-1].data[2]
+    #Y_test = aggregator.collaborators[-1].data[3]
     
     #Pick collaborator which data are used to train
     X_test_used = aggregator.collaborators[0].data[2]
