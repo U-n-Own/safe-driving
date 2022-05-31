@@ -60,17 +60,18 @@ color_type = 3
 img_cols = 240
 img_rows = 240
 num_fed_round = 50
-NUMBER_CLASSES = 15
+
 PATH = '/home/gargano/dataset/dataWithoutMasks'
 USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
 USERS_EXCLUDED =['Amparore']
+
 #A lambda function that filter and exclude the n-th user of user in the for loop
 USERS_TRAINING = list(filter(lambda x: x not in USERS_EXCLUDED, USERS))
 
 # Users without last user in lista
 #USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider']
 
-CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
+
 num_clients = len(USERS)
 all_models = []
 collaborators = []

@@ -20,7 +20,7 @@ from sklearn.model_selection import train_test_split
 import pathlib
 import matplotlib.pyplot as plt
 
-from Simulated_Federation_Learning import *
+from Simulated_Federation_Learning import USERS_TRAINING 
 #Structure of dataset    
 
 
