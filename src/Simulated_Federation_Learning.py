@@ -133,7 +133,7 @@ class Aggregator(object):
         return test_acc
 
     def save_global_model(self):
-        self.model.save('/safe_drive/models/model_federated_learning_' + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0]  +'.h5')
+        self.model.save('/home/gargano/safe_drive/src/models/model_federated_learning_' + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0]  +'.h5')
 
 
     def plot_results_federation(self, fed_acc, fed_acc_used):
