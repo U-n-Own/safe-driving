@@ -14,11 +14,11 @@ import os
 import PIL
 import PIL.Image
 import tensorflow as tf
+from tensorflow import keras
 from sklearn.model_selection import train_test_split
 #import tensorflow_datasets as tfds
 import pathlib
 import matplotlib.pyplot as plt
-
 
 ''' 
 Aggregation server
