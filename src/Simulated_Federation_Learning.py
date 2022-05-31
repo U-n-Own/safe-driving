@@ -184,6 +184,11 @@ model = model_compile(model)
     collaborator = Collaborator(model, data)
     collaborators.append(collaborator) '''
 
+#Pick the collaborator that we've not trained on in this round
+print("\n\nLoading test user data:\n\n\n")
+x_train, X_test, y_train, Y_test = loading_data_user(USERS.index(USERS_EXCLUDED[0]))
+
+
 for user in USERS_TRAINING:
     x_train, x_test, y_train, y_test = loading_data_user(USERS_TRAINING.index(user))
     data = (x_train, y_train, x_test, y_test)
@@ -191,9 +196,6 @@ for user in USERS_TRAINING:
     collaborators.append(collaborator)
 
 
-#Pick the collaborator that we've not trained on in this round
-print("\n\nLoading test user:\n\n\n")
-x_train, X_test, y_train, Y_test = loading_data_user(USERS.index(USERS_EXCLUDED))
 
 
 #Initialize the aggregator 
