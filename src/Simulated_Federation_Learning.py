@@ -148,7 +148,7 @@ class Aggregator(object):
         plt.grid()
         plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
         plt.xlim(0,20)
-        plt.savefig('plots/federated_learning_plot_Amparore_excluded.png',dpi=150)
+        plt.savefig('plots/federated_learning_plot_'+ USERS_EXCLUDED[0] +'_excluded.png',dpi=150)
 
 
 #Code for collaborator class in simulated federation learning, collaborators take the model from the aggregator that initialize it
