@@ -33,8 +33,6 @@ wandb.config = {
             "loss_function" : "categorical_crossentropy"
             }
 
-
-
 #Declaring global variables
 color_type = 3
 img_cols = 240
@@ -152,26 +150,6 @@ class Collaborator(object):
 # 6. Compute mean
 # 7. Send the new model to the collaborators
 
-''' 
-Aggregation server
-
-1. initialize model W0
-2. for each round t=1,…:
-3. Broadcast Wt−1 to all collaborators
-4. select C eligible participants 
-5. foreach|| participant p: 
-6.  wtp = LocalUpdate(p)
-7. wt = aggregate(∀p, wtp)
- '''
-
-'''
-Collaborator: Local Update
-get model from aggregation server
-select batch (all of current user)
-gb <- compute gradient for batch
-send model to aggregation server
-''' 
-
 
 #   [Federated Learning]    #
 
@@ -194,12 +172,10 @@ x_train, X_test_not_used, y_train, Y_test_not_used = loading_data_user(USERS.ind
 
 
 for user in USERS_TRAINING:
-    x_train, x_test, y_train, y_test = loading_data_user(USERS_TRAINING.index(user))
+    x_train, x_test, y_train, y_test = loading_data_user(USERS.index(user))
     data = (x_train, y_train, x_test, y_test)
     collaborator = Collaborator(model, data)
     collaborators.append(collaborator)
-
-
 
 
 #Initialize the aggregator 

@@ -84,7 +84,7 @@ def load_train_single_user(current_user_index):
         #print(glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png')))  
         #files = glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png'))
 
-        files = glob(os.path.join(PATH, CATEGORIES[classed], USERS_TRAINING[current_user_index] + '*.png'))
+        files = glob(os.path.join(PATH, CATEGORIES[classed], USERS[current_user_index] + '*.png'))
         
         print(len(files))
         for file in files:
@@ -133,7 +133,7 @@ def normalize_train_data_user(user, labels, names, X):
 def train_test_split_on_single_user(X, y, names, user):
     
     #Extract the index of the user in USERS
-    indices = [i for i, x in enumerate(names) if x.startswith(USERS_TRAINING[user])]
+    indices = [i for i, x in enumerate(names) if x.startswith(USERS[user])]
     x_test = [e for i, e in enumerate(X) if i in indices]
     x_train = [e for i, e in enumerate(X) if i not in indices]
     y_test = [e for i, e in enumerate(y) if i in indices]
@@ -146,7 +146,7 @@ def train_test_split_on_single_user(X, y, names, user):
 #Simulation of federated learning using 30 users and using a simple iterative workflow    
 def loading_data_user(current_user_index):
 
-    print('Loading dataset for user ', current_user_index , USERS_TRAINING[current_user_index] , '...\n\n')
+    print('Loading dataset for user ', current_user_index , USERS[current_user_index] , '...\n\n')
 
     img = load_train_single_user(current_user_index)
 

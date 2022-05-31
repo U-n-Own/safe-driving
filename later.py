@@ -1,6 +1,30 @@
 
 #Todo later: 
 
+
+
+''' 
+Aggregation server
+
+0. initialize model W0
+1. for each round t=1,…:
+2. Broadcast Wt−1 to all collaborators
+3. select C eligible participants 
+4. foreach|| participant p: 
+5.  wtp = LocalUpdate(p)
+6. wt = aggregate(∀p, wtp)
+ '''
+
+'''
+Collaborator: Local Update
+get model from aggregation server
+select batch (all of current user)
+gb <- compute gradient for batch
+send model to aggregation server
+''' 
+
+
+
 #Data augmentations
 ''' 
 def augumentation_imgs 
