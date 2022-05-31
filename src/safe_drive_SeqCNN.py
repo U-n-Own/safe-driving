@@ -12,6 +12,11 @@ import tensorflow as tf #Ver. 2.7.0
 import pathlib
 import matplotlib.pyplot as plt
 
+
+#weight and Biases initialization
+import wandb
+from wandb.keras import WandbCallback
+
 batch_size = 32
 img_height = 240
 img_width = 240
@@ -166,7 +171,7 @@ def old_fit_model(model, dataset_to_train, dataset_to_validate):
 
 
 def fit_model_federation(model, x_train, y_train, x_test, y_test):
-    history = model.fit(x_train, y_train, validation_data = (x_test, y_test), epochs=1)
+    history = model.fit(x_train, y_train, validation_data = (x_test, y_test), epochs=1, callbacks=[WandbCallback()])
     return history
 
 

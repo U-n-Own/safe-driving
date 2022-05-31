@@ -19,6 +19,20 @@ from sklearn.model_selection import train_test_split
 #import tensorflow_datasets as tfds
 import pathlib
 import matplotlib.pyplot as plt
+import wandb
+
+#weight and Biases initialization
+from wandb.keras import WandbCallback
+
+wandb.init(project="safe-driving", entity="vincent") 
+wandb.config = {
+            "learning_rate" : 0.001,
+            "batch_size" : 32, 
+            "epochs" : 1,
+            "loss_function" : "categorical_crossentropy"
+            }
+
+
 
 ''' 
 Aggregation server
