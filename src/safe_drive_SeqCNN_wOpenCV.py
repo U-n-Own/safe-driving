@@ -7,7 +7,6 @@ from sre_constants import JUMP
 import time
 from scipy import rand
 from tqdm import tqdm 
-from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
 import cv2
 from cProfile import label
@@ -16,11 +15,11 @@ import PIL
 import PIL.Image
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-#import tensorflow_datasets as tfds
 import pathlib
 import matplotlib.pyplot as plt
 
-from Simulated_Federation_Learning import USERS_TRAINING 
+from util_fl import *
+
 #Structure of dataset    
 
 
@@ -51,11 +50,6 @@ color_type = 3
 #Original is 640x480
 img_cols = 240
 img_rows = 240
-NUMBER_CLASSES = 15
-PATH = '/home/gargano/dataset/dataWithoutMasks'
-root_dir = '/home/gargano/'
-DATADIR = "/home/gargano/dataset/dataWithoutMasks"
-CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 i = 0
 
 def get_cv2_image(path):

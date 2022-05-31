@@ -1,5 +1,5 @@
-from safe_drive_SeqCNN_wOpenCV import *
-from safe_drive_SeqCNN import *
+from safe_drive_SeqCNN_wOpenCV import loading_data_user
+from safe_drive_SeqCNN import * 
 from util_fl import *
 
 from glob import glob
