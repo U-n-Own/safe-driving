@@ -1,5 +1,6 @@
 from safe_drive_SeqCNN_wOpenCV import *
 from safe_drive_SeqCNN import *
+from util_fl import *
 
 from glob import glob
 from importlib.resources import path
@@ -34,44 +35,11 @@ wandb.config = {
 
 
 
-''' 
-Aggregation server
-
-1. initialize model W0
-2. for each round t=1,…:
-3. Broadcast Wt−1 to all collaborators
-4. select C eligible participants 
-5. foreach|| participant p: 
-6.  wtp = LocalUpdate(p)
-7. wt = aggregate(∀p, wtp)
- '''
-
-'''
-Collaborator: Local Update
-get model from aggregation server
-select batch (all of current user)
-gb <- compute gradient for batch
-send model to aggregation server
-''' 
-
 #Declaring global variables
-
 color_type = 3
 img_cols = 240
 img_rows = 240
 num_fed_round = 50
-
-PATH = '/home/gargano/dataset/dataWithoutMasks'
-USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
-USERS_EXCLUDED =['Amparore']
-
-#A lambda function that filter and exclude the n-th user of user in the for loop
-USERS_TRAINING = list(filter(lambda x: x not in USERS_EXCLUDED, USERS))
-
-# Users without last user in lista
-#USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider']
-
-
 num_clients = len(USERS)
 all_models = []
 collaborators = []
@@ -184,7 +152,28 @@ class Collaborator(object):
 # 6. Compute mean
 # 7. Send the new model to the collaborators
 
-#   [Federated Learning]
+''' 
+Aggregation server
+
+1. initialize model W0
+2. for each round t=1,…:
+3. Broadcast Wt−1 to all collaborators
+4. select C eligible participants 
+5. foreach|| participant p: 
+6.  wtp = LocalUpdate(p)
+7. wt = aggregate(∀p, wtp)
+ '''
+
+'''
+Collaborator: Local Update
+get model from aggregation server
+select batch (all of current user)
+gb <- compute gradient for batch
+send model to aggregation server
+''' 
+
+
+#   [Federated Learning]    #
 
 #Initialize the aggregator model
 model = generate_model_safe_drive()
@@ -199,9 +188,8 @@ model = model_compile(model)
     collaborator = Collaborator(model, data)
     collaborators.append(collaborator) '''
 
-#Pick the collaborator that we've not trained on in this round
+#Pick the collaborator that we've not trained on in this experiment
 print("\n\nLoading test user data:\n\n\n")
-
 x_train, X_test_not_used, y_train, Y_test_not_used = loading_data_user(USERS.index(USERS_EXCLUDED[0]))
 
 
@@ -234,9 +222,6 @@ for round in range(num_fed_round):
 
     print('End of federated learning round\n\nEvaluation of the model...\n\n')
     
-    #X_test = aggregator.collaborators[-1].data[2]
-    #Y_test = aggregator.collaborators[-1].data[3]
-    
     #Pick collaborator which data are used to train
     X_test_used = aggregator.collaborators[7].data[2]
     Y_test_used = aggregator.collaborators[7].data[3]
@@ -248,13 +233,5 @@ for round in range(num_fed_round):
     aggregator.plot_results_federation(fed_acc, fed_acc_used)
 
 aggregator.save_global_model()
-
-    #Plot the results, on all users
-    #TODO: try to plot for each user in a separate graph
-
-    #aggregator.plot_results_federation(fed_acc, history_centralized_learning)
-    
-    #aggregator.prediction_aggregation(x_test, y_test)
-    #trained_model_evaluation(aggregator.model, validation)
 
 #################################################

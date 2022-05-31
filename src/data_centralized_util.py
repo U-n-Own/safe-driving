@@ -17,7 +17,7 @@ import tensorflow as tf
 import pathlib
 
 from safe_drive_SeqCNN_wOpenCV import *
-
+from util_fl import *
 
 
 def train_test_split_on_all_data(X, y, names):

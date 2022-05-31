@@ -1,7 +1,7 @@
 from cProfile import label
 from safe_drive_SeqCNN_wOpenCV import USERS, loading_data_user
 from data_centralized_util import *
-
+from util_fl import *
 
 from tensorflow.keras.preprocessing import image_dataset_from_directory
 import numpy as np
