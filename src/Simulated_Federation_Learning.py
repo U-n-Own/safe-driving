@@ -132,6 +132,10 @@ class Aggregator(object):
         print('\nTest loss:', test_loss)
         return test_acc
 
+    def save_global_model(self):
+        self.model.save('/safe_drive/models/model_federated_learning_' + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0]  +'.h5')
+
+
     def plot_results_federation(self, fed_acc, fed_acc_used):
 
         plt.figure(figsize=(5,4))
@@ -227,6 +231,8 @@ for round in range(num_fed_round):
 
     
     aggregator.plot_results_federation(fed_acc, fed_acc_used)
+
+aggregator.save_global_model()
 
     #Plot the results, on all users
     #TODO: try to plot for each user in a separate graph
