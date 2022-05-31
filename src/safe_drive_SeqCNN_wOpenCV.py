@@ -20,7 +20,9 @@ from sklearn.model_selection import train_test_split
 import pathlib
 import matplotlib.pyplot as plt
 
+from Simulated_Federation_Learning import *
 #Structure of dataset    
+
 
 #Each instance work on it's own data on 29/30 users
 #In federate n copy of model e
@@ -52,8 +54,6 @@ img_rows = 240
 NUMBER_CLASSES = 15
 PATH = '/home/gargano/dataset/dataWithoutMasks'
 USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider','Thomas']
-USERS_DONE = []
-USER_TRAINED = list(range(len(USERS)))
 root_dir = '/home/gargano/'
 DATADIR = "/home/gargano/dataset/dataWithoutMasks"
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
@@ -91,7 +91,7 @@ def load_train_single_user(current_user_index):
         #print(glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png')))  
         #files = glob(os.path.join(PATH, CATEGORIES[classed], USERS[user_chosen] + '*.png'))
 
-        files = glob(os.path.join(PATH, CATEGORIES[classed], USERS[current_user_index] + '*.png'))
+        files = glob(os.path.join(PATH, CATEGORIES[classed], USERS_TRAINING[current_user_index] + '*.png'))
         
         print(len(files))
         for file in files:
@@ -140,7 +140,7 @@ def normalize_train_data_user(user, labels, names, X):
 def train_test_split_on_single_user(X, y, names, user):
     
     #Extract the index of the user in USERS
-    indices = [i for i, x in enumerate(names) if x.startswith(USERS[user])]
+    indices = [i for i, x in enumerate(names) if x.startswith(USERS_TRAINING[user])]
     x_test = [e for i, e in enumerate(X) if i in indices]
     x_train = [e for i, e in enumerate(X) if i not in indices]
     y_test = [e for i, e in enumerate(y) if i in indices]
@@ -153,7 +153,7 @@ def train_test_split_on_single_user(X, y, names, user):
 #Simulation of federated learning using 30 users and using a simple iterative workflow    
 def loading_data_user(current_user_index):
 
-    print('Loading dataset for user ', current_user_index , '...\n\n')
+    print('Loading dataset for user ', current_user_index , USERS_TRAINING[current_user_index] , '...\n\n')
 
     img = load_train_single_user(current_user_index)
 

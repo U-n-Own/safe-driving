@@ -70,8 +70,6 @@ USERS_TRAINING = list(filter(lambda x: x not in USERS_EXCLUDED, USERS))
 # Users without last user in lista
 #USERS =['Amparore', 'Baccega', 'Basile', 'Beccuti', 'Botta', 'Castagno', 'Davide', 'DiCaro', 'DiNardo','Esposito','Francesca','Giovanni','Gunetti','Idilio','Ines','Malangone','Maurizio','Michael','MirkoLai','MirkoPolato','Olivelli','Pozzato','Riccardo','Rossana','Ruggero','Sapino','Simone','Susanna','Theseider']
 
-USERS_TEST =['Thomas']
-USERS_TWO = ['Amparore', 'Baccega']
 CATEGORIES = ["c00","c01","c02","c03","c04","c05","c06","c07","c08","c09","c10","c11","c12","c13","c14"]
 num_clients = len(USERS)
 all_models = []
@@ -150,7 +148,7 @@ class Aggregator(object):
         model = self.model
         print('\n\nSaving global model...\n\n')
         model.save('/home/gargano/safe-driving/src/models/model_federated_learning_' + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0]  +'.h5')
-        model.save("Fed_model_" + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0])
+        #model.save("Fed_model_" + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0])
 
     def plot_results_federation(self, fed_acc, fed_acc_used):
 
@@ -163,7 +161,7 @@ class Aggregator(object):
         plt.legend()
         plt.grid()
         plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
-        plt.xlim(0,20)
+        plt.xlim(0,50)
         plt.savefig('plots/federated_learning_plot_'+ USERS_EXCLUDED[0] +'_excluded.png',dpi=150)
 
 
@@ -202,7 +200,8 @@ model = model_compile(model)
 
 #Pick the collaborator that we've not trained on in this round
 print("\n\nLoading test user data:\n\n\n")
-x_train, X_test, y_train, Y_test = loading_data_user(USERS.index(USERS_EXCLUDED[0]))
+
+x_train, X_test_not_used, y_train, Y_test_not_used = loading_data_user(USERS.index(USERS_EXCLUDED[0]))
 
 
 for user in USERS_TRAINING:
@@ -227,9 +226,6 @@ for round in range(num_fed_round):
         aggregator.train_collaborator(aggregator.collaborators[i].data, i)
 
 
-#    for i in range(len(USERS) - 1):
-#        aggregator.train_collaborator(aggregator.collaborators[i].data, i)
-
     #local update of the model in the aggregator
     aggregator.model = aggregator.local_update(all_models)
     print('\n\nSending model to collaborators...\n\n')
@@ -241,10 +237,10 @@ for round in range(num_fed_round):
     #Y_test = aggregator.collaborators[-1].data[3]
     
     #Pick collaborator which data are used to train
-    X_test_used = aggregator.collaborators[0].data[2]
-    Y_test_used = aggregator.collaborators[0].data[3]
+    X_test_used = aggregator.collaborators[7].data[2]
+    Y_test_used = aggregator.collaborators[7].data[3]
     
-    fed_acc.append(aggregator.accuracy_federated_learning(X_test, Y_test))
+    fed_acc.append(aggregator.accuracy_federated_learning(X_test_not_used, Y_test_not_used))
     fed_acc_used.append(aggregator.accuracy_federated_learning(X_test_used, Y_test_used))
 
     
