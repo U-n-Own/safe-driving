@@ -1,5 +1,4 @@
 from cProfile import label
-from safe_drive_SeqCNN_wOpenCV import USERS, loading_data_user
 from data_centralized_util import *
 from util_fl import *
 
@@ -21,51 +20,6 @@ batch_size = 32
 img_height = 240
 img_width = 240
 num_classes = 15
-
-#Image importing + preprocessing
-#This preprocessing does reshaping and splitting of the dataset
-def loading_dataset():
-
-    dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
-        '/home/gargano/dataset/dataWithoutMasks',
-        labels = 'inferred',
-        label_mode = "categorical", #Maybe int? user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
-        image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-        batch_size=batch_size,
-        color_mode="rgb", #Don't know what format images are can try both?
-        shuffle = True,
-        seed = 123,
-        validation_split = 0.2,
-        subset = 'training'
-    )
-
-    dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
-        '/home/gargano/dataset/dataWithoutMasks',
-        labels = 'inferred',
-        label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
-        image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
-        batch_size=batch_size,
-        color_mode="rgb", #Don't know what format images are can try both?
-        shuffle = True,
-        seed = 123,
-        validation_split = 0.2,
-        subset = 'validation'
-    )
-
-    return dataset_to_train, dataset_to_validate
-
-#Loading dataset keeping last user as validation set
-def loading_dataset_standardized():
-
-    x_train, x_test, y_train, y_test = load_full_dataset() 
-
-
-    #TODO : Extract last users
-
-    return x_train, x_test, y_train, y_test
-        
-    
-
 
 # Model for image classification on 15 classes, 
 # classes consists in actions one of them is safe driving the other are action that distract the user
@@ -156,29 +110,16 @@ def model_compile(model):
 
     return model
 
-#I'm trying to use the last user as test set
 def fit_model_centralized(model, x_train, x_test, y_train, y_test):
 
     history = model.fit(x_train, y_train, validation_data = (x_test, y_test), epochs=10)
     
     return history
-    
-def old_fit_model(model, dataset_to_train, dataset_to_validate):
-    
-    history = model.fit(dataset_to_train, validation_data = dataset_to_validate, epochs=10)
-
-    return history
-
 
 def fit_model_federation(model, x_train, y_train, x_test, y_test):
     history = model.fit(x_train, y_train, validation_data = (x_test, y_test), epochs=1, callbacks=[WandbCallback()])
     return history
 
-
-def trained_model_evaluation(model, dataset_to_validate):
-    test_loss, test_acc = model.evaluate(dataset_to_validate)
-    print('\nTest accuracy:', test_acc)
-    return test_acc
 
 #No Federated learning, data is not distributed
 def train_model_centralized():

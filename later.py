@@ -144,3 +144,37 @@ class CNNModel(epochs = 10):
         plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
         plt.xlim(0,20)
         plt.savefig('plots/federated_learning_plot_each_user.png',dpi=150) '''
+
+#Not used anymore
+
+''' #Image importing + preprocessing
+#This preprocessing does reshaping and splitting of the dataset
+def loading_dataset():
+
+    dataset_to_train = tf.keras.preprocessing.image_dataset_from_directory(
+        '/home/gargano/dataset/dataWithoutMasks',
+        labels = 'inferred',
+        label_mode = "categorical", #Maybe int? user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
+        image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
+        batch_size=batch_size,
+        color_mode="rgb", #Don't know what format images are can try both?
+        shuffle = True,
+        seed = 123,
+        validation_split = 0.2,
+        subset = 'training'
+    )
+
+    dataset_to_validate = tf.keras.preprocessing.image_dataset_from_directory(
+        '/home/gargano/dataset/dataWithoutMasks',
+        labels = 'inferred',
+        label_mode = "categorical", #user distracted with 15 different actions or not one of the label is user not distracted , we chose categorical for one hot encoding
+        image_size=(img_height, img_width), #Our is 640x480, we resize to 256x256, we can try to keep the original size. @Brief Reshape in not in this size
+        batch_size=batch_size,
+        color_mode="rgb", #Don't know what format images are can try both?
+        shuffle = True,
+        seed = 123,
+        validation_split = 0.2,
+        subset = 'validation'
+    )
+
+    return dataset_to_train, dataset_to_validate '''
