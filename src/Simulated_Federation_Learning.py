@@ -127,7 +127,7 @@ class Aggregator(object):
         plt.ylabel('Validation accuracy')
         plt.legend()
         plt.grid()
-        plt.xticks(np.arange(0,20,1),np.arange(1,21,1))
+        plt.xticks(np.arange(0,50,1),np.arange(1,51,1))
         plt.xlim(0,50)
         plt.savefig('plots/federated_learning_plot_'+ USERS_EXCLUDED[0] +'_excluded.png',dpi=150)
 
@@ -199,8 +199,8 @@ for round in range(num_fed_round):
     print('End of federated learning round\n\nEvaluation of the model...\n\n')
     
     #Pick collaborator which data are used to train
-    X_test_used = aggregator.collaborators[7].data[2]
-    Y_test_used = aggregator.collaborators[7].data[3]
+    X_test_used = aggregator.collaborators[0].data[2]
+    Y_test_used = aggregator.collaborators[0].data[3]
     
     fed_acc.append(aggregator.accuracy_federated_learning(X_test_not_used, Y_test_not_used))
     fed_acc_used.append(aggregator.accuracy_federated_learning(X_test_used, Y_test_used))
