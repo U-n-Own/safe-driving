@@ -29,7 +29,7 @@ wandb.init(project="safe-driving", entity="vincent")
 wandb.config = {
             "learning_rate" : 0.001,
             "batch_size" : 32, 
-            "epochs" : 1,
+            "epochs" : 50,
             "loss_function" : "categorical_crossentropy"
             }
 
