@@ -128,8 +128,7 @@ class Aggregator(object):
         plt.legend()
         plt.grid()
         #plt.rc('xtick', labelsize=10)
-        plt.xticks(x[::2])
-        #plt.xticks(np.arange(0,50,1),np.arange(1,51,1))
+        plt.xticks(np.arange(0,50,5),np.arange(0,50,5))
         plt.xlim(0,50)
         plt.savefig('plots/federated_learning_plot_'+ USERS_EXCLUDED[0] +'_excluded.png',dpi=150)
 
