@@ -117,7 +117,7 @@ def fit_model_centralized(model, x_train, x_test, y_train, y_test):
     return history
 
 def fit_model_federation(model, x_train, y_train, x_test, y_test):
-    history = model.fit(x_train, y_train, validation_data = (x_test, y_test), epochs=1, callbacks=[Wandbcallback()])
+    history = model.fit(x_train, y_train, validation_data = (x_test, y_test), epochs=1, callbacks=[WandbCallback()])
     return history
 
 

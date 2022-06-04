@@ -37,7 +37,7 @@ wandb.config = {
 color_type = 3
 img_cols = 240
 img_rows = 240
-num_fed_round = 35 
+num_fed_round = 40
 num_clients = len(USERS)
 all_models = []
 collaborators = []
@@ -114,14 +114,14 @@ class Aggregator(object):
     def save_global_model(self):
         model = self.model
         print('\n\nSaving global model...\n\n')
-        model.save('/home/gargano/safe-driving/src/models/model_federated_learning_' + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0]  +'.h5')
-        #model.save("Fed_model_" + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0])
+        #model.save('/home/gargano/safe-driving/src/models/model_federated_learning_' + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0]  +'.h5')
+        model.save("Fed_model_" + str(time.time()) + '_exluded_' + USERS_EXCLUDED[0])
 
     def plot_results_federation(self, fed_acc, fed_acc_used):
 
         plt.figure(figsize=(5,4))
-        plt.plot(fed_acc,label='Federated Learning')
-        plt.plot(fed_acc_used, label='Federated Learning exluding user')
+        plt.plot(fed_acc,label='Federated Learning 1 user as test')
+        plt.plot(fed_acc_used, label='Federated Learning')
         #plt.plot(history_centralized_learning.history['val_accuracy'],label='Centralised learning')
         plt.xlabel('Number of epochs')
         plt.ylabel('Validation accuracy')
